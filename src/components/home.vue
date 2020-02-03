@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import HomeHeader from './header'
-import BgMap from './map'
+import HomeHeader from './Header'
+import BgMap from './MyMap'
 
 export default {
   name: 'homepage',

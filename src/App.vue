@@ -5,24 +5,37 @@
 </template>
 
 <script>
-import Home from './components/Home.vue'
+import Home from "./components/Home.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Home
   }
-}
+};
 </script>
 
-<style>
+<style lang="less">
 #app {
   position: relative;
   height: 100%;
   width: 100%;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+/* 图表标题样式 */
+h3 {
+  font-size: 18px;
+  font-weight: 400;
+  text-align: left;
+}
+/* 表格样式 */
+table {
+  font-size: 14px;
+  thead {
+    font-weight: 500;
+  }
 }
 </style>

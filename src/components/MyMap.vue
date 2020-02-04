@@ -10,7 +10,4 @@ export default {
 </script>
 
 <style>
-.myMap {
-  /* background: burlywood */
-}
 </style>

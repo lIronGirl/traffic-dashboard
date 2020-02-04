@@ -34,8 +34,17 @@ h3 {
 /* 表格样式 */
 table {
   font-size: 14px;
+  border-collapse: collapse;
+  td {
+    height: 30px;
+  }
   thead {
     font-weight: 500;
+  }
+  tbody {
+    tr:nth-child(odd) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
   }
 }
 </style>

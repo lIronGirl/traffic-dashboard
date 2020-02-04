@@ -51,17 +51,12 @@ export default {
       flex: 1;
       &.section1,
       &.section3 {
-        margin-top: 100px;
-        .report {
-          table {
-            width: 80%;
-          }
-        }
+        margin-top: 70px;
+      }
+      >div {
+          margin-top: 30px;
       }
     }
-  }
-  table {
-    width: 100%;
   }
 }
 </style>

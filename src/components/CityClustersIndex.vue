@@ -11,11 +11,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>上海</td>
-          <td>15</td>
-          <td>4500</td>
-          <td>100</td>
+        <tr v-for="(item,index) in tableData" :key="index">
+          <td>{{ item.city }}</td>
+          <td>{{ item.GDP }}</td>
+          <td>{{ item.population }}</td>
+          <td>{{ item.scenicSpotsCount }}</td>
         </tr>
       </tbody>
     </table>
@@ -42,6 +42,8 @@ export default {
       //  接口:获取指数数据
       this.tableData = [
         { city: "Shanghai", GDP: 15, population: 2000, scenicSpotsCount: 100 },
+        { city: "Beijing", GDP: 14, population: 2300, scenicSpotsCount: 150 },
+        { city: "Shanghai", GDP: 15, population: 2000, scenicSpotsCount: 100 },
         { city: "Beijing", GDP: 14, population: 2300, scenicSpotsCount: 150 }
       ];
     }
@@ -50,10 +52,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.report {
-  #tripmoderatio-chart-dom {
-    width: 50%;
-    height: 204px;
-  }
+table {
+  width: 80%;
 }
 </style>

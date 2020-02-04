@@ -84,8 +84,8 @@ export default {
 <style lang="less" scoped>
 .report {
   #tripmoderatio-chart-dom {
-    width: 50%;
-    height: 204px;
+    width: 70%;
+    height: 304px;
   }
 }
 </style>

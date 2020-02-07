@@ -1,4 +1,4 @@
-let mapStyle1 = [{
+export let mapStyle1 = [{
     'featureType': 'water',
     'elementType': 'all',
     'stylers': {
@@ -103,6 +103,4 @@ let mapStyle1 = [{
         'visibility': 'off'
     }
 }];
-let mapStyle2 = [];
-
-export default { mapStyle1, mapStyle2 };
+export let mapStyle2 = [];

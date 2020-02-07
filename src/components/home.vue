@@ -1,13 +1,15 @@
 <template>
   <div id="homepage">
-    <bg-map class="bg-map"></bg-map>
+    <bg-map class="bg-map" :indicator="curSumIndicator"></bg-map>
     <home-header class="home-header" msg="dddddddddd"></home-header>
     <main class="main-content">
       <section class="section1">
         <trip-mode-ratio></trip-mode-ratio>
         <city-clusters-index></city-clusters-index>
       </section>
-      <section class="section2"></section>
+      <section class="section2">
+        <summary-data @onIndicatorClick="handleIndicatorClick"></summary-data>
+      </section>
       <section class="section3"></section>
     </main>
   </div>
@@ -18,14 +20,26 @@ import HomeHeader from "./Header";
 import BgMap from "./MyMap";
 import TripModeRatio from "./TripModeRatio";
 import CityClustersIndex from "./CityClustersIndex";
+import SummaryData from "./Summary";
 
 export default {
   name: "homepage",
+  data() {
+    return {
+      curSumIndicator: "occur"
+    };
+  },
   components: {
     HomeHeader,
     BgMap,
     TripModeRatio,
-    CityClustersIndex
+    CityClustersIndex,
+    SummaryData
+  },
+  methods: {
+    handleIndicatorClick(indicator) {
+      this.curSumIndicator = indicator;
+    }
   }
 };
 </script>
@@ -53,8 +67,8 @@ export default {
       &.section3 {
         margin-top: 70px;
       }
-      >div {
-          margin-top: 30px;
+      > div {
+        margin-top: 30px;
       }
     }
   }

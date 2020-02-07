@@ -47,4 +47,8 @@ table {
     }
   }
 }
+/* 隐藏百度地图版权信息 */
+.anchorBL {
+  display: none;
+}
 </style>

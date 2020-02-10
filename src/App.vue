@@ -17,6 +17,12 @@ export default {
 
 <style lang="less">
 #app {
+  margin: 0;
+  padding: 0;
+  width: 1920px;
+  height: 1080px;
+  font-size: 12px;
+  color: white;
   position: relative;
   height: 100%;
   width: 100%;

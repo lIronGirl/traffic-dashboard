@@ -1,6 +1,16 @@
 <template>
   <div class="report">
     <h3>城市群指标</h3>
+    <table>
+      <thead>
+        <tr>
+          <td>城市名</td>
+          <td>人均GDP（万）</td>
+          <td>总人口（万）</td>
+          <td>景区总数</td>
+        </tr>
+      </thead>
+    </table>
     <table class="table" id="city-clusters-index-table">
       <thead>
         <tr>

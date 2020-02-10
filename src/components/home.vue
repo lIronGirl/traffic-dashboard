@@ -1,7 +1,6 @@
 <template>
   <div id="homepage">
-    <bg-map class="bg-map" :indicator="curSumIndicator"></bg-map>
-    <home-header class="home-header" msg="dddddddddd"></home-header>
+    <home-header class="home-header"></home-header>
     <main class="main-content">
       <section class="section1">
         <trip-mode-ratio></trip-mode-ratio>
@@ -10,8 +9,11 @@
       <section class="section2">
         <summary-data @onIndicatorClick="handleIndicatorClick"></summary-data>
       </section>
-      <section class="section3"></section>
+      <section class="section3">
+        <rank-table></rank-table>
+      </section>
     </main>
+    <bg-map class="bg-map" :indicator="curSumIndicator"></bg-map>
   </div>
 </template>
 
@@ -21,6 +23,7 @@ import BgMap from "./MyMap";
 import TripModeRatio from "./TripModeRatio";
 import CityClustersIndex from "./CityClustersIndex";
 import SummaryData from "./Summary";
+import RankTable from "./Rank";
 
 export default {
   name: "homepage",
@@ -34,7 +37,8 @@ export default {
     BgMap,
     TripModeRatio,
     CityClustersIndex,
-    SummaryData
+    SummaryData,
+    RankTable
   },
   methods: {
     handleIndicatorClick(indicator) {
@@ -60,7 +64,7 @@ export default {
   main {
     display: -webkit-flex;
     display: flex;
-    margin: 0 20px;
+    margin: 20px;
     section {
       flex: 1;
       &.section1,

@@ -50,6 +50,7 @@ export default {
 header {
   text-align: center;
   position: relative;
+  margin-top: 20px;
   a {
     color: #42b983;
   }
@@ -65,7 +66,7 @@ header {
     border-top: 1px #111317 solid;
     font-size: 16px;
     padding: 4px 0;
-    top: -17px;
+    top: -1px;
     &:before {
       content: "";
       width: 100%;
@@ -91,7 +92,7 @@ header {
   }
   .header-links {
     position: absolute;
-    top: -10px;
+    top: 0px;
     right: 20px;
     font-size: 16px;
     list-style-type: none;

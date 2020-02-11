@@ -1,88 +1,98 @@
 <template>
-  <div style="height:100%;width:100%">
-    <div class="body" :style="view">
-      <div class="scroll-content" :style="{top}">
-        <tr v-for="(item, index) in dutyRateData" :key="index">
-          <td>{{item.group}}</td>
-          <td>{{item.bookNum}}</td>
-          <td>{{item.sceneNum}}</td>
-          <td>{{item.dutyRate}}</td>
-        </tr>
-      </div>
-    </div>
+  <div>
+    <h3 class="align-right">出行量排行榜</h3>
+    <Table
+      id="rank-table"
+      stripe
+      :columns="rankColumns"
+      :data="tableData.concat(tableData).concat(tableData).concat(tableData)"
+    ></Table>
   </div>
 </template>
+
 <script>
 export default {
-  props: {
-    viewHeight: {
-      //可视窗口
-      type: [Number, String],
-      default: "200px"
-    },
-    // animationTime: {//移动间隔
-    //   type: [Number, String],
-    //   default: "0.825s"
-    // },
-    // direction:{//移动方向
-    //     type:String,
-    //     default:top,
-    // },
-    moveDistance: {
-      //移动距离
-      type: Number,
-      default: 25
-    }
-  },
   data() {
     return {
-      dutyRateData: [
-        { group: "电工班1", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班2", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班3", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班4", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班5", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班6", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班7", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班8", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班9", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班10", bookNum: 3, sceneNum: 0, dutyRate: "88%" },
-        { group: "电工班11", bookNum: 3, sceneNum: 0, dutyRate: "88%" }
+      rankColumns: [
+        {
+          type: "index",
+          width: 60,
+          align: "right"
+        },
+        {
+          title: "省名",
+          key: "name"
+        },
+        {
+          title: "Age",
+          key: "age"
+        },
+        {
+          title: "Address",
+          key: "address"
+        }
       ],
-      activeIndex: 0,
-      view: ""
+      tableData: [
+        {
+          name: "John Brown",
+          age: 18,
+          address: "222222222",
+          date: "2016-10-03"
+        },
+        {
+          name: "Jim Green",
+          age: 24,
+          address: "1111111",
+          date: "2016-10-01"
+        },
+        {
+          name: "Joe Black",
+          age: 30,
+          address: "43433333",
+          date: "2016-10-02"
+        },
+        {
+          name: "Jon Snow",
+          age: 26,
+          address: "2231231",
+          date: "2016-10-04"
+        }
+      ]
     };
   },
-  methods: {},
-  computed: {
-    top() {
-      return -this.activeIndex * this.moveDistance + "px"; //定义移动的单元高度
-    }
-  },
   mounted() {
-    this.view = { height: this.viewHeight };
-    var that = this;
-    setInterval(function() {
-      //自定义滚动 出勤率
-      if (that.activeIndex < that.dutyRateData.length /* that.towerListArr.length */) {
-        that.activeIndex += 1;
-      } else {
-        that.activeIndex = 0;
+    setTimeout(function() {
+      var table = document
+        .getElementById("rank-table")
+        .getElementsByClassName("ivu-table-body")[0];
+      var timer = null;
+      function play() {
+        clearInterval(timer);
+        timer = setInterval(function() {
+          table.scrollTop++;
+          if (table.scrollTop >= 240 / 2) {
+            table.scrollTop = 0;
+          }
+        }, 100);
       }
-    }, 1500);
+      setTimeout(play, 500);
+      table.onmouseover = function() {
+        clearInterval(timer);
+      };
+      table.onmouseout = play;
+    }, 0);
   }
 };
 </script>
-<style lang="less" scoped>
-.scroll-content {
-  //自定义滚动 间隔时间和方向
-  position: relative;
-  transition: top 0.825s; //向上移动
+<style>
+#rank-table .ivu-table-body {
+  overflow: hidden;
+  height: 258px;
 }
-.body {
-  width: 100%;
-  height: 100px;
-  overflow-y: hidden;
-  //   position: absolute;
+</style>
+<style lang="less" scoped>
+h3.align-right {
+  text-align: right;
 }
 </style>

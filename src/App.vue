@@ -30,31 +30,53 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-}
-/* 图表标题样式 */
-h3 {
-  font-size: 18px;
-  font-weight: 400;
-  text-align: left;
-}
-/* 表格样式 */
-table {
-  font-size: 14px;
-  border-collapse: collapse;
-  td {
-    height: 30px;
+  /* 图表标题样式 */
+  h3 {
+    font-size: 18px;
+    font-weight: 400;
+    text-align: left;
+    margin-bottom: 14px;
   }
-  thead {
-    font-weight: 500;
+  h3.align-right {
+    text-align: right;
   }
-  tbody {
-    tr:nth-child(odd) {
-      background-color: rgba(255, 255, 255, 0.05);
+  /* 表格样式 */
+  table {
+    font-size: 14px;
+    border-collapse: collapse;
+    td {
+      height: 30px;
+    }
+    thead {
+      font-weight: 500;
+    }
+    tbody {
+      tr:nth-child(odd) {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
     }
   }
-}
-/* 隐藏百度地图版权信息 */
-.anchorBL {
-  display: none;
+  /* iView表格样式重写 */
+  .ivu-table {
+    background-color: transparent;
+    color: #fff;
+    th,
+    td {
+      background-color: transparent;
+      border-bottom: none;
+    }
+    &.ivu-table-stripe .ivu-table-body tr:nth-child(2n) td,
+    &.ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td {
+      background-color: transparent;
+    }
+    &:before {
+      height: 0;
+    }
+  }
+
+  /* 隐藏百度地图版权信息 */
+  .anchorBL {
+    display: none;
+  }
 }
 </style>

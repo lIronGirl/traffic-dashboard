@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 class="align-right">出行量排行榜</h3>
-    <Table id="rank-table" :height="viewHeight" stripe :columns="rankColumns" :data="tableData"></Table>
+    <Table id="rank-table" :height="viewHeight+38" stripe :columns="rankColumns" :data="tableData"></Table>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
     tableDom = table.getElementsByClassName("ivu-table-body")[0];
     //   TODO调试接口时，需要修改为在回调中调用之后的函数
     that.getTableData();
-    if (that.tableData.length > 15) {
+    if (that.tableData.length > that.trViewCount) {
       that.startTimer();
       tableDom.onmouseover = function() {
         clearTimeout(timer);

@@ -50,7 +50,7 @@ export default {
 header {
   text-align: center;
   position: relative;
-  margin-top: 20px;
+  padding-top: 20px;
   a {
     color: #42b983;
   }
@@ -92,7 +92,7 @@ header {
   }
   .header-links {
     position: absolute;
-    top: 0px;
+    top: 20px;
     right: 20px;
     font-size: 16px;
     list-style-type: none;
@@ -102,6 +102,10 @@ header {
       margin: 0 6px;
       padding: 4px 6px;
       background: rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      &:hover {
+        color: #4bccec
+      }
     }
   }
 }

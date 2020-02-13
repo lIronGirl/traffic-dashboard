@@ -31,6 +31,7 @@ export default {
       );
       // 绘制图表
       myChart1.setOption({
+        color: ['#4bccec', '#a680ff'],
         tooltip: {
           trigger: "item",
           formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -39,13 +40,17 @@ export default {
           orient: "vertical",
           right: 10,
           top: 'middle',
+          textStyle: {
+            color: '#fff',
+            fontSize: 14
+          },
           data: ["高铁出行", "飞机出行"]
         },
         series: [
           {
             name: "高铁飞机出行占比",
             type: "pie",
-            radius: ["50%", "70%"],
+            radius: ["54%", "74%"],
             center: ['30%', '50%'],
             avoidLabelOverlap: false,
             label: {
@@ -83,9 +88,12 @@ export default {
 
 <style lang="less" scoped>
 .report {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
   #tripmoderatio-chart-dom {
     width: 70%;
-    height: 304px;
+    flex: 1;
   }
 }
 </style>

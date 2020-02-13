@@ -112,7 +112,7 @@ export default {
           trigger: "item"
         },
         bmap: {
-          center: [104.114129, 37.550339],
+          center: [110.114129, 42.550339],
           zoom: 5,
           roam: false,
           mapStyle: {

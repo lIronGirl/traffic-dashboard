@@ -11,6 +11,10 @@ export default {
   name: "app",
   components: {
     Home
+  },
+  mounted() {
+    /* let winWidth = document.documentElement.clientWidth;
+    document.getElementById('app').style.transform = 'scale('+ winWidth/1920+','+ winWidth/1920 +')' */
   }
 };
 </script>
@@ -19,11 +23,12 @@ export default {
 #app {
   margin: 0;
   padding: 0;
-  width: 1920px;
-  height: 1080px;
   font-size: 12px;
   color: white;
-  position: relative;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   font-family: "Avenir", Helvetica, Arial, sans-serif;

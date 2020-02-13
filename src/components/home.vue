@@ -64,15 +64,20 @@ export default {
   main {
     display: -webkit-flex;
     display: flex;
-    margin: 20px;
+    padding: 20px;
+    height: 84%;
     section {
       flex: 1;
+      display: -webkit-flex;
+      display: flex;
+      flex-direction: column;
       &.section1,
       &.section3 {
-        margin-top: 70px;
+        margin-top: 2%;
       }
       > div {
         margin-top: 30px;
+        flex: 1;
       }
     }
   }

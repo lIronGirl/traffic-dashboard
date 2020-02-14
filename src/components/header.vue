@@ -1,6 +1,6 @@
 <template>
   <header id="homepageheader">
-    <h1 class="header-title">中国主要城市交通健康榜</h1>
+    <h1 class="header-title">中国主要城市出行排行榜</h1>
     <div class="header-time">{{ nowTime }}</div>
     <ul class="header-links">
       <li><router-link to="/cityClustersTravel">城市群出行</router-link></li>

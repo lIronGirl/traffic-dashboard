@@ -75,6 +75,9 @@ export default {
       &.section3 {
         margin-top: 2%;
       }
+      &.section2 {
+        flex: 1.2
+      }
       > div {
         margin-top: 30px;
         flex: 1;

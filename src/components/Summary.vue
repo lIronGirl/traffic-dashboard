@@ -72,11 +72,13 @@ export default {
 
 <style lang="less" scoped>
 ol {
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
+  display: -webkit-flex;
+  display: flex;
   li.indicator {
     display: inline-block;
-    margin: 0 10px;
+    flex: 1;
     cursor: pointer;
     h5 {
       font-size: 16px;

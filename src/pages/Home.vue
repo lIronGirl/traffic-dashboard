@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import HomeHeader from "./Header";
-import BgMap from "./MyMap";
-import TripModeRatio from "./TripModeRatio";
-import CityClustersIndex from "./CityClustersIndex";
-import SummaryData from "./Summary";
-import RankTable from "./Rank";
+import HomeHeader from "../components/Header";
+import BgMap from "../components/MyMap";
+import TripModeRatio from "../components/TripModeRatio";
+import CityClustersIndex from "../components/CityClustersIndex";
+import SummaryData from "../components/Summary";
+import RankTable from "../components/Rank";
 
 export default {
   name: "homepage",

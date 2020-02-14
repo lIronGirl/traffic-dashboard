@@ -19,15 +19,28 @@ export default {
         },
         {
           title: "省名",
-          key: "name"
+          key: "name",
+          width: 70
         },
         {
-          title: "Age",
-          key: "age"
+          title: "发生量",
+          key: "age",
+          sortable: true
         },
         {
-          title: "Address",
-          key: "address"
+          title: "吸引量",
+          key: "address",
+          sortable: true
+        },
+        {
+          title: "高铁出行量",
+          key: "age",
+          sortable: true
+        },
+        {
+          title: "飞机出行量",
+          key: "address",
+          sortable: true
         }
       ],
       tableData: [],
@@ -61,27 +74,26 @@ export default {
     getTableData() {
       let fakeData = [
         {
-          name: "John Brown",
-          age: 18,
-          address: "222222222",
-          date: "2016-10-03"
+          name: "北京",
+          age: 18033,
+          address: 23134
         },
         {
-          name: "Jim Green",
-          age: 24,
-          address: "1111111",
+          name: "广东",
+          age: 24239,
+          address: 9767,
           date: "2016-10-01"
         },
         {
-          name: "Joe Black",
-          age: 30,
-          address: "43433333",
+          name: "河北",
+          age: 30753,
+          address: 43433,
           date: "2016-10-02"
         },
         {
-          name: "Jon Snow",
-          age: 26,
-          address: "2231231",
+          name: "天津",
+          age: 2665,
+          address: 23123,
           date: "2016-10-04"
         }
       ];

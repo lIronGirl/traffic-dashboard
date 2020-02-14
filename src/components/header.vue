@@ -3,10 +3,10 @@
     <h1 class="header-title">中国主要城市交通健康榜</h1>
     <div class="header-time">{{ nowTime }}</div>
     <ul class="header-links">
-      <li>城市群出行</li>
-      <li>城市群场站交通状况</li>
-      <li>个体出行</li>
-      <li>交通预测</li>
+      <li><router-link to="/cityClustersTravel">城市群出行</router-link></li>
+      <li><router-link to="/stationTraffic">城市群场站交通状况</router-link></li>
+      <li><router-link to="/individualTravel">个体出行</router-link></li>
+      <li><router-link to="/trafficPrediction">交通预测</router-link></li>
     </ul>
   </header>
 </template>
@@ -52,7 +52,7 @@ header {
   position: relative;
   padding-top: 20px;
   a {
-    color: #42b983;
+    color: #fff;
   }
   h1 {
     padding: 4px 0 8px 0;
@@ -103,7 +103,7 @@ header {
       padding: 4px 6px;
       background: rgba(255, 255, 255, 0.05);
       cursor: pointer;
-      &:hover {
+      a:hover {
         color: #4bccec
       }
     }

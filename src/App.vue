@@ -1,14 +1,16 @@
 <template>
   <div id="app">
+    <home-header class="home-header"></home-header>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
+import HomeHeader from "./components/Header";
 export default {
   name: "app",
   components: {
+    HomeHeader
   },
   mounted() {
   }

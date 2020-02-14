@@ -1,6 +1,5 @@
 <template>
   <div id="homepage">
-    <home-header class="home-header"></home-header>
     <main class="main-content">
       <section class="section1">
         <trip-mode-ratio></trip-mode-ratio>
@@ -18,7 +17,6 @@
 </template>
 
 <script>
-import HomeHeader from "../components/Header";
 import BgMap from "../components/MyMap";
 import TripModeRatio from "../components/TripModeRatio";
 import CityClustersIndex from "../components/CityClustersIndex";
@@ -33,7 +31,6 @@ export default {
     };
   },
   components: {
-    HomeHeader,
     BgMap,
     TripModeRatio,
     CityClustersIndex,
@@ -52,7 +49,7 @@ export default {
 #homepage {
   height: 100%;
   width: 100%;
-  position: relative;
+  // position: relative;
   .bg-map {
     position: absolute;
     top: 0;

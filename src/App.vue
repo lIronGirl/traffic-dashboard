@@ -11,8 +11,6 @@ export default {
   name: "app",
   components: {
     HomeHeader
-  },
-  mounted() {
   }
 };
 </script>

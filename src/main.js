@@ -26,7 +26,7 @@ const router = new VueRouter({
     { path: '/individualTravel', component: IndividualTravel },
     { path: '/trafficPrediction', component: TrafficPrediction }
   ]
-})
+});
 
 new Vue({
   render: h => h(App),

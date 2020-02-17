@@ -1,12 +1,25 @@
 <template>
   <header id="homepageheader">
-    <h1 class="header-title">中国主要城市出行排行榜</h1>
+    <h1 class="header-title">{{ pageTitle }}</h1>
     <div class="header-time">{{ nowTime }}</div>
-    <ul class="header-links">
-      <li><router-link to="/cityClustersTravel">城市群出行</router-link></li>
-      <li><router-link to="/stationTraffic">城市群场站交通状况</router-link></li>
-      <li><router-link to="/individualTravel">个体出行</router-link></li>
-      <li><router-link to="/trafficPrediction">交通预测</router-link></li>
+    <ul class="header-links" @click="linkChange($event)">
+      <li>
+        <router-link to="/">
+          <i class="iconfont icon-home"></i>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/cityClustersTravel">城市群出行</router-link>
+      </li>
+      <li>
+        <router-link to="/stationTraffic">城市群场站交通状况</router-link>
+      </li>
+      <li>
+        <router-link to="/individualTravel">个体出行</router-link>
+      </li>
+      <li>
+        <router-link to="/trafficPrediction">交通预测</router-link>
+      </li>
     </ul>
   </header>
 </template>
@@ -16,15 +29,21 @@ import moment from "moment";
 import "moment/locale/zh-cn";
 moment.locale("zh-cn");
 
+let pageTitle = {
+  "/": "中国主要城市出行排行榜",
+  "/cityClustersTravel": "京津冀出行排行",
+  "/stationTraffic": "京津冀场站周围交通状况",
+  "/individualTravel": "个体出行交通状况",
+  "/trafficPrediction": "京津冀交通需求预测"
+};
+
 export default {
   name: "homeheader",
   data() {
     return {
-      nowTime: ""
+      nowTime: "",
+      pageTitle: "中国主要城市出行排行榜"
     };
-  },
-  props: {
-    msg: String
   },
   methods: {
     currentTime() {
@@ -32,6 +51,16 @@ export default {
     },
     getTime() {
       this.nowTime = moment().format("YYYY-MM-DD HH:mm:ss");
+    },
+    linkChange(e) {
+      let node = e.target;
+      while (node.parentNode.nodeName != "BODY") {
+        if (node.nodeName == "LI") {
+          break;
+        }
+        node = node.parentNode;
+      }
+      this.pageTitle = pageTitle[node.firstChild.hash.slice(1)];
     }
   },
   mounted() {
@@ -104,7 +133,11 @@ header {
       background: rgba(255, 255, 255, 0.05);
       cursor: pointer;
       a:hover {
-        color: #4bccec
+        color: #4bccec;
+      }
+      &:first-child {
+        padding-right: 12px;
+        padding-left: 12px;
       }
     }
   }

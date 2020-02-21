@@ -22,10 +22,16 @@
           </Select>
         </div>
         <div class="part rank-table">
-          <Tabs value="name1" size="small" type="card">
-            <TabPane label="出行" name="name1">标签一的内容</TabPane>
-            <TabPane label="迁入" name="name2">标签二的内容</TabPane>
-            <TabPane label="迁出" name="name3">标签三的内容</TabPane>
+          <Tabs v-model="rankType" size="small" type="card">
+            <TabPane label="出行" name="tripRank">
+              <Table :height="514" stripe :columns="tripColumns" :data="tableData"></Table>
+            </TabPane>
+            <TabPane label="迁入" name="inRank">
+              <Table :height="514" stripe :columns="outOrInColumns" :data="tableData"></Table>
+            </TabPane>
+            <TabPane label="迁出" name="outRank">
+              <Table :height="514" stripe :columns="outOrInColumns" :data="tableData"></Table>
+            </TabPane>
           </Tabs>
         </div>
       </section>
@@ -49,8 +55,48 @@ export default {
     return {
       open: false,
       currDate: moment().format("YYYY-MM-DD"),
-      tripMode: "road"
+      tripMode: "road",
+      rankType: "inRank",
+      tripColumns: [
+        {
+          title: "排行",
+          key: "name"
+        },
+        {
+          title: "指数",
+          key: "age"
+        },
+        {
+          title: "时长",
+          key: "address"
+        }
+      ],
+      outOrInColumns: [
+        {
+          title: "排行",
+          key: "name"
+        },
+        {
+          title: "指数",
+          key: "age"
+        }
+      ],
+      tableData: []
     };
+  },
+  watch: {
+    currDate() {
+      this.getTableData();
+    },
+    tripMode() {
+      this.getTableData();
+    },
+    rankType() {
+      this.getTableData();
+    }
+  },
+  mounted() {
+    this.getTableData();
   },
   methods: {
     handleClick() {
@@ -60,8 +106,37 @@ export default {
       this.open = false;
       this.currDate = date;
     },
-    handleOk() {
-      this.open = false;
+    getTableData() {
+      let that = this;
+      /* that.currDate;
+      that.tripMode;
+      that.rankType; */
+      alert(that.currDate + "-" + that.tripMode + "-" + that.rankType);
+      that.tableData = [
+        {
+          name: "北京",
+          age: 18033,
+          address: 23134
+        },
+        {
+          name: "广东",
+          age: 24239,
+          address: 9767,
+          date: "2016-10-01"
+        },
+        {
+          name: "河北",
+          age: 30753,
+          address: 43433,
+          date: "2016-10-02"
+        },
+        {
+          name: "天津",
+          age: 2665,
+          address: 23123,
+          date: "2016-10-04"
+        }
+      ];
     }
   }
 };
@@ -76,7 +151,7 @@ export default {
     padding: 20px;
     height: 84%;
     section {
-      width: 16%;
+      width: 20%;
       height: 100%;
       float: right;
       .part {
@@ -97,7 +172,7 @@ export default {
   @btnBackgroundColor: rgba(255, 255, 255, 0.05);
   @boxInsetShadow: rgba(15, 29, 51, 0.5) 0px 4px 5px 0px,
     rgba(75, 204, 236, 0.5) 0px 0px 6px 0px inset;
-  @boxBackgroundColor: #101216;
+  @boxBackgroundColor: #181c21;
   @fontNormalColor: #fff;
   @fontPrimaryColor: #4bccec;
   @dateCellSize: 50px;

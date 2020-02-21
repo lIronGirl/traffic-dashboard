@@ -2,7 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import echarts from 'echarts'
 import 'view-design/dist/styles/iview.css';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
+import './assets/my-theme/index.less';
 
 Vue.prototype.$echarts = echarts
 
@@ -10,8 +11,10 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter);
 
-import { Table } from 'view-design';
+import { Table, Icon, DatePicker } from 'view-design';
 Vue.component('Table', Table);
+Vue.component('Icon', Icon);
+Vue.component('DatePicker', DatePicker);
 
 const Home = () => import('./pages/Home.vue');
 const CityClustersTravel = () => import('./pages/CityClustersTravel.vue');

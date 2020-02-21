@@ -2,7 +2,7 @@
   <div id="cityClustersTravelPage">
     <main>
       <section>
-        <div class="condition">
+        <div class="part">
           <DatePicker
             :open="open"
             :value="currDate"
@@ -20,6 +20,13 @@
             <Option value="rail">轨道</Option>
             <Option value="road">公路</Option>
           </Select>
+        </div>
+        <div class="part rank-table">
+          <Tabs value="name1" size="small" type="card">
+            <TabPane label="出行" name="name1">标签一的内容</TabPane>
+            <TabPane label="迁入" name="name2">标签二的内容</TabPane>
+            <TabPane label="迁出" name="name3">标签三的内容</TabPane>
+          </Tabs>
         </div>
       </section>
     </main>
@@ -70,10 +77,15 @@ export default {
     height: 84%;
     section {
       width: 16%;
+      height: 100%;
       float: right;
-      .condition {
+      .part {
         padding: 16px;
+        margin-bottom: 16px;
         background-color: rgba(255, 255, 255, 0.05);
+        &.rank-table {
+          height: 80%;
+        }
       }
     }
   }
@@ -172,6 +184,28 @@ export default {
     }
     .ivu-select-item-focus {
       background-color: transparent;
+    }
+  }
+
+  .ivu-tabs.ivu-tabs-card {
+    color: @fontNormalColor;
+    & > .ivu-tabs-bar {
+      border: none;
+      margin-bottom: 0;
+      .ivu-tabs-tab {
+        background-color: transparent;
+        border-color: transparent;
+      }
+      .ivu-tabs-tab-active {
+        background-color: @boxBackgroundColor;
+        border-color: transparent;
+        border: none;
+      }
+    }
+    .ivu-tabs-content {
+      & > div {
+        background: @boxBackgroundColor;
+      }
     }
   }
 }

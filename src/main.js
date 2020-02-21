@@ -11,10 +11,12 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter);
 
-import { Table, Icon, DatePicker } from 'view-design';
+import { Table, Icon, DatePicker, Select, Option } from 'view-design';
 Vue.component('Table', Table);
 Vue.component('Icon', Icon);
 Vue.component('DatePicker', DatePicker);
+Vue.component('Select', Select);
+Vue.component('Option', Option);
 
 const Home = () => import('./pages/Home.vue');
 const CityClustersTravel = () => import('./pages/CityClustersTravel.vue');

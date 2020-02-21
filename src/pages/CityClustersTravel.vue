@@ -2,13 +2,25 @@
   <div id="cityClustersTravelPage">
     <main>
       <section>
-        <DatePicker :open="open" :value="value3" type="date" size="large" @on-change="handleChange">
-          <a href="javascript:void(0)" @click="handleClick">
-            <Icon type="ios-calendar-outline"></Icon>
-            <template v-if="value3 === ''">Select date</template>
-            <template v-else>{{ value3 }}</template>
-          </a>
-        </DatePicker>
+        <div class="condition">
+          <DatePicker
+            :open="open"
+            :value="currDate"
+            type="date"
+            size="large"
+            @on-change="handleChange"
+          >
+            <a href="javascript:void(0)" @click="handleClick">
+              <Icon type="ios-calendar-outline" size="18" color="#fff"></Icon>
+              <span style="font-size: 18px; color: #fff;padding-left: 8px;">{{ currDate }}</span>
+            </a>
+          </DatePicker>
+          <Select v-model="tripMode" style="width:100%; margin-top: 8px;">
+            <Option value="air">飞机</Option>
+            <Option value="rail">轨道</Option>
+            <Option value="road">公路</Option>
+          </Select>
+        </div>
       </section>
     </main>
 
@@ -18,6 +30,8 @@
 
 <script>
 import BgMap from "../components/MyMap";
+import moment from "moment";
+import "moment/locale/zh-cn";
 
 export default {
   name: "cityClustersTravelPage",
@@ -27,7 +41,8 @@ export default {
   data() {
     return {
       open: false,
-      value3: ""
+      currDate: moment().format("YYYY-MM-DD"),
+      tripMode: "road"
     };
   },
   methods: {
@@ -36,7 +51,7 @@ export default {
     },
     handleChange(date) {
       this.open = false;
-      this.value3 = date;
+      this.currDate = date;
     },
     handleOk() {
       this.open = false;
@@ -56,6 +71,10 @@ export default {
     section {
       width: 16%;
       float: right;
+      .condition {
+        padding: 16px;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
     }
   }
 }
@@ -67,6 +86,7 @@ export default {
   @boxInsetShadow: rgba(15, 29, 51, 0.5) 0px 4px 5px 0px,
     rgba(75, 204, 236, 0.5) 0px 0px 6px 0px inset;
   @boxBackgroundColor: #101216;
+  @fontNormalColor: #fff;
   @fontPrimaryColor: #4bccec;
   @dateCellSize: 50px;
 
@@ -130,6 +150,28 @@ export default {
     .ivu-date-picker-cells-year .ivu-date-picker-cells-cell-focused,
     .ivu-date-picker-cells-month .ivu-date-picker-cells-cell-focused {
       border: 1px solid @fontPrimaryColor;
+    }
+  }
+
+  .ivu-select {
+    .ivu-select-selection,
+    .ivu-select-dropdown {
+      background-color: @boxBackgroundColor;
+      border: none;
+      color: @fontNormalColor;
+    }
+    .ivu-select-item {
+      color: @fontNormalColor;
+    }
+    .ivu-select-item-selected,
+    .ivu-select-item-selected:hover {
+      color: @fontPrimaryColor;
+    }
+    .ivu-select-item:hover {
+      background: rgba(243, 243, 243, 0.08);
+    }
+    .ivu-select-item-focus {
+      background-color: transparent;
     }
   }
 }

@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       nowTime: "",
-      pageTitle: "中国主要城市出行排行榜"
+      pageTitle: ""
     };
   },
   methods: {
@@ -65,6 +65,7 @@ export default {
   },
   mounted() {
     this.currentTime();
+    this.pageTitle = pageTitle[location.hash.slice(1)];
   },
   beforeDestroy() {
     if (this.getTime) {

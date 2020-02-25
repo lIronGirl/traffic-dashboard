@@ -70,6 +70,9 @@ export default {
     &.ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td {
       background-color: transparent;
     }
+    .ivu-table-row-highlight td {
+      color: #4bccec;
+    }
     &:before {
       height: 0;
     }

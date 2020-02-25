@@ -26,7 +26,7 @@ export let mapStyle1 = [{
     'featureType': 'highway',
     'elementType': 'all',
     'stylers': {
-        'color': '#fdfdfd'
+        'color': '#242424'
     }
 }, {
     'featureType': 'highway',
@@ -101,6 +101,18 @@ export let mapStyle1 = [{
     'stylers': {
         'color': '#999999',
         'visibility': 'off'
+    }
+}, {
+    "featureType": "road",
+    "elementType": "geometry.fill",
+    "stylers": {
+        "color": "#12223dff"
+    }
+}, {
+    "featureType": "road",
+    "elementType": "geometry.stroke",
+    "stylers": {
+        "color": "#ffffff00"
     }
 }];
 export let mapStyle2 = [];

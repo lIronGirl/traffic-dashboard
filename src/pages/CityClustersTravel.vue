@@ -1,48 +1,67 @@
 <template>
   <div id="cityClustersTravelPage">
-    <main>
-      <section>
-        <div class="part">
-          <DatePicker
-            :open="open"
-            :value="currDate"
-            type="date"
-            size="large"
-            @on-change="handleChange"
-          >
-            <a href="javascript:void(0)" @click="handleClick">
-              <Icon type="ios-calendar-outline" size="18" color="#fff"></Icon>
-              <span style="font-size: 18px; color: #fff;padding-left: 8px;">{{ currDate }}</span>
-            </a>
-          </DatePicker>
-          <Select v-model="tripMode" style="width:100%; margin-top: 8px;">
-            <Option value="air">飞机</Option>
-            <Option value="rail">轨道</Option>
-            <Option value="road">公路</Option>
-          </Select>
-        </div>
-        <div class="part rank-table">
-          <Tabs v-model="rankType" size="small" type="card">
-            <TabPane label="出行" name="tripRank">
-              <Table :height="514" stripe :columns="tripColumns" :data="tableData"></Table>
-            </TabPane>
-            <TabPane label="迁入" name="inRank">
-              <Table :height="514" stripe :columns="outOrInColumns" :data="tableData"></Table>
-            </TabPane>
-            <TabPane label="迁出" name="outRank">
-              <Table :height="514" stripe :columns="outOrInColumns" :data="tableData"></Table>
-            </TabPane>
-          </Tabs>
-        </div>
-      </section>
-    </main>
+    <div class="content">
+      <div class="part">
+        <DatePicker
+          :open="open"
+          :value="currDate"
+          type="date"
+          size="large"
+          @on-change="handleChange"
+        >
+          <a href="javascript:void(0)" @click="handleClick">
+            <Icon type="ios-calendar-outline" size="18" color="#fff"></Icon>
+            <span style="font-size: 18px; color: #fff;padding-left: 8px;">{{ currDate }}</span>
+          </a>
+        </DatePicker>
+        <Select v-model="tripMode" style="width:100%; margin-top: 8px;">
+          <Option value="air">飞机</Option>
+          <Option value="rail">轨道</Option>
+          <Option value="road">公路</Option>
+        </Select>
+      </div>
+      <div class="part rank-table">
+        <Tabs v-model="rankType" size="small" type="card">
+          <TabPane label="出行" name="tripRank">
+            <Table
+              :height="514"
+              stripe
+              highlight-row
+              :columns="tripColumns"
+              :data="tableData"
+              @on-row-click="seleckRow"
+            ></Table>
+          </TabPane>
+          <TabPane label="迁入" name="inRank">
+            <Table
+              :height="514"
+              stripe
+              highlight-row
+              :columns="outOrInColumns"
+              :data="tableData"
+              @on-row-click="seleckRow"
+            ></Table>
+          </TabPane>
+          <TabPane label="迁出" name="outRank">
+            <Table
+              :height="514"
+              stripe
+              highlight-row
+              :columns="outOrInColumns"
+              :data="tableData"
+              @on-row-click="seleckRow"
+            ></Table>
+          </TabPane>
+        </Tabs>
+      </div>
+    </div>
 
-    <bg-map class="bg-map"></bg-map>
+    <bg-map class="bg-map" :mapData="mapData" :mapCenter="mapCenter"></bg-map>
   </div>
 </template>
 
 <script>
-import BgMap from "../components/MyMap";
+import BgMap from "../components/MyMap2";
 import moment from "moment";
 import "moment/locale/zh-cn";
 
@@ -55,8 +74,8 @@ export default {
     return {
       open: false,
       currDate: moment().format("YYYY-MM-DD"),
-      tripMode: "road",
-      rankType: "inRank",
+      tripMode: "air",
+      rankType: "tripRank",
       tripColumns: [
         {
           title: "排行",
@@ -64,11 +83,11 @@ export default {
         },
         {
           title: "指数",
-          key: "age"
+          key: "index"
         },
         {
           title: "时长",
-          key: "address"
+          key: "time"
         }
       ],
       outOrInColumns: [
@@ -78,25 +97,27 @@ export default {
         },
         {
           title: "指数",
-          key: "age"
+          key: "index"
         }
       ],
-      tableData: []
+      tableData: [],
+      mapData: [],
+      mapCenter: 0
     };
   },
   watch: {
     currDate() {
-      this.getTableData();
+      this.getData();
     },
     tripMode() {
-      this.getTableData();
+      this.getData();
     },
     rankType() {
-      this.getTableData();
+      this.getData();
     }
   },
   mounted() {
-    this.getTableData();
+    this.getData();
   },
   methods: {
     handleClick() {
@@ -106,37 +127,127 @@ export default {
       this.open = false;
       this.currDate = date;
     },
-    getTableData() {
+    seleckRow(row, index) {
+      this.mapCenter = index;
+    },
+    getData() {
+      // 飞机使用线图，轨道及公路使用路径图
       let that = this;
       /* that.currDate;
       that.tripMode;
       that.rankType; */
-      alert(that.currDate + "-" + that.tripMode + "-" + that.rankType);
-      that.tableData = [
-        {
-          name: "北京",
-          age: 18033,
-          address: 23134
-        },
-        {
-          name: "广东",
-          age: 24239,
-          address: 9767,
-          date: "2016-10-01"
-        },
-        {
-          name: "河北",
-          age: 30753,
-          address: 43433,
-          date: "2016-10-02"
-        },
-        {
-          name: "天津",
-          age: 2665,
-          address: 23123,
-          date: "2016-10-04"
-        }
+      // alert(that.currDate + "-" + that.tripMode + "-" + that.rankType);
+      let fakeData = [
+        [
+          {
+            name: "北京"
+          },
+          {
+            name: "廊坊",
+            index: 38,
+            time: 58
+          }
+        ],
+        [
+          {
+            name: "廊坊"
+          },
+          {
+            name: "北京",
+            index: 36,
+            time: 50
+          }
+        ],
+        [
+          {
+            name: "北京"
+          },
+          {
+            name: "石家庄",
+            index: 30,
+            time: 300
+          }
+        ],
+        [
+          {
+            name: "北京"
+          },
+          {
+            name: "天津",
+            index: 30,
+            time: 120
+          }
+        ],
+        [
+          {
+            name: "北京"
+          },
+          {
+            name: "唐山",
+            index: 28,
+            time: 240
+          }
+        ],
+        [
+          {
+            name: "石家庄"
+          },
+          {
+            name: "北京",
+            index: 27,
+            time: 360
+          }
+        ],
+        [
+          {
+            name: "石家庄"
+          },
+          {
+            name: "天津",
+            index: 25,
+            time: 120
+          }
+        ],
+        [
+          {
+            name: "天津"
+          },
+          {
+            name: "北京",
+            index: 25,
+            time: 120
+          }
+        ],
+        [
+          {
+            name: "石家庄"
+          },
+          {
+            name: "唐山",
+            index: 23,
+            time: 260
+          }
+        ],
+        [
+          {
+            name: "北京"
+          },
+          {
+            name: "唐山",
+            index: 10,
+            time: 300
+          }
+        ]
       ];
+      that.tableData = fakeData.map(function(val) {
+        return {
+          name: val[0].name + "-" + val[1].name,
+          index: val[1].index,
+          time: val[1].time
+        };
+      });
+      that.tableData[0] && (that.tableData[0]._highlight = true);
+      that.mapData = fakeData;
     }
   }
 };
@@ -147,20 +258,18 @@ export default {
 #cityClustersTravelPage {
   width: 100%;
   height: 100%;
-  main {
-    padding: 20px;
-    height: 84%;
-    section {
-      width: 20%;
-      height: 100%;
-      float: right;
-      .part {
-        padding: 16px;
-        margin-bottom: 16px;
-        background-color: rgba(255, 255, 255, 0.05);
-        &.rank-table {
-          height: 80%;
-        }
+  .content {
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    right: 20px;
+    z-index: 2;
+    .part {
+      padding: 16px;
+      margin-bottom: 16px;
+      background-color: rgba(255, 255, 255, 0.05);
+      &.rank-table {
+        height: 80%;
       }
     }
   }
@@ -183,7 +292,6 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: -1;
   }
   .ivu-date-picker .ivu-select-dropdown {
     background-color: @boxBackgroundColor;

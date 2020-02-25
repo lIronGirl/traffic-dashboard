@@ -55,12 +55,12 @@ export default {
     linkChange(e) {
       let node = e.target;
       while (node.parentNode.nodeName != "BODY") {
-        if (node.nodeName == "LI") {
+        if (node.nodeName == "A") {
           break;
         }
         node = node.parentNode;
       }
-      this.pageTitle = pageTitle[node.firstChild.hash.slice(1)];
+      this.pageTitle = pageTitle[node.hash.slice(1)];
     }
   },
   mounted() {
@@ -81,6 +81,7 @@ header {
   text-align: center;
   position: relative;
   padding-top: 20px;
+  z-index: 2;
   a {
     color: #fff;
   }

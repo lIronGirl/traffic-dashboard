@@ -39,7 +39,7 @@
               highlight-row
               :columns="outOrInColumns"
               :data="tableData"
-              @on-row-click="seleckRow"
+              @on-row-click="seleckInRow"
             ></Table>
           </TabPane>
           <TabPane label="迁出" name="outRank">
@@ -49,7 +49,7 @@
               highlight-row
               :columns="outOrInColumns"
               :data="tableData"
-              @on-row-click="seleckRow"
+              @on-row-click="seleckOutRow"
             ></Table>
           </TabPane>
         </Tabs>
@@ -79,7 +79,8 @@ export default {
       tripColumns: [
         {
           title: "排行",
-          key: "name"
+          key: "name",
+          tooltip: true
         },
         {
           title: "指数",
@@ -112,7 +113,8 @@ export default {
     tripMode() {
       this.getData();
     },
-    rankType() {
+    rankType(val) {
+      this.mapCenter = val === "tripRank" ? 0 : -1;
       this.getData();
     }
   },
@@ -130,6 +132,12 @@ export default {
     seleckRow(row, index) {
       this.mapCenter = index;
     },
+    seleckInRow(row) {
+      this.mapData = this.getInCityData(row.name);
+    },
+    seleckOutRow(row) {
+      this.mapData = this.getOutCityData(row.name);
+    },
     getData() {
       // 飞机使用线图，轨道及公路使用路径图
       let that = this;
@@ -137,7 +145,7 @@ export default {
       that.tripMode;
       that.rankType; */
       // alert(that.currDate + "-" + that.tripMode + "-" + that.rankType);
-      let fakeData = [
+      let fakeData1 = [
         [
           {
             name: "北京"
@@ -239,15 +247,111 @@ export default {
           }
         ]
       ];
-      that.tableData = fakeData.map(function(val) {
-        return {
-          name: val[0].name + "-" + val[1].name,
-          index: val[1].index,
-          time: val[1].time
-        };
-      });
+      let fakeData2 = [
+        {
+          name: "北京",
+          index: 80
+        },
+        {
+          name: "天津",
+          index: 76
+        },
+        {
+          name: "石家庄",
+          index: 60
+        },
+        {
+          name: "廊坊",
+          index: 54
+        },
+        {
+          name: "唐山",
+          index: 46
+        }
+      ];
+      let fakeData3 = [
+        {
+          name: "北京",
+          index: 79
+        },
+        {
+          name: "廊坊",
+          index: 76
+        },
+        {
+          name: "天津",
+          index: 60
+        },
+        {
+          name: "石家庄",
+          index: 54
+        },
+        {
+          name: "唐山",
+          index: 46
+        }
+      ];
+
+      if (that.rankType === "tripRank" && that.tripMode === "air") {
+        that.tableData = fakeData1.map(function(val) {
+          return {
+            name: val[0].name + "-" + val[1].name,
+            index: val[1].index,
+            time: val[1].time
+          };
+        });
+        that.mapData = fakeData1;
+      } else if (that.rankType === "inRank" && that.tripMode === "air") {
+        that.tableData = fakeData2;
+        that.mapData = that.getInCityData(fakeData2[0].name);
+      } else if (that.rankType === "outRank" && that.tripMode === "air") {
+        that.tableData = fakeData3;
+        that.mapData = that.getOutCityData(fakeData3[0].name);
+      }
+
       that.tableData[0] && (that.tableData[0]._highlight = true);
-      that.mapData = fakeData;
+    },
+    getInCityData(city) {
+      let fakeData = [
+        { name: "廊坊" },
+        { name: "北京" },
+        { name: "天津" },
+        { name: "石家庄" },
+        { name: "邢台" },
+        { name: "唐山" },
+        { name: "邯郸" },
+        { name: "沧州" },
+        { name: "衡水" }
+      ].filter(function(val) {
+        return val.name !== city;
+      });
+
+      if (this.tripMode === "air") {
+        return fakeData.map(function(val) {
+          return [val, { name: city }];
+        });
+      }
+    },
+    getOutCityData(city) {
+      let fakeData = [
+        { name: "廊坊" },
+        { name: "北京" },
+        { name: "天津" },
+        { name: "石家庄" },
+        { name: "邢台" },
+        { name: "唐山" },
+        { name: "邯郸" },
+        { name: "沧州" },
+        { name: "衡水" }
+      ].filter(function(val) {
+        return val.name !== city;
+      });
+
+      if (this.tripMode === "air") {
+        return fakeData.map(function(val) {
+          return [{ name: city }, val];
+        });
+      }
     }
   }
 };

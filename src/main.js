@@ -11,6 +11,8 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter);
 
+require('./mock/index');
+
 import { Table, Icon, DatePicker, Select, Option, Tabs, TabPane } from 'view-design';
 Vue.component('Table', Table);
 Vue.component('Icon', Icon);

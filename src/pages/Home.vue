@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import BgMap from "../components/MyMap";
+import BgMap from "@/components/MyMap";
 import TripModeRatio from "../components/TripModeRatio";
 import CityClustersIndex from "../components/CityClustersIndex";
 import SummaryData from "../components/Summary";
@@ -73,7 +73,7 @@ export default {
         margin-top: 2%;
       }
       &.section2 {
-        flex: 1.2
+        flex: 1.2;
       }
       > div {
         margin-top: 30px;

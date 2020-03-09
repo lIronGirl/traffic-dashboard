@@ -28,7 +28,7 @@
               stripe
               highlight-row
               :columns="tripColumns"
-              :data="tableData"
+              :data="triptableData"
               @on-row-click="seleckRow"
             ></Table>
           </TabPane>
@@ -38,7 +38,7 @@
               stripe
               highlight-row
               :columns="outOrInColumns"
-              :data="tableData"
+              :data="intableData"
               @on-row-click="seleckInRow"
             ></Table>
           </TabPane>
@@ -48,7 +48,7 @@
               stripe
               highlight-row
               :columns="outOrInColumns"
-              :data="tableData"
+              :data="outtableData"
               @on-row-click="seleckOutRow"
             ></Table>
           </TabPane>
@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <bg-map class="bg-map" :mapData="mapData" :mapCenter="mapCenter"></bg-map>
+    <bg-map class="bg-map" :mapData="mapData" :mapCenter="mapCenter" :tripMode="tripMode"></bg-map>
   </div>
 </template>
 
@@ -101,7 +101,9 @@ export default {
           key: "index"
         }
       ],
-      tableData: [],
+      triptableData: [],
+      intableData: [],
+      outtableData: [],
       mapData: [],
       mapCenter: 0
     };
@@ -113,8 +115,7 @@ export default {
     tripMode() {
       this.getData();
     },
-    rankType(val) {
-      this.mapCenter = val === "tripRank" ? 0 : -1;
+    rankType() {
       this.getData();
     }
   },
@@ -151,6 +152,16 @@ export default {
             name: "北京"
           },
           {
+            name: "石家庄",
+            index: 40,
+            time: 300
+          }
+        ],
+        [
+          {
+            name: "北京"
+          },
+          {
             name: "廊坊",
             index: 38,
             time: 58
@@ -164,16 +175,6 @@ export default {
             name: "北京",
             index: 36,
             time: 50
-          }
-        ],
-        [
-          {
-            name: "北京"
-          },
-          {
-            name: "石家庄",
-            index: 30,
-            time: 300
           }
         ],
         [
@@ -292,25 +293,94 @@ export default {
         }
       ];
 
-      if (that.rankType === "tripRank" && that.tripMode === "air") {
-        that.tableData = fakeData1.map(function(val) {
+      if (that.rankType === "tripRank") {
+        that.triptableData = fakeData1.map(function(val) {
           return {
             name: val[0].name + "-" + val[1].name,
             index: val[1].index,
             time: val[1].time
           };
         });
-        that.mapData = fakeData1;
+        that.triptableData[0] && (that.triptableData[0]._highlight = true);
+        if (that.tripMode === "air") {
+          that.mapData = fakeData1;
+        } else if (that.tripMode === "rail") {
+          that.mapData = that.getRailData(
+            fakeData1[0][0].name,
+            fakeData1[0][1].name
+          );
+        } else {
+          /* that.mapData = that.getRoadData(
+            fakeData1[0][0].name,
+            fakeData1[0][1].name
+          ); */
+        }
       } else if (that.rankType === "inRank" && that.tripMode === "air") {
-        that.tableData = fakeData2;
+        that.intableData = fakeData2;
+        that.intableData[0] && (that.intableData[0]._highlight = true);
         that.mapData = that.getInCityData(fakeData2[0].name);
       } else if (that.rankType === "outRank" && that.tripMode === "air") {
-        that.tableData = fakeData3;
+        that.outtableData = fakeData3;
+        that.outtableData[0] && (that.outtableData[0]._highlight = true);
         that.mapData = that.getOutCityData(fakeData3[0].name);
       }
 
-      that.tableData[0] && (that.tableData[0]._highlight = true);
+      that.mapCenter = that.rankType === "tripRank" ? 0 : -1;
     },
+    getRailData(fromCity, toCity) {
+      // let that = this;
+      if (fromCity === "北京" && toCity === "石家庄") {
+        return [
+          {
+            coords: [
+              [116.328103, 39.900835],
+              [114.490825, 38.016821]
+            ]
+          },
+          {
+            coords: [
+              [116.328103, 39.900835],
+              [115.607409, 38.869587],
+              [114.490825, 38.016821]
+            ]
+          },
+          {
+            coords: [
+              [116.328103, 39.900835],
+              [115.952311, 39.295036],
+              [114.490825, 38.016821]
+            ]
+          }
+        ];
+      }
+    },
+    /* getRoadData(fromCity, toCity) {
+      let that =
+      if (fromCity === "北京" && toCity === "石家庄") {
+        that.mapData = [
+          {
+            coords: [
+              [116.328103, 39.900835],
+              [114.490825, 38.016821]
+            ]
+          },
+          {
+            coords: [
+              [116.328103, 39.900835],
+              [115.607409, 38.869587],
+              [114.490825, 38.016821]
+            ]
+          },
+          {
+            coords: [
+              [116.328103, 39.900835],
+              [115.952311, 39.295036],
+              [114.490825, 38.016821]
+            ]
+          }
+        ];
+      }
+    }, */
     getInCityData(city) {
       let fakeData = [
         { name: "廊坊" },

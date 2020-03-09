@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { getTripmodeRatio } from "@/api/index.js";
 export default {
   name: "tripModeRatioChart",
   components: {},
@@ -14,14 +15,11 @@ export default {
       pieData: []
     };
   },
-  created() {
+  created() {},
+  mounted() {
     var that = this;
     // 先获取飞机高铁出行占比
     that.getTripModeRatio();
-  },
-  mounted() {
-    //绘制饼图
-    this.drawPie();
   },
   methods: {
     drawPie() {
@@ -31,7 +29,7 @@ export default {
       );
       // 绘制图表
       myChart1.setOption({
-        color: ['#4bccec', '#a680ff'],
+        color: ["#4bccec", "#a680ff"],
         tooltip: {
           trigger: "item",
           formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -39,19 +37,18 @@ export default {
         legend: {
           orient: "vertical",
           right: 10,
-          top: 'middle',
+          top: "middle",
           textStyle: {
-            color: '#fff',
+            color: "#fff",
             fontSize: 14
-          },
-          data: ["高铁出行", "飞机出行"]
+          }
         },
         series: [
           {
             name: "高铁飞机出行占比",
             type: "pie",
             radius: ["54%", "74%"],
-            center: ['30%', '50%'],
+            center: ["30%", "50%"],
             avoidLabelOverlap: false,
             label: {
               normal: {
@@ -77,10 +74,12 @@ export default {
     },
     getTripModeRatio() {
       //  接口获取高铁飞机出行量
-      this.pieData = [
-        { value: 335, name: "高铁出行" },
-        { value: 310, name: "飞机出行" }
-      ];
+      let that = this;
+      getTripmodeRatio().then(res => {
+        that.pieData = res;
+        //绘制饼图
+        that.drawPie();
+      });
     }
   }
 };

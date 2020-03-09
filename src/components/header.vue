@@ -56,11 +56,11 @@ export default {
       let node = e.target;
       while (node.parentNode.nodeName != "BODY") {
         if (node.nodeName == "A") {
+          this.pageTitle = pageTitle[node.hash.slice(1)];
           break;
         }
         node = node.parentNode;
       }
-      this.pageTitle = pageTitle[node.hash.slice(1)];
     }
   },
   mounted() {

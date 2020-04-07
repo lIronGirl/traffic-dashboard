@@ -29,7 +29,7 @@
               highlight-row
               :columns="tripColumns"
               :data="triptableData"
-              @on-row-click="seleckRow"
+              @on-row-click="selectRow"
             ></Table>
           </TabPane>
           <TabPane label="迁入" name="inRank">
@@ -39,7 +39,7 @@
               highlight-row
               :columns="outOrInColumns"
               :data="intableData"
-              @on-row-click="seleckInRow"
+              @on-row-click="selectInRow"
             ></Table>
           </TabPane>
           <TabPane label="迁出" name="outRank">
@@ -49,7 +49,7 @@
               highlight-row
               :columns="outOrInColumns"
               :data="outtableData"
-              @on-row-click="seleckOutRow"
+              @on-row-click="selectOutRow"
             ></Table>
           </TabPane>
         </Tabs>
@@ -64,6 +64,7 @@
 import BgMap from "../components/MyMap2";
 import moment from "moment";
 import "moment/locale/zh-cn";
+import { getTripViaAirRankList, getTripViaRailRankList } from "@/api/index.js";
 
 export default {
   name: "cityClustersTravelPage",
@@ -130,13 +131,13 @@ export default {
       this.open = false;
       this.currDate = date;
     },
-    seleckRow(row, index) {
+    selectRow(row, index) {
       this.mapCenter = index;
     },
-    seleckInRow(row) {
+    selectInRow(row) {
       this.mapData = this.getInCityData(row.name);
     },
-    seleckOutRow(row) {
+    selectOutRow(row) {
       this.mapData = this.getOutCityData(row.name);
     },
     getData() {
@@ -146,108 +147,6 @@ export default {
       that.tripMode;
       that.rankType; */
       // alert(that.currDate + "-" + that.tripMode + "-" + that.rankType);
-      let fakeData1 = [
-        [
-          {
-            name: "北京"
-          },
-          {
-            name: "石家庄",
-            index: 40,
-            time: 300
-          }
-        ],
-        [
-          {
-            name: "北京"
-          },
-          {
-            name: "廊坊",
-            index: 38,
-            time: 58
-          }
-        ],
-        [
-          {
-            name: "廊坊"
-          },
-          {
-            name: "北京",
-            index: 36,
-            time: 50
-          }
-        ],
-        [
-          {
-            name: "北京"
-          },
-          {
-            name: "天津",
-            index: 30,
-            time: 120
-          }
-        ],
-        [
-          {
-            name: "北京"
-          },
-          {
-            name: "唐山",
-            index: 28,
-            time: 240
-          }
-        ],
-        [
-          {
-            name: "石家庄"
-          },
-          {
-            name: "北京",
-            index: 27,
-            time: 360
-          }
-        ],
-        [
-          {
-            name: "石家庄"
-          },
-          {
-            name: "天津",
-            index: 25,
-            time: 120
-          }
-        ],
-        [
-          {
-            name: "天津"
-          },
-          {
-            name: "北京",
-            index: 25,
-            time: 120
-          }
-        ],
-        [
-          {
-            name: "石家庄"
-          },
-          {
-            name: "唐山",
-            index: 23,
-            time: 260
-          }
-        ],
-        [
-          {
-            name: "北京"
-          },
-          {
-            name: "唐山",
-            index: 10,
-            time: 300
-          }
-        ]
-      ];
       let fakeData2 = [
         {
           name: "北京",
@@ -294,21 +193,31 @@ export default {
       ];
 
       if (that.rankType === "tripRank") {
-        that.triptableData = fakeData1.map(function(val) {
-          return {
-            name: val[0].name + "-" + val[1].name,
-            index: val[1].index,
-            time: val[1].time
-          };
-        });
-        that.triptableData[0] && (that.triptableData[0]._highlight = true);
         if (that.tripMode === "air") {
-          that.mapData = fakeData1;
+          getTripViaAirRankList(that.currDate).then(res => {
+            that.triptableData = res.map(function(val) {
+              return {
+                name: val[0].name + "-" + val[1].name,
+                index: val[1].index,
+                time: val[1].time
+              };
+            });
+            that.triptableData[0] && (that.triptableData[0]._highlight = true);
+            that.mapData = res;
+          });
         } else if (that.tripMode === "rail") {
-          that.mapData = that.getRailData(
-            fakeData1[0][0].name,
-            fakeData1[0][1].name
-          );
+          getTripViaRailRankList(that.currDate).then(res => {
+            that.triptableData = res.map(function(val) {
+              return {
+                name: val[0].name + "-" + val[1].name,
+                index: val[1].index,
+                time: val[1].time
+              };
+            });
+            that.triptableData[0] && (that.triptableData[0]._highlight = true);
+
+            that.mapData = that.getRailData(res[0][0].name, res[0][1].name);
+          });
         } else {
           /* that.mapData = that.getRoadData(
             fakeData1[0][0].name,
@@ -433,7 +342,7 @@ export default {
   width: 100%;
   height: 100%;
   .content {
-    width: 20%;
+    width: 22%;
     height: 100%;
     position: absolute;
     right: 20px;
@@ -444,124 +353,6 @@ export default {
       background-color: rgba(255, 255, 255, 0.05);
       &.rank-table {
         height: 80%;
-      }
-    }
-  }
-}
-</style>
-<style lang="less">
-/* 日期选择器样式 */
-#cityClustersTravelPage {
-  @btnBackgroundColor: rgba(255, 255, 255, 0.05);
-  @boxInsetShadow: rgba(15, 29, 51, 0.5) 0px 4px 5px 0px,
-    rgba(75, 204, 236, 0.5) 0px 0px 6px 0px inset;
-  @boxBackgroundColor: #181c21;
-  @fontNormalColor: #fff;
-  @fontPrimaryColor: #4bccec;
-  @dateCellSize: 50px;
-
-  .bg-map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-  }
-  .ivu-date-picker .ivu-select-dropdown {
-    background-color: @boxBackgroundColor;
-    box-shadow: @boxInsetShadow;
-    border: 1px solid rgba(75, 204, 236, 0.6);
-    /* .ivu-btn {
-      margin-left: 10px;
-      background: @btnBackgroundColor;
-      color: #fff;
-      border: none;
-      &.ivu-btn-primary {
-        color: @fontPrimaryColor;
-      }
-      &:hover {
-        box-shadow: @boxInsetShadow;
-        color: @fontPrimaryColor;
-      }
-    } */
-    .ivu-date-picker-header,
-    .ivu-picker-confirm {
-      border: none;
-    }
-    .ivu-date-picker-cells {
-      width: 378px;
-      margin: 0;
-      .ivu-date-picker-cells-header span {
-        line-height: @dateCellSize;
-        margin: 0;
-        width: @dateCellSize;
-        height: @dateCellSize;
-      }
-      span.ivu-date-picker-cells-cell {
-        width: @dateCellSize;
-        height: @dateCellSize;
-      }
-      span em {
-        width: @dateCellSize;
-        height: @dateCellSize;
-        line-height: @dateCellSize;
-        margin: 0;
-      }
-    }
-    .ivu-date-picker-cells-year .ivu-date-picker-cells-cell-focused,
-    .ivu-date-picker-cells-month .ivu-date-picker-cells-cell-focused,
-    .ivu-date-picker-cells-cell:hover em,
-    .ivu-date-picker-cells-cell-selected em,
-    .ivu-date-picker-cells-cell-selected:hover em {
-      color: @fontPrimaryColor;
-      background-color: transparent;
-    }
-    .ivu-date-picker-cells-year .ivu-date-picker-cells-cell-focused,
-    .ivu-date-picker-cells-month .ivu-date-picker-cells-cell-focused {
-      border: 1px solid @fontPrimaryColor;
-    }
-  }
-
-  .ivu-select {
-    .ivu-select-selection,
-    .ivu-select-dropdown {
-      background-color: @boxBackgroundColor;
-      border: none;
-      color: @fontNormalColor;
-    }
-    .ivu-select-item {
-      color: @fontNormalColor;
-    }
-    .ivu-select-item-selected,
-    .ivu-select-item-selected:hover {
-      color: @fontPrimaryColor;
-    }
-    .ivu-select-item:hover {
-      background: rgba(243, 243, 243, 0.08);
-    }
-    .ivu-select-item-focus {
-      background-color: transparent;
-    }
-  }
-
-  .ivu-tabs.ivu-tabs-card {
-    color: @fontNormalColor;
-    & > .ivu-tabs-bar {
-      border: none;
-      margin-bottom: 0;
-      .ivu-tabs-tab {
-        background-color: transparent;
-        border-color: transparent;
-      }
-      .ivu-tabs-tab-active {
-        background-color: @boxBackgroundColor;
-        border-color: transparent;
-        border: none;
-      }
-    }
-    .ivu-tabs-content {
-      & > div {
-        background: @boxBackgroundColor;
       }
     }
   }

@@ -1,0 +1,30 @@
+{
+  "id": "742172",
+  "name": "lvuel",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "lvuel 项目图标",
+  "glyphs": [
+    {
+      "icon_id": "13041734",
+      "name": "up_arrow",
+      "font_class": "up_arrow",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "13041738",
+      "name": "down_arrow",
+      "font_class": "down_arrow",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "8879771",
+      "name": "home",
+      "font_class": "home",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    }
+  ]
+}

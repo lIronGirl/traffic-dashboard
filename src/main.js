@@ -13,14 +13,16 @@ Vue.use(VueRouter);
 
 require('./mock/index');
 
-import { Table, Icon, DatePicker, Select, Option, Tabs, TabPane } from 'view-design';
+import { Table, Icon, DatePicker, Select, Option, Tabs, TabPane, Radio, RadioGroup } from 'view-design';
 Vue.component('Table', Table);
 Vue.component('Icon', Icon);
 Vue.component('DatePicker', DatePicker);
 Vue.component('Select', Select);
 Vue.component('Option', Option);
 Vue.component('Tabs', Tabs);
-Vue.component('TabPane', TabPane)
+Vue.component('TabPane', TabPane);
+Vue.component('Radio', Radio);
+Vue.component('RadioGroup', RadioGroup);
 
 const Home = () => import('./pages/Home.vue');
 const CityClustersTravel = () => import('./pages/CityClustersTravel.vue');

@@ -2,24 +2,18 @@
   <main id="trafficPredictionPage">
     <section class="section1">
       <div class="line-chart">
-        <h3>未来一周交通预测</h3>
-        <RadioGroup
-          v-model="staticCity"
-          type="button"
-          size="small"
-          style="float: left;"
-          @on-change="getWeekPrediction"
-        >
-          <Radio label="ALL">整体</Radio>
-          <Radio label="BJ">北京</Radio>
-          <Radio label="TJ">天津</Radio>
-          <Radio label="HB">河北</Radio>
-        </RadioGroup>
+        <h3>城市交通预测</h3>
+        <div class="individual-selector">
+          <label style="text-align: left;" for>城市</label>
+          <Select v-model="staticCity" filterable @on-change="getWeekPrediction">
+            <Option v-for="item in cityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
+        </div>
         <div id="static-chart-dom"></div>
       </div>
-      <div class="radar-chart">
-        <h3>预测变量对比</h3>
-        <div id="radar-chart-dom"></div>
+      <div class="jamtrendcolumn-chart">
+        <h3>拥堵趋势预测</h3>
+        <div id="jamtrendcolumn-chart-dom"></div>
       </div>
     </section>
     <section class="section2">
@@ -58,11 +52,11 @@
           </TabPane>
         </Tabs>
       </div>
-      <div class="index-map">
-        <h3>指数地图</h3>
+      <div class="jamnextdaytrendline-chart">
+        <h3>明日24小时拥堵趋势预测</h3>
+        <div id="jamnextdaytrendline-chart-dom"></div>
       </div>
     </section>
-    <!-- <bg-map class="bg-map" :mapData="mapData"></bg-map> -->
   </main>
 </template>
 
@@ -70,12 +64,22 @@
 // import BgMap from "../components/MyMap4";
 import moment from "moment";
 import "moment/locale/zh-cn";
-moment.locale("zh-cn");
+moment.locale("zh-cn", {
+  calendar: {
+    sameDay: "[今日\n]" + "MM/DD",
+    nextDay: "[明日\n]" + "MM/DD",
+    nextWeek: "dddd" + "[\n]" + "MM/DD",
+    lastDay: "[昨日\n]" + "MM/DD",
+    lastWeek: "[上个] dddd",
+    sameElse: "DD/MM/YYYY"
+  }
+});
 
 import {
   getWeekPrediction,
-  getPredictionVarCompare,
-  getHubTrafficPrediction
+  getHubTrafficPrediction,
+  getJamTrendPrediction,
+  getJamNextDayTrendPrediction
 } from "@/api/index.js";
 
 export default {
@@ -85,10 +89,29 @@ export default {
   },
   data() {
     return {
-      staticCity: "ALL",
+      staticCity: 0,
+      cityList: [
+        {
+          id: 0,
+          name: "整体"
+        },
+        {
+          id: 1,
+          name: "北京"
+        },
+        {
+          id: 2,
+          name: "天津"
+        },
+        {
+          id: 3,
+          name: "石家庄"
+        }
+      ],
       staticContent: "duration",
       staticsData: {},
-      radarData: [],
+      jamTrendData: [],
+      jamNextDayTrendData: [],
       stationType: "rail",
       rankColumns: [
         {
@@ -102,12 +125,20 @@ export default {
           key: "hubName"
         },
         {
-          title: "出行数量",
-          key: "count"
+          title: "承载力",
+          key: "bearingCapacity"
         },
         {
-          title: "出行指数",
-          key: "index"
+          title: "未来一小时预测客运量",
+          key: "psgvolNext1h"
+        },
+        {
+          title: "次日预测客运量",
+          key: "psgvolNext1d"
+        },
+        {
+          title: "预测精度",
+          key: "predAcc"
         }
       ],
       rankTableData: [],
@@ -116,8 +147,9 @@ export default {
   },
   mounted() {
     this.getWeekPrediction();
-    this.getPredictionVarCompare();
     this.getHubTrafficPrediction();
+    this.getJamTrendPrediction();
+    this.getJamNextDayTrendPrediction();
   },
   methods: {
     drawLineChart() {
@@ -178,94 +210,241 @@ export default {
         series: that.staticsData.series
       });
     },
-    drawRadarChart() {
+    drawJamTrendColumnChart() {
       let that = this;
       // 基于准备好的dom，初始化echarts实例
       let staticChart = this.$echarts.init(
-        document.getElementById("radar-chart-dom")
+        document.getElementById("jamtrendcolumn-chart-dom")
       );
       staticChart.setOption({
-        color: ["#4bccec", "#a680ff"],
-        radar: {
-          name: {
+        color: ["#ec4b4b", "#eca54b", "#ece84b", "#4bec85"],
+        legend: {
+          show: false
+        },
+        visualMap: [
+          {
+            left: "center",
+            top: "top",
+            orient: "horizontal",
+            dimension: 2,
+            categories: ["严重拥堵", "拥堵", "缓行", "通畅"],
+            inRange: {
+              color: ["#ec4b4b", "#eca54b", "#ece84b", "#4bec85"]
+            },
             textStyle: {
+              color: "#fff",
+              fontSize: 14
+            }
+          }
+        ],
+        grid: {
+          bottom: 50,
+          top: 40
+        },
+        xAxis: {
+          type: "category",
+          axisTick: { show: false },
+          axisLine: {
+            lineStyle: {
               color: "#fff"
             }
           },
-          indicator: [
-            { name: "路网高延时运行时间比", max: 1 },
-            { name: "路网拥堵路段里程比", max: 1 },
-            { name: "常发拥堵路段里程比", max: 1 },
-            { name: "路网高峰行程延迟指数", max: 1 },
-            { name: "道路运行速度偏差率", max: 1 },
-            { name: "高峰平均速度", max: 1 }
-          ]
+          data: that.jamTrendData.time
+        },
+        yAxis: {
+          type: "value",
+          axisTick: { show: false },
+          axisLabel: { color: "#fff" },
+          axisLine: { show: false },
+          splitLine: { lineStyle: { color: "#333" } }
         },
         series: [
           {
-            type: "radar",
-            data: [
-              {
-                value: that.radarData
-              }
-            ]
+            type: "bar",
+            barWidth: 24,
+            data: that.jamTrendData.seriesData
+          }
+        ]
+      });
+    },
+    drawJamNextDayTrendLineChart() {
+      let that = this;
+      // 基于准备好的dom，初始化echarts实例
+      let staticChart = this.$echarts.init(
+        document.getElementById("jamnextdaytrendline-chart-dom")
+      );
+      staticChart.setOption({
+        color: ["#ec4b4b", "#eca54b", "#ece84b", "#4bec85"],
+        legend: {
+          show: false
+        },
+        visualMap: {
+          top: "top",
+          left: "center",
+          orient: "horizontal",
+          inverse: true,
+          pieces: [
+            {
+              gt: 0,
+              lte: 3,
+              color: "#4bec85",
+              label: "通畅"
+            },
+            {
+              gt: 3,
+              lte: 6,
+              color: "#ece84b",
+              label: "缓行"
+            },
+            {
+              gt: 6,
+              lte: 8,
+              color: "#eca54b",
+              label: "拥堵"
+            },
+            {
+              gt: 8,
+              color: "#ec4b4b",
+              label: "严重拥堵"
+            }
+          ],
+          outOfRange: {
+            color: "#999"
+          },
+          textStyle: {
+            color: "#fff",
+            fontSize: 14
+          }
+        },
+        grid: {
+          bottom: 100,
+          top: 40
+        },
+        xAxis: {
+          type: "category",
+          axisTick: { show: false },
+          axisLine: {
+            lineStyle: {
+              color: "#fff"
+            }
+          },
+          data: that.jamNextDayTrendData.time
+        },
+        yAxis: {
+          type: "value",
+          axisTick: { show: false },
+          axisLabel: { color: "#fff" },
+          axisLine: { show: false },
+          splitLine: { lineStyle: { color: "#333" } }
+        },
+        series: [
+          {
+            type: "line",
+            data: that.jamNextDayTrendData.seriesData,
+            markLine: {
+              silent: true,
+              data: [
+                {
+                  yAxis: 3
+                },
+                {
+                  yAxis: 6
+                },
+                {
+                  yAxis: 8
+                }
+              ]
+            }
           }
         ]
       });
     },
     getWeekPrediction() {
       let that = this;
-      getWeekPrediction(
-        that.staticCity === "ALL" ? null : that.staticCity
-      ).then(res => {
-        let time = [];
-        let series = [];
-        let histroyVal = [];
-        let predictVal = [];
-        res.forEach((data, i) => {
-          let isHistroy = data.type === 1;
-          time.push(moment(data.time).format("MM/DD"));
-          if (isHistroy) {
-            histroyVal[i] = data.index;
-          } else {
-            predictVal[i] = data.index;
-          }
-        });
-        histroyVal[histroyVal.length] = predictVal[histroyVal.length];
-        series = [
-          {
-            name: "真实值",
-            type: "line",
-            data: histroyVal,
-            itemStyle: {
-              normal: {
-                color: "#4bccec"
+      getWeekPrediction(that.staticCity === 0 ? null : that.staticCity).then(
+        res => {
+          let time = [];
+          let series = [];
+          let histroyVal = [];
+          let predictVal = [];
+          res.forEach((data, i) => {
+            let isHistroy = data.type === 1;
+            time.push(moment(data.time).format("MM/DD"));
+            if (isHistroy) {
+              histroyVal[i] = data.index;
+            } else {
+              predictVal[i] = data.index;
+            }
+          });
+          histroyVal[histroyVal.length] = predictVal[histroyVal.length];
+          series = [
+            {
+              name: "真实值",
+              type: "line",
+              data: histroyVal,
+              itemStyle: {
+                normal: {
+                  color: "#4bccec"
+                }
+              }
+            },
+            {
+              name: "预测值",
+              type: "line",
+              data: predictVal,
+              itemStyle: {
+                normal: {
+                  color: "#a680ff"
+                }
               }
             }
-          },
-          {
-            name: "预测值",
-            type: "line",
-            data: predictVal,
-            itemStyle: {
-              normal: {
-                color: "#a680ff"
-              }
-            }
-          }
-        ];
-        that.staticsData = {
-          time: time,
-          series: series
-        };
-        that.drawLineChart();
+          ];
+          that.staticsData = {
+            time: time,
+            series: series
+          };
+          that.drawLineChart();
+        }
+      );
+    },
+    getJamTrendPrediction() {
+      let that = this;
+
+      that.jamTrendData = {
+        time: [],
+        seriesData: []
+      };
+      getJamTrendPrediction().then(res => {
+        let typeList = ["严重拥堵", "拥堵", "缓行", "通畅"];
+        for (let index = 0; index < res.length; index++) {
+          const item = res[index];
+          that.jamTrendData.time.push({
+            value: moment(item.time).calendar(),
+            textStyle: { color: index === 1 ? "#ec4b4b" : "#fff" }
+          });
+          that.jamTrendData.seriesData.push([
+            index,
+            item.index,
+            typeList[+item.type - 1]
+          ]);
+        }
+        that.drawJamTrendColumnChart();
       });
     },
-    getPredictionVarCompare() {
+    getJamNextDayTrendPrediction() {
       let that = this;
-      getPredictionVarCompare().then(res => {
-        that.radarData = res;
-        that.drawRadarChart();
+
+      that.jamNextDayTrendData = {
+        time: [],
+        seriesData: []
+      };
+      getJamNextDayTrendPrediction().then(res => {
+        for (let index = 0; index < res.length; index++) {
+          const item = res[index];
+          that.jamNextDayTrendData.time.push(item.time);
+          that.jamNextDayTrendData.seriesData.push(item.index);
+        }
+        that.drawJamNextDayTrendLineChart();
       });
     },
     getHubTrafficPrediction() {
@@ -316,32 +495,50 @@ export default {
   }
   .section1 {
     .line-chart {
-      flex: 2;
+      flex: 0.6;
+      width: 60%;
       display: -webkit-flex;
       display: flex;
       flex-direction: column;
-      .ivu-radio-group {
+      .individual-selector {
         flex: 0.1;
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: row;
+        margin-bottom: 8px;
+        label {
+          flex: 0.05;
+          text-align: center;
+        }
+        .ivu-select {
+          flex: 0.1;
+        }
       }
       #static-chart-dom {
         flex: 0.9;
       }
     }
-    .radar-chart {
-      flex: 1;
-      #radar-chart-dom {
+    .jamtrendcolumn-chart {
+      flex: 0.4;
+      margin: 20px 0 10px 20px;
+      #jamtrendcolumn-chart-dom {
         height: 90%;
       }
     }
   }
   .section2 {
     .rank-table {
-      flex: 2;
-      width: 70%;
-      height: 90%;
-    }
-    .index-map {
       flex: 1;
+      width: 60%;
+      height: 80%;
+      margin: 20px 0 10px 0;
+    }
+    .jamnextdaytrendline-chart {
+      flex: 1;
+      margin: 20px 0 10px 20px;
+      #jamnextdaytrendline-chart-dom {
+        height: 90%;
+      }
     }
   }
 }

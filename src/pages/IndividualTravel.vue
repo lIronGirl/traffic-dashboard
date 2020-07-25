@@ -2,31 +2,15 @@
   <div id="individualTravel">
     <div class="content">
       <div class="part statistical-chart">
-        <h3>京津冀最近24小时出行统计</h3>
-        <div class="static-filter clearfix">
-          <RadioGroup
-            v-model="staticCity"
-            type="button"
-            size="small"
-            style="float: left;"
-            @on-change="getStaticsData"
-          >
-            <Radio label="BJ">北京</Radio>
-            <Radio label="TJ">天津</Radio>
-            <Radio label="HB">河北</Radio>
-          </RadioGroup>
-          <RadioGroup
-            v-model="staticContent"
-            type="button"
-            size="small"
-            style="float: right;"
-            @on-change="getStaticsData"
-          >
-            <Radio label="duration">出行时长</Radio>
-            <Radio label="distance">出行距离</Radio>
-          </RadioGroup>
-        </div>
-        <div id="static-chart-dom"></div>
+        <h3>联程出行统计</h3>
+        <Table
+          :height="514"
+          stripe
+          highlight-row
+          :columns="connectingTripColumns"
+          :data="connectingTripData"
+          @on-row-click="selectRow"
+        ></Table>
       </div>
       <div class="part rank-table">
         <h3>个体出行排行</h3>
@@ -58,8 +42,7 @@
 <script>
 import BgMap from "../components/MyMap4";
 import {
-  getTravelTimeStatics,
-  getTravelDistanceStatics,
+  getConnectingTripRank,
   getIndividualList,
   getIndividualRank
 } from "@/api/index.js";
@@ -71,9 +54,25 @@ export default {
   },
   data() {
     return {
-      staticCity: "BJ",
-      staticContent: "duration",
-      staticsData: {},
+      connectingTripColumns: [
+        {
+          type: "index",
+          width: 60,
+          align: "right",
+          title: "排行"
+        },
+        {
+          title: "热门路线（某场站到某场站）",
+          key: "popularRoutes"
+        },
+        {
+          title: "出行量",
+          key: "travelVol",
+          align: "right",
+          width: 120
+        }
+      ],
+      connectingTripData: [],
       individualList: [],
       individual: "--ALL--",
       rankColumns: [
@@ -106,7 +105,7 @@ export default {
     };
   },
   mounted() {
-    this.getStaticsData();
+    this.getConnectingTripRank();
     this.getIndividualList();
     this.getIndividualRank();
   },
@@ -174,46 +173,6 @@ export default {
         ]
       });
     },
-    getStaticsData() {
-      let that = this;
-      if (that.staticContent === "duration") {
-        getTravelTimeStatics(that.staticCity).then(res => {
-          let time = [];
-          let inTravel = [];
-          let outTravel = [];
-          res.forEach(data => {
-            time.push(data.time);
-            inTravel.push(data.inTravel);
-            outTravel.push(data.outTravel);
-          });
-
-          that.staticsData = {
-            time: time,
-            inTravel: inTravel,
-            outTravel: outTravel
-          };
-          that.drawChart();
-        });
-      } else {
-        getTravelDistanceStatics(that.staticCity).then(res => {
-          let time = [];
-          let inTravel = [];
-          let outTravel = [];
-          res.forEach(data => {
-            time.push(data.time);
-            inTravel.push(data.inTravel);
-            outTravel.push(data.outTravel);
-          });
-
-          that.staticsData = {
-            time: time,
-            inTravel: inTravel,
-            outTravel: outTravel
-          };
-          that.drawChart();
-        });
-      }
-    },
     getIndividualList() {
       var that = this;
       getIndividualList().then(res => {
@@ -226,11 +185,11 @@ export default {
         that.individual === "--ALL--" ? null : that.individual
       ).then(res => {
         that.rankTableData = res;
-        if (that.rankTableData[0]) {
+        /* if (that.rankTableData[0]) {
           let data = that.rankTableData[0];
           data._highlight = true;
           that.mapData = {
-            citys: [
+            points: [
               {
                 name: data.src,
                 value: data.srcCoords
@@ -246,6 +205,51 @@ export default {
               }
             ]
           };
+        } */
+      });
+    },
+    getConnectingTripRank() {
+      let that = this;
+      getConnectingTripRank().then(res => {
+        let tableData = [];
+        for (let i = 0; i < res.length; i++) {
+          const data = res[i],
+            period = 8;
+          let stations = [],
+            lines = [],
+            points = [];
+          for (let k = 0; k < data.points.length; k++) {
+            const point = data.points[k],
+              symbols = ["plane", "rail", "car"];
+            stations.push(point.name);
+            points.push({
+              name: point.name,
+              value: point.coords
+            });
+            if (k < data.points.length - 1) {
+              let nextPoint = data.points[k + 1];
+              lines.push({
+                coords: [point.coords, nextPoint.coords],
+                delay: period * k,
+                symbol: symbols[point.by - 1] // 1:飞机，2:轨道，3:汽车
+              });
+            }
+          }
+          tableData.push({
+            popularRoutes: stations.join("-"),
+            travelVol: data.travelVol,
+            mapData: {
+              points: points,
+              moveLines: lines
+            }
+          });
+        }
+
+        that.connectingTripData = tableData;
+        if (that.connectingTripData[0]) {
+          let data = that.connectingTripData[0];
+          data._highlight = true;
+          that.mapData = data.mapData;
         }
       });
     },
@@ -253,7 +257,7 @@ export default {
       let data = row;
       let that = this;
       that.mapData = {
-        citys: [
+        points: [
           {
             name: data.src,
             value: data.srcCoords

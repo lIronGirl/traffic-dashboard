@@ -271,8 +271,61 @@ Mock.mock('/api/individualrank', 'get', (option) => {
     return Mock.mock(res);
 });
 
-Mock.mock('/api/weekprediction', 'get', () => {
+Mock.mock('/api/connectingtriprank', 'get', () => {
     let res = [];
+    // by为交通方式1:飞机，2:轨道，3:汽车，终点不需要有此字段
+    res = [{
+        points: [{
+            name: '北京南',
+            coords: [116.385488, 39.87128],
+            by: 2
+        }, {
+            name: '大兴机场',
+            coords: [116.42396, 39.511576],
+            by: 3,
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488],
+            by: 1
+        }, {
+            name: '滨海机场',
+            coords: [117.371645, 39.133514]
+        }],
+        travelVol: 3300
+    }, {
+        points: [{
+            name: '北京南',
+            coords: [116.385488, 39.87128],
+            by: 2
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488]
+        }],
+        travelVol: 3120
+    }, {
+        points: [{
+            name: '北京南',
+            coords: [116.385488, 39.87128],
+            by: 2
+        }, {
+            name: '大兴机场',
+            coords: [116.42396, 39.511576],
+            by: 1,
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488]
+        }],
+        travelVol: 2799
+    }];
+
+    return Mock.mock(res);
+});
+
+// 城市交通预测{time: 时间, index: 指数, type: 类型 1代表历史 2代表预测}
+Mock.mock('/api/weekprediction', 'get', (/* option */) => {
+    // let cityID = JSON.parse(option.body).cityID;    // 获取city ID
+    let res = [];
+    // 临时用随机生成数据，后期根据城市赋值对应城市的数据 res = [{time: ‘2020-07-18T01:50:32’, index: 2, type: 1}]
     for (let i = 0; i < 14; i++) {
         res.push({
             time: function () {
@@ -288,26 +341,47 @@ Mock.mock('/api/weekprediction', 'get', () => {
     return Mock.mock(res);
 });
 
-Mock.mock('/api/predictionvarcompare', 'get', () => {
-    let res = [];
-    for (let i = 0; i < 6; i++) {
-        res.push(Random.float(0, 0, 1, 1))
-    }
-
-    return Mock.mock(res);
-});
-
 Mock.mock('/api/hubtrafficprediction', 'get', (option) => {
     let hubType = JSON.parse(option.body).hubType;
     let res = [];
     for (let i = 0; i < 10; i++) {
         res.push({
             'hubName|1': hubType === 'rail' ? railStations : hubType === 'air' ? airStations : hubType === 'highway' ? highway : scenicspot,
-            'count|10000-30000': 10000,
-            'index|1-10': 1
+            'bearingCapacity|10000-30000': 10000,
+            'psgvolNext1h|10000-30000': 10000,
+            'psgvolNext1d|10000-30000': 10000,
+            'predAcc|1-10': 1
         })
     }
 
+    return Mock.mock(res);
+});
+
+// 交通需求预测-拥堵趋势预测柱状图数据
+// type 1~4 代表 ["严重拥堵", "拥堵", "缓行", "通畅"]
+Mock.mock('/api/jamtrendprediction', 'get', () => {
+    // let hubType = JSON.parse(option.body).hubType;
+    let res = [];
+    for (let i = 0; i < 8; i++) {
+        res.push({
+            time: function () {
+                return moment().add(i - 1, 'days');
+            },
+            'index|1-10': 1,
+            'type|1-4': 1
+        })
+    }
+    return Mock.mock(res);
+});
+// 交通需求预测-明日24小时拥堵趋势预测曲线图数据
+Mock.mock('/api/jamnextdaytrendprediction', 'get', () => {
+    let res = [];
+    for (let i = 0; i < 12; i++) {
+        res.push({
+            time: (i * 2 < 10 ? ('0' + i * 2) : i * 2) + ':00',
+            'index|0-10': 0
+        })
+    }
     return Mock.mock(res);
 });
 export default Mock;

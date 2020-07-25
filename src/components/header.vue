@@ -15,7 +15,7 @@
         <router-link to="/stationTraffic">城市群场站交通状况</router-link>
       </li>
       <li>
-        <router-link to="/individualTravel">个体出行</router-link>
+        <router-link to="/individualTravel">联程出行</router-link>
       </li>
       <li>
         <router-link to="/trafficPrediction">交通预测</router-link>
@@ -32,7 +32,7 @@ moment.locale("zh-cn");
 let pageTitle = {
   "/": "中国主要城市出行排行榜",
   "/cityClustersTravel": "京津冀出行排行",
-  "/stationTraffic": "京津冀场站周围交通状况",
+  "/stationTraffic": "京津冀场站交通状况",
   "/individualTravel": "个体出行交通状况",
   "/trafficPrediction": "京津冀交通需求预测"
 };

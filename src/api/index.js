@@ -82,6 +82,14 @@ export function getTravelDistanceStatics(city) {
         }
     })
 }
+
+export function getConnectingTripRank() {
+    return request({
+        url: 'api/connectingtriprank',
+        method: 'get'
+    })
+}
+
 export function getIndividualList() {
     return request({
         url: 'api/individuallist',
@@ -98,21 +106,16 @@ export function getIndividualRank(name) {
     })
 }
 
-export function getWeekPrediction(city) {
+export function getWeekPrediction(cityID) {
     return request({
         url: 'api/weekprediction',
         method: 'get',
         data: {
-            city: city
+            cityID: cityID
         }
     })
 }
-export function getPredictionVarCompare() {
-    return request({
-        url: 'api/predictionvarcompare',
-        method: 'get'
-    })
-}
+
 export function getHubTrafficPrediction(hubType) {
     return request({
         url: 'api/hubtrafficprediction',
@@ -121,4 +124,18 @@ export function getHubTrafficPrediction(hubType) {
             hubType: hubType
         }
     })
-} 
+}
+
+export function getJamTrendPrediction() {
+    return request({
+        url: 'api/jamtrendprediction',
+        method: 'get'
+    })
+}
+
+export function getJamNextDayTrendPrediction() {
+    return request({
+        url: 'api/jamnextdaytrendprediction',
+        method: 'get'
+    })
+}

@@ -7,6 +7,7 @@
           :height="514"
           stripe
           highlight-row
+          ref="currentRowTable"
           :columns="connectingTripColumns"
           :data="connectingTripData"
           @on-row-click="selectRow"
@@ -28,9 +29,10 @@
           :height="514"
           stripe
           highlight-row
+          ref="individualCurrentRowTable"
           :columns="rankColumns"
           :data="rankTableData"
-          @on-row-click="selectRow"
+          @on-row-click="selectIndividualRow"
         ></Table>
       </div>
     </div>
@@ -54,6 +56,7 @@ export default {
   },
   data() {
     return {
+      currnetActiveTable: 1, // 1:联程出行统计表，2:个体出行表
       connectingTripColumns: [
         {
           type: "index",
@@ -184,28 +187,49 @@ export default {
       getIndividualRank(
         that.individual === "--ALL--" ? null : that.individual
       ).then(res => {
-        that.rankTableData = res;
-        /* if (that.rankTableData[0]) {
-          let data = that.rankTableData[0];
-          data._highlight = true;
-          that.mapData = {
-            points: [
-              {
-                name: data.src,
-                value: data.srcCoords
-              },
-              {
-                name: data.dest,
-                value: data.destCoords
-              }
-            ],
-            moveLines: [
-              {
-                coords: [data.srcCoords, data.destCoords]
-              }
-            ]
-          };
-        } */
+        let tableData = [];
+        for (let i = 0; i < res.length; i++) {
+          const data = res[i],
+            period = 5;
+          let lines = [],
+            points = [];
+          for (let k = 0; k < data.points.length; k++) {
+            const point = data.points[k],
+              symbols = ["plane", "rail", "car"];
+            points.push({
+              name: point.name,
+              value: point.coords
+            });
+            if (k < data.points.length - 1) {
+              let nextPoint = data.points[k + 1];
+              lines.push({
+                coords: [point.coords, nextPoint.coords],
+                delay: period * k,
+                symbol: symbols[point.by - 1] // 1:飞机，2:轨道，3:汽车
+              });
+            }
+          }
+          tableData.push({
+            name: data.name,
+            duration: data.duration,
+            src: data.points[0].name,
+            dest: data.points[data.points.length - 1].name,
+            mapData: {
+              points: points,
+              moveLines: lines
+            }
+          });
+        }
+
+        that.rankTableData = tableData;
+
+        if (
+          (that.individual !== "--ALL--" && tableData[0]) ||
+          that.currnetActiveTable === 2
+        ) {
+          tableData[0]._highlight = true;
+          that.selectIndividualRow(tableData[0]);
+        }
       });
     },
     getConnectingTripRank() {
@@ -214,7 +238,7 @@ export default {
         let tableData = [];
         for (let i = 0; i < res.length; i++) {
           const data = res[i],
-            period = 8;
+            period = 5;
           let stations = [],
             lines = [],
             points = [];
@@ -256,23 +280,16 @@ export default {
     selectRow(row) {
       let data = row;
       let that = this;
-      that.mapData = {
-        points: [
-          {
-            name: data.src,
-            value: data.srcCoords
-          },
-          {
-            name: data.dest,
-            value: data.destCoords
-          }
-        ],
-        moveLines: [
-          {
-            coords: [data.srcCoords, data.destCoords]
-          }
-        ]
-      };
+      that.currnetActiveTable = 1;
+      this.$refs.individualCurrentRowTable.clearCurrentRow();
+      that.mapData = data.mapData;
+    },
+    selectIndividualRow(row) {
+      let data = row;
+      let that = this;
+      that.currnetActiveTable = 2;
+      this.$refs.currentRowTable.clearCurrentRow();
+      that.mapData = data.mapData;
     }
   }
 };

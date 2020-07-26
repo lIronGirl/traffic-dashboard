@@ -5,7 +5,7 @@ moment.locale("zh-cn");
 
 const Random = Mock.Random;
 
-const jing_jin_ji = ['北京', '天津', '保定', '唐山', '廊坊', '石家庄', '秦皇岛', '张家口', '承德', '沧州', '衡水', '邢台', '邯郸', '定州', '辛集', '安阳']
+/* const jing_jin_ji = ['北京', '天津', '保定', '唐山', '廊坊', '石家庄', '秦皇岛', '张家口', '承德', '沧州', '衡水', '邢台', '邯郸', '定州', '辛集', '安阳']
 const jing_jin_jiGeoCoordMap = {
     '北京': [116.403963, 39.915119],
     '天津': [117.221314, 39.001884],
@@ -23,7 +23,7 @@ const jing_jin_jiGeoCoordMap = {
     '定州': [114.987875, 38.536202],
     '辛集': [115.217841, 37.944911],
     '安阳': [115.217841, 37.944911]
-};
+}; */
 const tripModeRatio = [{
     name: '飞机出行',
     value: Random.integer(2000, 10000)
@@ -239,7 +239,7 @@ Mock.mock('/api/individuallist', 'get', () => {
 Mock.mock('/api/individualrank', 'get', (option) => {
     let res = [];
     if (JSON.parse(option.body).name) {
-        res.push({
+        /* res.push({
             name: JSON.parse(option.body).name,
             'duration|2-20': 2,
             'src|1': jing_jin_ji,
@@ -250,10 +250,26 @@ Mock.mock('/api/individualrank', 'get', (option) => {
             destCoords: function () {
                 return jing_jin_jiGeoCoordMap[this.dest]
             }
+        }) */
+        res.push({
+            name: JSON.parse(option.body).name,
+            'duration|2-20': 2,
+            points: [{
+                name: '天津站',
+                coords: [117.216853, 39.142488],
+                'by|1-3': 1
+            }, {
+                name: '大兴机场',
+                coords: [116.42396, 39.511576],
+                'by|1-3': 1
+            }, {
+                name: '北京南',
+                coords: [116.385488, 39.87128]
+            }]
         })
     } else {
         for (let t = 0; t < 10; t++) {
-            res.push({
+            /* res.push({
                 'name': Random.cname(),
                 'duration|2-20': 2,
                 'src|1': jing_jin_ji,
@@ -264,6 +280,22 @@ Mock.mock('/api/individualrank', 'get', (option) => {
                 destCoords: function () {
                     return jing_jin_jiGeoCoordMap[this.dest]
                 }
+            }) */
+            res.push({
+                'name': Random.cname(),
+                'duration|2-20': 2,
+                points: [{
+                    name: '天津站',
+                    coords: [117.216853, 39.142488],
+                    'by|1-3': 1
+                }, {
+                    name: '大兴机场',
+                    coords: [116.42396, 39.511576],
+                    'by|1-3': 1
+                }, {
+                    name: '北京南',
+                    coords: [116.385488, 39.87128]
+                }]
             })
         }
     }
@@ -277,16 +309,13 @@ Mock.mock('/api/connectingtriprank', 'get', () => {
     res = [{
         points: [{
             name: '北京南',
-            coords: [116.385488, 39.87128],
-            by: 2
+            coords: [116.385488, 39.87128]
         }, {
             name: '大兴机场',
-            coords: [116.42396, 39.511576],
-            by: 3,
+            coords: [116.42396, 39.511576]
         }, {
             name: '天津站',
-            coords: [117.216853, 39.142488],
-            by: 1
+            coords: [117.216853, 39.142488]
         }, {
             name: '滨海机场',
             coords: [117.371645, 39.133514]
@@ -294,23 +323,20 @@ Mock.mock('/api/connectingtriprank', 'get', () => {
         travelVol: 3300
     }, {
         points: [{
-            name: '北京南',
-            coords: [116.385488, 39.87128],
-            by: 2
-        }, {
             name: '天津站',
             coords: [117.216853, 39.142488]
+        }, {
+            name: '北京南',
+            coords: [116.385488, 39.87128]
         }],
         travelVol: 3120
     }, {
         points: [{
             name: '北京南',
-            coords: [116.385488, 39.87128],
-            by: 2
+            coords: [116.385488, 39.87128]
         }, {
             name: '大兴机场',
-            coords: [116.42396, 39.511576],
-            by: 1,
+            coords: [116.42396, 39.511576]
         }, {
             name: '天津站',
             coords: [117.216853, 39.142488]

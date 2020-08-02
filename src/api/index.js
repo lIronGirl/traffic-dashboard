@@ -149,3 +149,13 @@ export function getCityClustersIndex(type) {
         }
     })
 }
+
+export function getCityTrafficRank(sortBy) {
+    return request({
+        url: 'api/citytrafficrank',
+        method: 'get',
+        data: {
+            sortBy: sortBy
+        }
+    })
+}

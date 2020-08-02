@@ -127,6 +127,7 @@ export default {
               series: [
                 {
                   type: "scatter",
+                  animation: false,
                   coordinateSystem: "bmap",
                   data: convertData(that.mapData),
                   symbolSize: function(val) {
@@ -149,6 +150,7 @@ export default {
                 {
                   name: "Top 5",
                   type: "effectScatter",
+                  animation: false,
                   coordinateSystem: "bmap",
                   data: convertData(
                     that.mapData
@@ -213,6 +215,7 @@ export default {
                 }, */
                 {
                   type: "lines",
+                  animation: false,
                   coordinateSystem: "bmap",
                   zlevel: 1,
                   effect: {
@@ -234,6 +237,7 @@ export default {
                 },
                 {
                   type: "effectScatter",
+                  animation: false,
                   coordinateSystem: "bmap",
                   zlevel: 2,
                   rippleEffect: {

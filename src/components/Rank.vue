@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { getCityTrafficRank } from "@/api/index.js";
 let tableDom = null;
 let timer = null;
 export default {
@@ -14,39 +15,46 @@ export default {
       rankColumns: [
         {
           type: "index",
-          width: 60,
+          width: 50,
           align: "right"
         },
         {
-          title: "省名",
+          title: "城市",
           key: "name",
-          width: 70
+          width: 100
         },
         {
           title: "发生量",
-          key: "age",
-          sortable: true
+          key: "occur"
         },
         {
           title: "吸引量",
-          key: "address",
-          sortable: true
+          key: "attr"
         },
         {
           title: "高铁出行量",
-          key: "age",
-          sortable: true
+          key: "rail"
         },
         {
           title: "飞机出行量",
-          key: "address",
-          sortable: true
+          key: "air"
         }
       ],
       tableData: [],
       trHeight: 30,
       trViewCount: 15
     };
+  },
+  props: {
+    sortBy: {
+      default: "occur"
+    }
+  },
+  watch: {
+    sortBy: function(val) {
+      let that = this;
+      that.getCityTrafficRank(val);
+    }
   },
   computed: {
     viewHeight() {
@@ -58,7 +66,7 @@ export default {
     let table = document.getElementById("rank-table");
     tableDom = table.getElementsByClassName("ivu-table-body")[0];
     //   TODO调试接口时，需要修改为在回调中调用之后的函数
-    that.getTableData();
+    that.getCityTrafficRank();
     if (that.tableData.length > that.trViewCount) {
       that.startTimer();
       tableDom.onmouseover = function() {
@@ -71,38 +79,11 @@ export default {
     }
   },
   methods: {
-    getTableData() {
-      let fakeData = [
-        {
-          name: "北京",
-          age: 18033,
-          address: 23134
-        },
-        {
-          name: "广东",
-          age: 24239,
-          address: 9767,
-          date: "2016-10-01"
-        },
-        {
-          name: "河北",
-          age: 30753,
-          address: 43433,
-          date: "2016-10-02"
-        },
-        {
-          name: "天津",
-          age: 2665,
-          address: 23123,
-          date: "2016-10-04"
-        }
-      ];
-
-      this.tableData = fakeData
-        .concat(fakeData)
-        .concat(fakeData)
-        .concat(fakeData)
-        .concat(fakeData);
+    getCityTrafficRank(sortBy) {
+      var that = this;
+      getCityTrafficRank(sortBy).then(res => {
+        that.tableData = res;
+      });
     },
     startTimer() {
       let that = this;

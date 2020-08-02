@@ -528,4 +528,20 @@ Mock.mock('/api/cityclustersindex', 'get', (option) => {
     }
     return Mock.mock(res);
 });
+
+//  sortBy occur:发生量，attr：吸引量，rail：高铁出行量，air：飞机出行量
+Mock.mock('/api/citytrafficrank', 'get', (/* option */) => {
+    // let sortBy = JSON.parse(option.body).sortBy;
+    let res = [];
+    for (let i = 0; i < 20; i++) {
+        res.push({
+            name: Random.city(),
+            'occur|10000-100000': 10000,
+            'attr|10000-100000': 10000,
+            'rail|1000-100000': 1000,
+            'air|1000-100000': 1000
+        });
+    }
+    return Mock.mock(res);
+});
 export default Mock;

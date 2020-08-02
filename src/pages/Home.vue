@@ -9,7 +9,7 @@
         <summary-data @onIndicatorClick="handleIndicatorClick"></summary-data>
       </section>
       <section class="section3">
-        <rank-table></rank-table>
+        <rank-table :sortBy="curSumIndicator"></rank-table>
       </section>
     </main>
     <bg-map class="bg-map" :indicator="curSumIndicator"></bg-map>

@@ -410,4 +410,122 @@ Mock.mock('/api/jamnextdaytrendprediction', 'get', () => {
     }
     return Mock.mock(res);
 });
+
+// 主页-城市群出行量 type 1:全国Top5城市，2:京津冀城市群
+Mock.mock('/api/cityclustersindex', 'get', (option) => {
+    let type = +JSON.parse(option.body).type;
+    let res = [];
+    /* city: "Shanghai",
+        stationCount: 15,
+            population: 2000,
+                avgDailyTraffic: 100 */
+    if (type === 1) {
+        res = [
+            {
+                city: "Shanghai",
+                stationCount: 15,
+                population: 2000,
+                avgDailyTraffic: 100
+            },
+            {
+                city: "Beijing",
+                stationCount: 14,
+                population: 2300,
+                avgDailyTraffic: 150
+            },
+            {
+                city: "Shanghai",
+                stationCount: 15,
+                population: 2000,
+                avgDailyTraffic: 100
+            },
+            {
+                city: "Beijing",
+                stationCount: 14,
+                population: 2300,
+                avgDailyTraffic: 150
+            },
+            {
+                city: "Chongqing",
+                stationCount: 14,
+                population: 2300,
+                avgDailyTraffic: 150
+            }
+        ];
+    } else {
+        res = [
+            {
+                city: "Bengjing",
+                stationCount: 15,
+                population: 2000,
+                avgDailyTraffic: 100
+            },
+            {
+                city: "Tianjin",
+                stationCount: 14,
+                population: 2300,
+                avgDailyTraffic: 150
+            },
+            {
+                city: "Langfang",
+                stationCount: 10,
+                population: 1000,
+                avgDailyTraffic: 90
+            },
+            {
+                city: "Shijianzhuang",
+                stationCount: 17,
+                population: 1500,
+                avgDailyTraffic: 150
+            }, {
+                city: "Bengjing",
+                stationCount: 15,
+                population: 2000,
+                avgDailyTraffic: 100
+            },
+            {
+                city: "Tianjin",
+                stationCount: 14,
+                population: 2300,
+                avgDailyTraffic: 150
+            },
+            {
+                city: "Langfang",
+                stationCount: 10,
+                population: 1000,
+                avgDailyTraffic: 90
+            },
+            {
+                city: "Shijianzhuang",
+                stationCount: 17,
+                population: 1500,
+                avgDailyTraffic: 150
+            }, {
+                city: "Bengjing",
+                stationCount: 15,
+                population: 2000,
+                avgDailyTraffic: 100
+            },
+            {
+                city: "Tianjin",
+                stationCount: 14,
+                population: 2300,
+                avgDailyTraffic: 150
+            },
+            {
+                city: "Langfang",
+                stationCount: 10,
+                population: 1000,
+                avgDailyTraffic: 90
+            },
+            {
+                city: "Shijianzhuang",
+                stationCount: 17,
+                population: 1500,
+                avgDailyTraffic: 150
+            }
+        ];
+    }
+    return Mock.mock(res);
+});
 export default Mock;

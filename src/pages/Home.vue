@@ -2,8 +2,8 @@
   <div id="homepage">
     <main class="main-content">
       <section class="section1">
-        <trip-mode-ratio></trip-mode-ratio>
-        <city-clusters-index></city-clusters-index>
+        <trip-mode-ratio class="pie-chart"></trip-mode-ratio>
+        <city-clusters-index class="index-table"></city-clusters-index>
       </section>
       <section class="section2">
         <summary-data @onIndicatorClick="handleIndicatorClick"></summary-data>
@@ -76,8 +76,17 @@ export default {
         flex: 1.2;
       }
       > div {
-        margin-top: 30px;
+        margin-top: 5%;
         flex: 1;
+      }
+      &.section1 {
+        position: relative;
+        .pie-chart {
+          height: 40%;
+        }
+        .index-table {
+          height: 50%;
+        }
       }
     }
   }

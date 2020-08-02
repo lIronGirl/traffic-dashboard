@@ -139,3 +139,13 @@ export function getJamNextDayTrendPrediction() {
         method: 'get'
     })
 }
+
+export function getCityClustersIndex(type) {
+    return request({
+        url: 'api/cityclustersindex',
+        method: 'get',
+        data: {
+            type: type
+        }
+    })
+}

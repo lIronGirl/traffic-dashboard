@@ -24,20 +24,92 @@ export default {
           width: 100
         },
         {
-          title: "发生量",
-          key: "occur"
+          renderHeader: h => {
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: { padding: "4px 0 0 0" }
+                },
+                "发生量"
+              ),
+              h("i", {
+                style: {
+                  display: this.sortBy === "occur" ? "inline-block" : "none",
+                  padding: "2px 0 4px 0"
+                },
+                class: "iconfont icon-down_arrow"
+              })
+            ]);
+          },
+          key: "occur",
+          align: "right"
         },
         {
-          title: "吸引量",
-          key: "attr"
+          renderHeader: h => {
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: { padding: "4px 0 0 0" }
+                },
+                "吸引量"
+              ),
+              h("i", {
+                style: {
+                  display: this.sortBy === "attr" ? "inline-block" : "none",
+                  padding: "2px 0 4px 0"
+                },
+                class: "iconfont icon-down_arrow"
+              })
+            ]);
+          },
+          key: "attr",
+          align: "right"
         },
         {
-          title: "高铁出行量",
-          key: "rail"
+          renderHeader: h => {
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: { padding: "4px 0 0 0" }
+                },
+                "高铁出行量"
+              ),
+              h("i", {
+                style: {
+                  display: this.sortBy === "rail" ? "inline-block" : "none",
+                  padding: "2px 0 4px 0"
+                },
+                class: "iconfont icon-down_arrow"
+              })
+            ]);
+          },
+          key: "rail",
+          align: "right"
         },
         {
-          title: "飞机出行量",
-          key: "air"
+          renderHeader: h => {
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: { padding: "4px 0 0 0" }
+                },
+                "飞机出行量"
+              ),
+              h("i", {
+                style: {
+                  display: this.sortBy === "air" ? "inline-block" : "none",
+                  padding: "2px 0 4px 0"
+                },
+                class: "iconfont icon-down_arrow"
+              })
+            ]);
+          },
+          key: "air",
+          align: "right"
         }
       ],
       tableData: [],
@@ -111,5 +183,10 @@ export default {
 <style lang="less" scoped>
 h3.align-right {
   text-align: right;
+}
+</style>
+<style lang="less">
+#rank-table .icon-down_arrow:before {
+  color: #4bccec;
 }
 </style>

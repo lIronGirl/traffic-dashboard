@@ -159,3 +159,41 @@ export function getCityTrafficRank(sortBy) {
         }
     })
 }
+
+export function getOccurrenceQuantity() {
+    return request({
+        url: 'api/occurrencequantity',
+        method: 'get'
+    })
+}
+
+export function getAttractionQuantity() {
+    return request({
+        url: 'api/attractionquantity',
+        method: 'get'
+    })
+}
+
+export function getRailQuantity() {
+    return request({
+        url: 'api/railquantity',
+        method: 'get'
+    })
+}
+
+export function getAirQuantity() {
+    return request({
+        url: 'api/airquantity',
+        method: 'get'
+    })
+}
+
+export function getStationTraffic(hubType) {
+    return request({
+        url: 'api/stationtraffic',
+        method: 'get',
+        data: {
+            hubType: hubType
+        }
+    })
+}

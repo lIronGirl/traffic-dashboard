@@ -4,44 +4,16 @@
       <div class="part rank-table">
         <Tabs v-model="stationType" size="small" type="card">
           <TabPane label="火车站" name="rail">
-            <Table
-              :height="514"
-              stripe
-              highlight-row
-              :columns="railColumns"
-              :data="railTableData"
-              @on-row-click="selectRow"
-            ></Table>
+            <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
           </TabPane>
           <TabPane label="机场" name="air">
-            <Table
-              :height="514"
-              stripe
-              highlight-row
-              :columns="airColumns"
-              :data="airTableData"
-              @on-row-click="selectRow"
-            ></Table>
+            <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
           </TabPane>
           <TabPane label="高速" name="highway">
-            <Table
-              :height="514"
-              stripe
-              highlight-row
-              :columns="highwayColumns"
-              :data="highwayTableData"
-              @on-row-click="selectRow"
-            ></Table>
+            <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
           </TabPane>
           <TabPane label="景区" name="scenicspot">
-            <Table
-              :height="514"
-              stripe
-              highlight-row
-              :columns="scenicspotColumns"
-              :data="scenicspotTableData"
-              @on-row-click="selectRow"
-            ></Table>
+            <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
           </TabPane>
         </Tabs>
       </div>
@@ -53,12 +25,7 @@
 
 <script>
 import BgMap from "../components/MyMap3";
-import {
-  getRailStationTraffic,
-  getAirStationTraffic,
-  getHighwayStationTraffic,
-  getScenicspotStationTraffic
-} from "@/api/index.js";
+import { getStationTraffic } from "@/api/index.js";
 
 export default {
   name: "stationTrafficPage",
@@ -68,7 +35,7 @@ export default {
   data() {
     return {
       stationType: "rail",
-      railColumns: [
+      tableColumns: [
         {
           type: "index",
           width: 60,
@@ -76,151 +43,23 @@ export default {
           title: "排行"
         },
         {
-          title: "火车站名称",
-          key: "station"
+          title: "枢纽名称",
+          key: "hubName"
         },
         {
-          title: "拥堵延时指数/车速",
-          key: "index",
-          width: 160,
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "span",
-                {
-                  style: { display: "block", padding: "4px 0 0 0" }
-                },
-                params.row.index
-              ),
-              h(
-                "span",
-                {
-                  style: { display: "block", padding: "2px 0 4px 0" }
-                },
-                params.row.speed + "km/h"
-              )
-            ]);
-          }
+          title: "枢纽承载力",
+          key: "bearingCapacity"
+        },
+        {
+          title: "客流量",
+          key: "passengerVolume"
+        },
+        {
+          title: "疏解效率",
+          key: "relievingEfficiency"
         }
       ],
-      airColumns: [
-        {
-          type: "index",
-          width: 60,
-          align: "right",
-          title: "排行"
-        },
-        {
-          title: "机场名称",
-          key: "station"
-        },
-        {
-          title: "拥堵延时指数/车速",
-          key: "index",
-          width: 160,
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "span",
-                {
-                  style: { display: "block", padding: "4px 0 0 0" }
-                },
-                params.row.index
-              ),
-              h(
-                "span",
-                {
-                  style: { display: "block", padding: "2px 0 4px 0" }
-                },
-                params.row.speed + "km/h"
-              )
-            ]);
-          }
-        }
-      ],
-      highwayColumns: [
-        {
-          type: "index",
-          width: 60,
-          align: "right",
-          title: "排行"
-        },
-        {
-          title: "高速名称",
-          key: "station"
-        },
-        {
-          title: "拥堵长度/车速",
-          key: "index",
-          width: 160,
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "span",
-                {
-                  style: { display: "block", padding: "4px 0 0 0" }
-                },
-                params.row.jamLength + "km"
-              ),
-              h(
-                "span",
-                {
-                  style: { display: "block", padding: "2px 0 4px 0" }
-                },
-                params.row.speed + "km/h"
-              )
-            ]);
-          }
-        }
-      ],
-      scenicspotColumns: [
-        {
-          type: "index",
-          width: 60,
-          align: "right",
-          title: "排行"
-        },
-        {
-          title: "景区名称",
-          key: "station"
-        },
-        {
-          title: "拥堵延时指数/周环比",
-          key: "index",
-          width: 160,
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "span",
-                {
-                  style: { display: "block", padding: "4px 0 0 0" }
-                },
-                params.row.index
-              ),
-              h("i", {
-                style: { display: "inline-block", padding: "2px 0 4px 0" },
-                class:
-                  "iconfont " +
-                  "icon-" +
-                  (params.row.weak2weak.indexOf("-") !== -1
-                    ? "down_arrow"
-                    : "up_arrow")
-              }),
-              h(
-                "span",
-                {
-                  style: { display: "inline-block", padding: "2px 0 4px 0" }
-                },
-                params.row.weak2weak + "%"
-              )
-            ]);
-          }
-        }
-      ],
-      railTableData: [],
-      airTableData: [],
-      highwayTableData: [],
-      scenicspotTableData: [],
+      tableData: [],
       mapData: [],
       mapCenter: 0
     };
@@ -235,92 +74,18 @@ export default {
   },
   methods: {
     getData() {
-      let me = this,
-        stationType = me.stationType;
+      let me = this;
+      let stationType = me.stationType;
       me.seriesType = "scatter";
-      switch (stationType) {
-        case "rail":
-          getRailStationTraffic().then(function(res) {
-            me.railTableData = res;
-            me.mapData = res.map(function(station) {
-              return {
-                name: station.station,
-                value: station.coords.concat(station.index),
-                itemStyle: {
-                  normal: {
-                    color: me.getLevelColor(station.index)
-                  }
-                }
-              };
-            });
-          });
-          break;
-        case "air":
-          getAirStationTraffic().then(res => {
-            me.airTableData = res;
-            me.mapData = res.map(function(station) {
-              return {
-                name: station.station,
-                value: station.coords.concat(station.index),
-                itemStyle: {
-                  normal: {
-                    color: me.getLevelColor(station.index)
-                  }
-                }
-              };
-            });
-          });
-          break;
-        case "highway":
-          getHighwayStationTraffic().then(res => {
-            me.highwayTableData = res;
-            me.mapData = res.map(function(station) {
-              return {
-                name: station.station,
-                value: station.coords.concat(station.index),
-                itemStyle: {
-                  normal: {
-                    color: me.getLevelColor(station.index)
-                  }
-                }
-              };
-            });
-          });
-          break;
-        case "scenicspot":
-          getScenicspotStationTraffic().then(res => {
-            me.scenicspotTableData = res;
-            me.mapData = res.map(function(station) {
-              return {
-                name: station.station,
-                value: station.coords.concat(station.index),
-                itemStyle: {
-                  normal: {
-                    color: me.getLevelColor(station.index)
-                  }
-                }
-              };
-            });
-          });
-          break;
-        default:
-          break;
-      }
-    },
-    getLevelColor(level) {
-      let color = "";
-      if (level > 8) {
-        color = "#ec4b4b";
-      } else if (level > 6) {
-        color = "#eca54b";
-      } else if (level > 4) {
-        color = "#ece84b";
-      } else if (level > 2) {
-        color = "#4bccec";
-      } else {
-        color = "#4bec85";
-      }
-      return color;
+      getStationTraffic(stationType).then(function(res) {
+        me.tableData = res;
+        me.mapData = res.map(function(station) {
+          return {
+            name: station.hubName,
+            value: station.coords.concat(station.passengerVolume)
+          };
+        });
+      });
     }
   }
 };

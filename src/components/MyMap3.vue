@@ -49,15 +49,26 @@ export default {
           }
         }
       };
-
+      let levelColors = ["#ec4b4b", "#eca54b", "#ece84b", "#4bec85"];
       let option = {
+        visualMap: {
+          min: 10000,
+          max: 30000,
+          calculable: true,
+          color: levelColors,
+          textStyle: {
+            color: "#fff"
+          },
+          right: "5%",
+          bottom: "5%"
+        },
         series: [
           {
             type: "effectScatter",
             coordinateSystem: "bmap",
             data: that.mapData,
             symbolSize: function(val) {
-              return val[2] * 2;
+              return val[2] / 2000;
             },
             showEffectOn: "render",
             rippleEffect: {

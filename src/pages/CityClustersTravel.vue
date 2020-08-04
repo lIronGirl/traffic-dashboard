@@ -14,11 +14,12 @@
             <span style="font-size: 18px; color: #fff;padding-left: 8px;">{{ currDate }}</span>
           </a>
         </DatePicker>
-        <Select v-model="tripMode" style="width:100%; margin-top: 8px;">
-          <Option value="air">飞机</Option>
-          <Option value="rail">轨道</Option>
-          <Option value="road">公路</Option>
-        </Select>
+        <RadioGroup v-model="tripMode" type="button">
+          <Radio label="passenger">客运</Radio>
+          <Radio label="air">飞机</Radio>
+          <Radio label="rail">轨道</Radio>
+          <Radio label="road">公路</Radio>
+        </RadioGroup>
       </div>
       <div class="part rank-table">
         <Tabs v-model="rankType" size="small" type="card">
@@ -37,7 +38,7 @@
               :height="514"
               stripe
               highlight-row
-              :columns="outOrInColumns"
+              :columns="inColumns"
               :data="intableData"
               @on-row-click="selectInRow"
             ></Table>
@@ -47,7 +48,7 @@
               :height="514"
               stripe
               highlight-row
-              :columns="outOrInColumns"
+              :columns="outColumns"
               :data="outtableData"
               @on-row-click="selectOutRow"
             ></Table>
@@ -75,31 +76,82 @@ export default {
     return {
       open: false,
       currDate: moment().format("YYYY-MM-DD"),
-      tripMode: "air",
+      tripMode: "passenger",
       rankType: "tripRank",
       tripColumns: [
         {
-          title: "排行",
-          key: "name",
-          tooltip: true
+          type: "index",
+          width: 58,
+          align: "right",
+          title: "排行"
         },
         {
-          title: "指数",
-          key: "index"
+          title: "城市",
+          key: "city"
         },
         {
-          title: "时长",
-          key: "time"
+          title: "迁入量",
+          key: "inVol",
+          align: "right"
+        },
+        {
+          title: "与上一日增量",
+          key: "inVolIncre",
+          align: "right"
+        },
+        {
+          title: "迁出量",
+          key: "outVol",
+          align: "right"
+        },
+        {
+          title: "与上一日增量",
+          key: "outVolIncre",
+          align: "right"
         }
       ],
-      outOrInColumns: [
+      inColumns: [
         {
-          title: "排行",
-          key: "name"
+          type: "index",
+          width: 58,
+          align: "right",
+          title: "排行"
         },
         {
-          title: "指数",
-          key: "index"
+          title: "城市",
+          key: "city"
+        },
+        {
+          title: "迁入量",
+          key: "inVol",
+          align: "right"
+        },
+        {
+          title: "与上一日增量",
+          key: "inVolIncre",
+          align: "right"
+        }
+      ],
+      outColumns: [
+        {
+          type: "index",
+          width: 58,
+          align: "right",
+          title: "排行"
+        },
+        {
+          title: "城市",
+          key: "city"
+        },
+        {
+          title: "迁出量",
+          key: "outVol",
+          align: "right"
+        },
+        {
+          title: "与上一日增量",
+          key: "outVolIncre",
+          align: "right"
         }
       ],
       triptableData: [],
@@ -342,7 +394,7 @@ export default {
   width: 100%;
   height: 100%;
   .content {
-    width: 22%;
+    width: 26%;
     height: 100%;
     position: absolute;
     right: 20px;
@@ -351,8 +403,20 @@ export default {
       padding: 16px;
       margin-bottom: 16px;
       background-color: rgba(255, 255, 255, 0.05);
+      & .ivu-date-picker {
+        width: 100%;
+      }
       &.rank-table {
         height: 80%;
+      }
+      .ivu-radio-group-button .ivu-radio-wrapper {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        border-color: #dcdee2ba;
+        margin-top: 20px;
+      }
+      .ivu-radio-group-button .ivu-radio-wrapper-checked {
+        border-color: #4bccec;
       }
     }
   }

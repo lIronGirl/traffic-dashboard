@@ -89,12 +89,12 @@ export default {
   },
   data() {
     return {
-      staticCity: 0,
+      staticCity: 1,
       cityList: [
-        {
+        /* {
           id: 0,
           name: "整体"
-        },
+        }, */
         {
           id: 1,
           name: "北京"
@@ -105,7 +105,7 @@ export default {
         },
         {
           id: 3,
-          name: "石家庄"
+          name: "保定"
         }
       ],
       staticContent: "duration",
@@ -126,19 +126,26 @@ export default {
         },
         {
           title: "承载力",
-          key: "bearingCapacity"
+          key: "bearingCapacity",
+          align: "right"
         },
         {
           title: "未来一小时预测客运量",
-          key: "psgvolNext1h"
+          key: "psgvolNext1h",
+          align: "right"
         },
         {
           title: "次日预测客运量",
-          key: "psgvolNext1d"
+          key: "psgvolNext1d",
+          align: "right"
         },
         {
           title: "预测精度",
-          key: "predAcc"
+          key: "predAcc",
+          align: "right",
+          render: (h, params) => {
+            return h("div", [h("span", params.row.predAcc + "%")]);
+          }
         }
       ],
       rankTableData: [],
@@ -148,8 +155,8 @@ export default {
   mounted() {
     this.getWeekPrediction();
     this.getHubTrafficPrediction();
-    this.getJamTrendPrediction();
-    this.getJamNextDayTrendPrediction();
+    // this.getJamTrendPrediction();
+    // this.getJamNextDayTrendPrediction();
   },
   methods: {
     drawLineChart() {
@@ -286,24 +293,24 @@ export default {
           pieces: [
             {
               gt: 0,
-              lte: 3,
+              lte: 1.2,
               color: "#4bec85",
               label: "通畅"
             },
             {
-              gt: 3,
-              lte: 6,
+              gt: 1.2,
+              lte: 1.5,
               color: "#ece84b",
               label: "缓行"
             },
             {
-              gt: 6,
-              lte: 8,
+              gt: 1.5,
+              lte: 1.8,
               color: "#eca54b",
               label: "拥堵"
             },
             {
-              gt: 8,
+              gt: 1.8,
               color: "#ec4b4b",
               label: "严重拥堵"
             }
@@ -345,13 +352,13 @@ export default {
               silent: true,
               data: [
                 {
-                  yAxis: 3
+                  yAxis: 1.2
                 },
                 {
-                  yAxis: 6
+                  yAxis: 1.5
                 },
                 {
-                  yAxis: 8
+                  yAxis: 1.8
                 }
               ]
             }
@@ -407,14 +414,14 @@ export default {
         }
       );
     },
-    getJamTrendPrediction() {
+    getJamTrendPrediction(hubName) {
       let that = this;
 
       that.jamTrendData = {
         time: [],
         seriesData: []
       };
-      getJamTrendPrediction().then(res => {
+      getJamTrendPrediction(hubName).then(res => {
         let typeList = ["严重拥堵", "拥堵", "缓行", "通畅"];
         for (let index = 0; index < res.length; index++) {
           const item = res[index];
@@ -431,14 +438,14 @@ export default {
         that.drawJamTrendColumnChart();
       });
     },
-    getJamNextDayTrendPrediction() {
+    getJamNextDayTrendPrediction(hubName) {
       let that = this;
 
       that.jamNextDayTrendData = {
         time: [],
         seriesData: []
       };
-      getJamNextDayTrendPrediction().then(res => {
+      getJamNextDayTrendPrediction(hubName).then(res => {
         for (let index = 0; index < res.length; index++) {
           const item = res[index];
           that.jamNextDayTrendData.time.push(item.time);
@@ -451,28 +458,37 @@ export default {
       let that = this;
       getHubTrafficPrediction(that.stationType).then(res => {
         that.rankTableData = res;
+        let data = that.rankTableData[0];
+        if (data) {
+          data._highlight = true;
+          that.updatePredictionChart(data.hubName);
+        } else {
+          that.updatePredictionChart();
+        }
       });
+    },
+    updatePredictionChart(hubName) {
+      let that = this;
+      if (hubName) {
+        that.getJamTrendPrediction(hubName);
+        that.getJamNextDayTrendPrediction(hubName);
+      } else {
+        that.jamNextDayTrendData = {
+          time: [],
+          seriesData: []
+        };
+        that.jamTrendData = {
+          time: [],
+          seriesData: []
+        };
+        that.drawJamTrendColumnChart();
+        that.drawJamNextDayTrendLineChart();
+      }
     },
     selectRow(row) {
       let data = row;
       let that = this;
-      that.mapData = {
-        citys: [
-          {
-            name: data.src,
-            series: data.srcCoords
-          },
-          {
-            name: data.dest,
-            series: data.destCoords
-          }
-        ],
-        moveLines: [
-          {
-            coords: [data.srcCoords, data.destCoords]
-          }
-        ]
-      };
+      that.updatePredictionChart(data.hubName);
     }
   }
 };

@@ -348,36 +348,61 @@ Mock.mock('/api/connectingtriprank', 'get', () => {
 });
 
 // 城市交通预测{time: 时间, index: 指数, type: 类型 1代表历史 2代表预测}
-Mock.mock('/api/weekprediction', 'get', (/* option */) => {
-    // let cityID = JSON.parse(option.body).cityID;    // 获取city ID
+Mock.mock('/api/weekprediction', 'get', (option) => {
+    let cityID = JSON.parse(option.body).cityID;    // 获取city ID
     let res = [];
+    let tmp = {
+        '1': [42.03, 59.37, 49.41, 56.42, 57.25, 42.89, 53.05, 55.36, 56.34, 55.54, 45.93, 53.86, 54.85, 46.87],
+        '2': [56.32, 48.42, 40.89, 41.00, 41.10, 53.01, 49.99, 51.33, 41.33, 50.68, 53.69, 40.56, 48.22, 44.13],
+        '3': [59.26, 50.92, 45.5, 58.43, 44.56, 42.46, 40.3, 52.37, 56.32, 53.75, 57.4, 55.03, 56.56, 42.44]
+    }
     // 临时用随机生成数据，后期根据城市赋值对应城市的数据 res = [{time: ‘2020-07-18T01:50:32’, index: 2, type: 1}]
     for (let i = 0; i < 14; i++) {
         res.push({
             time: function () {
                 return moment().add(i - 7, 'days');
             },
-            'index|2-10': 2,
+            index: tmp[cityID][i],
             type: function () {
                 return i < 8 ? 1 : 2
             }
         })
     }
-
     return Mock.mock(res);
 });
 
 Mock.mock('/api/hubtrafficprediction', 'get', (option) => {
     let hubType = JSON.parse(option.body).hubType;
     let res = [];
-    for (let i = 0; i < 10; i++) {
-        res.push({
-            'hubName|1': hubType === 'rail' ? railStations : hubType === 'air' ? airStations : hubType === 'highway' ? highway : scenicspot,
-            'bearingCapacity|10000-30000': 10000,
-            'psgvolNext1h|10000-30000': 10000,
-            'psgvolNext1d|10000-30000': 10000,
-            'predAcc|1-10': 1
-        })
+    let tmp = {
+        rail: {
+            hubName: ['北京西站', '北京南站', '石家庄站', '北京站', '天津站', '天津西站', '唐山站'],
+            bearingCapacity: [60, 100, 40, 30, 50, 30, 30],
+            psgvolNext1h: [2.02, 1.35, 0.93, 0.91, 0.88, 0.35, 0.22],
+            psgvolNext1d: [24.25, 16.25, 11.24, 11.03, 10.56, 4.21, 2.69],
+            predAcc: [73.20, 75.25, 66.12, 70.25, 81.35, 75.36, 86.25]
+        },
+        air: {
+            hubName: ['首都国际机场', '滨海国际机场', '正定国际机场', '大兴国际机场', '山海关机场'],
+            bearingCapacity: [50, 30, 20, 10, 5],
+            psgvolNext1h: [2.12, 0.52, 0.25, 0.06, 0.01],
+            psgvolNext1d: [26.38, 6.27, 3.18, 0.76, 0.07],
+            predAcc: [82.36, 85.64, 88.45, 90.34, 87.64]
+        }
+    };
+
+    let currTmp = tmp[hubType];
+    if (currTmp) {
+        for (let i = 0; i < currTmp.hubName.length; i++) {
+
+            res.push({
+                'hubName': currTmp.hubName[i],
+                'bearingCapacity': currTmp.bearingCapacity[i],
+                'psgvolNext1h': currTmp.psgvolNext1h[i],
+                'psgvolNext1d': currTmp.psgvolNext1d[i],
+                'predAcc': currTmp.predAcc[i]
+            })
+        }
     }
 
     return Mock.mock(res);
@@ -385,28 +410,57 @@ Mock.mock('/api/hubtrafficprediction', 'get', (option) => {
 
 // 交通需求预测-拥堵趋势预测柱状图数据
 // type 1~4 代表 ["严重拥堵", "拥堵", "缓行", "通畅"]
-Mock.mock('/api/jamtrendprediction', 'get', () => {
-    // let hubType = JSON.parse(option.body).hubType;
+Mock.mock('/api/jamtrendprediction', 'get', (option) => {
+    let hubName = JSON.parse(option.body).hubName;
+    let tmp = {
+        '北京西站': [1.38, 1.32, 1.33, 1.82, 2, 1.66, 1.43, 1.21, 1.27],
+        '北京南站': [1.63, 1.94, 1.32, 1.29, 2.17, 1.22, 1.85, 2, 2.17],
+        '首都国际机场': [1.55, 1.13, 1.52, 1.18, 1.34, 1.39, 1.46, 1.63, 1.06]
+    }
     let res = [];
     for (let i = 0; i < 8; i++) {
         res.push({
             time: function () {
                 return moment().add(i - 1, 'days');
             },
-            'index|1-10': 1,
-            'type|1-4': 1
+            'index': tmp[hubName][i],
+            'type': function () {
+                if (this.index > 1.8) {
+                    return 1;
+                } else if (this.index > 1.5) {
+                    return 2;
+                } else if (this.index > 1.2) {
+                    return 3;
+                } else {
+                    return 4;
+                }
+            }
         })
     }
     return Mock.mock(res);
 });
 // 交通需求预测-明日24小时拥堵趋势预测曲线图数据
-Mock.mock('/api/jamnextdaytrendprediction', 'get', () => {
+Mock.mock('/api/jamnextdaytrendprediction', 'get', (option) => {
+    let hubName = JSON.parse(option.body).hubName;
+    let tmp = {
+        '北京西站': [0.22, 0.03, 0.32, 0.32, 0.04, 0.33, 0.57, 0.91, 1.17, 1.13, 1.23, 1.52, 1.23, 0.84, 1.22, 1.39, 1.4, 1.41, 1.62, 1.66, 1.01, 1.2, 1.55, 1.26, 0.8],
+        '北京南站': [0.37, 0.34, 0.27, 0.39, 0.38, 0.03, 1.06, 0.65, 1.4, 1.35, 1.6, 1.11, 1.29, 1.07, 1.31, 1.23, 1.38, 1.2, 1.06, 1.67, 1.11, 1.52, 1.51, 1.56, 1.1],
+        '首都国际机场': [0.05, 0.04, 0.05, 0.24, 0.35, 0.27, 1.16, 1.57, 1.11, 1.27, 1.24, 1.68, 1.51, 1.31, 0.87, 1.4, 0.99, 1.24, 1.27, 1.33, 1.05, 1.51, 1.3, 1.18, 1.18]
+    }
+
     let res = [];
-    for (let i = 0; i < 12; i++) {
-        res.push({
-            time: (i * 2 < 10 ? ('0' + i * 2) : i * 2) + ':00',
-            'index|0-10': 0
-        })
+    for (let i = 0; i < 24; i++) {
+        if (tmp[hubName]) {
+            res.push({
+                time: i + '时',
+                'index': tmp[hubName][i]
+            })
+        } else {
+            res.push({
+                time: i + '时',
+                'index|0-2': 0
+            })
+        }
     }
     return Mock.mock(res);
 });

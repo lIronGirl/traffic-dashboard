@@ -126,17 +126,23 @@ export function getHubTrafficPrediction(hubType) {
     })
 }
 
-export function getJamTrendPrediction() {
+export function getJamTrendPrediction(hubName) {
     return request({
         url: 'api/jamtrendprediction',
-        method: 'get'
+        method: 'get',
+        data: {
+            hubName: hubName
+        }
     })
 }
 
-export function getJamNextDayTrendPrediction() {
+export function getJamNextDayTrendPrediction(hubName) {
     return request({
         url: 'api/jamnextdaytrendprediction',
-        method: 'get'
+        method: 'get',
+        data: {
+            hubName: hubName
+        }
     })
 }
 

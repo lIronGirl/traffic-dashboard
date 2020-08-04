@@ -65,7 +65,7 @@ export default {
           title: "排行"
         },
         {
-          title: "热门路线（某场站到某场站）",
+          title: "热门路线",
           key: "popularRoutes"
         },
         {
@@ -83,24 +83,21 @@ export default {
           type: "index",
           width: 60,
           align: "right",
-          title: "排行"
+          title: "序号"
         },
         {
           title: "出行个体",
+          width: 90,
           key: "name"
         },
         {
-          title: "出行时长（小时）",
-          key: "duration",
-          align: "right"
+          title: "出行链路",
+          width: 200,
+          key: "route"
         },
         {
-          title: "出发地",
-          key: "src"
-        },
-        {
-          title: "目的地",
-          key: "dest"
+          title: "出行方式",
+          key: "travelBy"
         }
       ],
       rankTableData: [],
@@ -192,14 +189,18 @@ export default {
           const data = res[i],
             period = 5;
           let lines = [],
-            points = [];
+            points = [],
+            route = [],
+            travelBy = [];
           for (let k = 0; k < data.points.length; k++) {
             const point = data.points[k],
-              symbols = ["plane", "rail", "car"];
+              symbols = ["plane", "rail", "car"],
+              symbolsRc = ["飞机", "轨道", "汽车"];
             points.push({
               name: point.name,
               value: point.coords
             });
+            route.push(point.name);
             if (k < data.points.length - 1) {
               let nextPoint = data.points[k + 1];
               lines.push({
@@ -207,13 +208,13 @@ export default {
                 delay: period * k,
                 symbol: symbols[point.by - 1] // 1:飞机，2:轨道，3:汽车
               });
+              travelBy.push(symbolsRc[point.by - 1]);
             }
           }
           tableData.push({
             name: data.name,
-            duration: data.duration,
-            src: data.points[0].name,
-            dest: data.points[data.points.length - 1].name,
+            route: route.join("-"),
+            travelBy: travelBy.join("-"),
             mapData: {
               points: points,
               moveLines: lines

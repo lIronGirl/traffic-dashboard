@@ -158,6 +158,7 @@ const stationGeoCoordMap = {
     '石家庄站': { coords: [114.490825, 38.016821], city: '石家庄' },
     '唐山站': { coords: [118.124977, 39.631246], city: '唐山' },
     '首都机场': { coords: [116.609564, 40.083812], city: '北京' },
+    '滨海国际机场': { coords: [117.371645, 39.133514], city: '天津' },
     '正定机场': { coords: [114.703893, 38.287385], city: '石家庄' },
     '北京南苑机场': { coords: [116.409387, 39.799315], city: '北京' },
     '山海关机场': { coords: [119.736468, 39.982802], city: '秦皇岛' },
@@ -228,76 +229,127 @@ Mock.mock('/api/traveldistancestatics', 'get', () => {
 
 Mock.mock('/api/individuallist', 'get', () => {
     let res = [];
-    for (let t = 0; t < 24; t++) {
+    for (let t = 0; t < 9; t++) {
         res.push({
             'id|+1': 1,
-            'name': Random.cname()
+            'name': ['任秀兰', '吴娟', '郑丽', '李丽', '谭军', '杜秀英', '郑明', '葛华', '关子龙'][t]
         })
     }
     return Mock.mock(res);
 });
 Mock.mock('/api/individualrank', 'get', (option) => {
+    let tmp = [{
+        'name': '任秀兰',
+        points: [{
+            name: '北京南站',
+            coords: [116.387452, 39.870426],
+            'by': 2
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488],
+            'by': 1
+        }, {
+            name: '滨海国际机场',
+            coords: [117.371645, 39.133514]
+        }]
+    }, {
+        'name': '吴娟',
+        points: [{
+            name: '北京西站',
+            coords: [116.328103, 39.900835],
+            'by': 2
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488]
+        }]
+    }, {
+        'name': '郑丽',
+        points: [{
+            name: '北京南站',
+            coords: [116.387452, 39.870426],
+            'by': 2
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488]
+        }]
+    }, {
+        'name': '李丽',
+        points: [{
+            name: '北京南站',
+            coords: [116.387452, 39.870426],
+            'by': 2
+        }, {
+            name: '首都国际机场',
+            coords: [116.609564, 40.083812]
+        }]
+    }, {
+        'name': '谭军',
+        points: [{
+            name: '滨海国际机场',
+            coords: [117.371645, 39.133514],
+            'by': 1
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488],
+            'by': 2
+        }, {
+            name: '北京南站',
+            coords: [116.387452, 39.870426],
+            'by': 1
+        }, {
+            name: '首都国际机场',
+            coords: [116.609564, 40.083812]
+        }]
+    }, {
+        'name': '杜秀英',
+        points: [{
+            name: '北京西站',
+            coords: [116.328103, 39.900835],
+            'by': 2
+        }, {
+            name: '石家庄站',
+            coords: [114.490825, 38.016821]
+        }]
+    }, {
+        'name': '郑明',
+        points: [{
+            name: '天津站',
+            coords: [117.216853, 39.142488],
+            'by': 2
+        }, {
+            name: '唐山站',
+            coords: [118.124977, 39.631246]
+        }]
+    }, {
+        'name': '葛华',
+        points: [{
+            name: '天津站',
+            coords: [117.216853, 39.142488],
+            'by': 2
+        }, {
+            name: '石家庄站',
+            coords: [114.490825, 38.016821]
+        }]
+    }, {
+        'name': '关子龙',
+        points: [{
+            name: '北京南站',
+            coords: [116.387452, 39.870426],
+            'by': 2
+        }, {
+            name: '大兴国际机场',
+            coords: [116.42396, 39.511576]
+        }]
+    }];
     let res = [];
     if (JSON.parse(option.body).name) {
-        /* res.push({
-            name: JSON.parse(option.body).name,
-            'duration|2-20': 2,
-            'src|1': jing_jin_ji,
-            'dest|1': jing_jin_ji,
-            srcCoords: function () {
-                return jing_jin_jiGeoCoordMap[this.src]
-            },
-            destCoords: function () {
-                return jing_jin_jiGeoCoordMap[this.dest]
+        res = tmp.filter(function (data) {
+            if (data.name === JSON.parse(option.body).name) {
+                return data;
             }
-        }) */
-        res.push({
-            name: JSON.parse(option.body).name,
-            'duration|2-20': 2,
-            points: [{
-                name: '天津站',
-                coords: [117.216853, 39.142488],
-                'by|1-3': 1
-            }, {
-                name: '大兴机场',
-                coords: [116.42396, 39.511576],
-                'by|1-3': 1
-            }, {
-                name: '北京南',
-                coords: [116.385488, 39.87128]
-            }]
-        })
+        });
     } else {
-        for (let t = 0; t < 10; t++) {
-            /* res.push({
-                'name': Random.cname(),
-                'duration|2-20': 2,
-                'src|1': jing_jin_ji,
-                'dest|1': jing_jin_ji,
-                srcCoords: function () {
-                    return jing_jin_jiGeoCoordMap[this.src]
-                },
-                destCoords: function () {
-                    return jing_jin_jiGeoCoordMap[this.dest]
-                }
-            }) */
-            res.push({
-                'name': Random.cname(),
-                'duration|2-20': 2,
-                points: [{
-                    name: '天津站',
-                    coords: [117.216853, 39.142488],
-                    'by|1-3': 1
-                }, {
-                    name: '大兴机场',
-                    coords: [116.42396, 39.511576],
-                    'by|1-3': 1
-                }, {
-                    name: '北京南',
-                    coords: [116.385488, 39.87128]
-                }]
-            })
-        }
+        res = tmp;
     }
 
     return Mock.mock(res);
@@ -308,40 +360,40 @@ Mock.mock('/api/connectingtriprank', 'get', () => {
     // by为交通方式1:飞机，2:轨道，3:汽车，终点不需要有此字段
     res = [{
         points: [{
-            name: '北京南',
-            coords: [116.385488, 39.87128]
-        }, {
-            name: '大兴机场',
-            coords: [116.42396, 39.511576]
+            name: '北京西站',
+            coords: [116.328811, 39.901873]
         }, {
             name: '天津站',
             coords: [117.216853, 39.142488]
-        }, {
-            name: '滨海机场',
-            coords: [117.371645, 39.133514]
         }],
-        travelVol: 3300
+        travelVol: 1365
     }, {
         points: [{
-            name: '天津站',
-            coords: [117.216853, 39.142488]
-        }, {
-            name: '北京南',
+            name: '北京南站',
             coords: [116.385488, 39.87128]
+        }, {
+            name: '首都国际机场',
+            coords: [116.609564, 40.083812]
         }],
-        travelVol: 3120
+        travelVol: 562
     }, {
         points: [{
-            name: '北京南',
+            name: '北京南站',
             coords: [116.385488, 39.87128]
-        }, {
-            name: '大兴机场',
-            coords: [116.42396, 39.511576]
         }, {
             name: '天津站',
             coords: [117.216853, 39.142488]
         }],
-        travelVol: 2799
+        travelVol: 352
+    }, {
+        points: [{
+            name: '北京西站',
+            coords: [116.328811, 39.901873]
+        }, {
+            name: '石家庄站',
+            coords: [114.490825, 38.016821]
+        }],
+        travelVol: 112
     }];
 
     return Mock.mock(res);

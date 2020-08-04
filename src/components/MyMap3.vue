@@ -39,7 +39,10 @@ export default {
         that.myChart || this.$echarts.init(document.getElementById("map3-dom"));
       let baseOpt = {
         tooltip: {
-          trigger: "item"
+          trigger: "item",
+          formatter: function(params) {
+            return params.name + "<br />客流量：" + params.data.value[2];
+          }
         },
         bmap: {
           // center: [110.114129, 42.550339],

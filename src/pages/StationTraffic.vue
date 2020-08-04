@@ -81,7 +81,7 @@ export default {
         me.tableData = res;
         me.mapData = res.map(function(station) {
           return {
-            name: station.hubName,
+            name: station.city + ": " + station.hubName,
             value: station.coords.concat(station.passengerVolume)
           };
         });
@@ -96,7 +96,7 @@ export default {
   width: 100%;
   height: 100%;
   .content {
-    width: 22%;
+    width: 28%;
     height: 100%;
     position: absolute;
     left: 20px;

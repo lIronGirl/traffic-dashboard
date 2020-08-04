@@ -140,7 +140,8 @@ export default {
                 color: levelColors,
                 textStyle: {
                   color: "#fff"
-                }
+                },
+                right: "30%"
               },
               series: [
                 {

@@ -22,7 +22,7 @@
         <Tabs v-model="stationType" size="small" type="card" @on-click="getHubTrafficPrediction">
           <TabPane label="火车站" name="rail">
             <Table
-              :height="440"
+              height="340"
               stripe
               highlight-row
               :columns="rankColumns"
@@ -32,7 +32,7 @@
           </TabPane>
           <TabPane label="机场" name="air">
             <Table
-              :height="440"
+              height="340"
               stripe
               highlight-row
               :columns="rankColumns"
@@ -42,7 +42,7 @@
           </TabPane>
           <TabPane label="高速收费站" name="highway">
             <Table
-              :height="440"
+              height="340"
               stripe
               highlight-row
               :columns="rankColumns"

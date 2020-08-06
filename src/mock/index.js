@@ -229,15 +229,16 @@ Mock.mock('/api/traveldistancestatics', 'get', () => {
 
 Mock.mock('/api/individuallist', 'get', () => {
     let res = [];
-    for (let t = 0; t < 9; t++) {
+    for (let t = 0; t < 10; t++) {
         res.push({
             'id|+1': 1,
-            'name': ['任秀兰', '吴娟', '郑丽', '李丽', '谭军', '杜秀英', '郑明', '葛华', '关子龙'][t]
+            'name': ['任秀兰', '吴娟', '郑丽', '李丽', '谭军', '杜秀英', '郑明', '葛华', '关子龙', '莫有'][t]
         })
     }
     return Mock.mock(res);
 });
 Mock.mock('/api/individualrank', 'get', (option) => {
+    // by 1: 飞机，2:轨道，3:汽车
     let tmp = [{
         'name': '任秀兰',
         points: [{
@@ -247,7 +248,7 @@ Mock.mock('/api/individualrank', 'get', (option) => {
         }, {
             name: '天津站',
             coords: [117.216853, 39.142488],
-            'by': 1
+            'by': 3
         }, {
             name: '滨海国际机场',
             coords: [117.371645, 39.133514]
@@ -277,7 +278,7 @@ Mock.mock('/api/individualrank', 'get', (option) => {
         points: [{
             name: '北京南站',
             coords: [116.387452, 39.870426],
-            'by': 2
+            'by': 3
         }, {
             name: '首都国际机场',
             coords: [116.609564, 40.083812]
@@ -287,7 +288,7 @@ Mock.mock('/api/individualrank', 'get', (option) => {
         points: [{
             name: '滨海国际机场',
             coords: [117.371645, 39.133514],
-            'by': 1
+            'by': 3
         }, {
             name: '天津站',
             coords: [117.216853, 39.142488],
@@ -295,7 +296,7 @@ Mock.mock('/api/individualrank', 'get', (option) => {
         }, {
             name: '北京南站',
             coords: [116.387452, 39.870426],
-            'by': 1
+            'by': 3
         }, {
             name: '首都国际机场',
             coords: [116.609564, 40.083812]
@@ -335,10 +336,24 @@ Mock.mock('/api/individualrank', 'get', (option) => {
         points: [{
             name: '北京南站',
             coords: [116.387452, 39.870426],
-            'by': 2
+            'by': 3
         }, {
             name: '大兴国际机场',
             coords: [116.42396, 39.511576]
+        }]
+    }, {
+        'name': '莫有',
+        points: [{
+            name: '天津站',
+            coords: [117.216853, 39.142488],
+            'by': 3
+        }, {
+            name: '滨海国际机场',
+            coords: [117.371645, 39.133514],
+            'by': 1
+        }, {
+            name: '首都国际机场',
+            coords: [116.609564, 40.083812]
         }]
     }];
     let res = [];

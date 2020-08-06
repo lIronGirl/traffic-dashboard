@@ -4,7 +4,7 @@
       <div class="part statistical-chart">
         <h3>联程出行统计</h3>
         <Table
-          :height="514"
+          height="202"
           stripe
           highlight-row
           ref="currentRowTable"
@@ -26,7 +26,7 @@
           </Select>
         </div>
         <Table
-          :height="514"
+          height="370"
           stripe
           highlight-row
           ref="individualCurrentRowTable"

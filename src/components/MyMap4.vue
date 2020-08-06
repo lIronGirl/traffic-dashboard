@@ -38,12 +38,19 @@ export default {
         car: carPath,
         rail: railPath
       };
+      let baseSpeed = 30;
+      let speed = {
+        plane: baseSpeed * 8,
+        car: baseSpeed,
+        rail: baseSpeed * 4
+      };
       // 基于准备好的dom，初始化echarts实例
       that.myChart =
         that.myChart || this.$echarts.init(document.getElementById("map4-dom"));
       let baseOpt = {
         tooltip: {
-          trigger: "item"
+          trigger: "item",
+          formatter: "{b}"
         },
         bmap: {
           // center: [110.114129, 42.550339],
@@ -78,7 +85,7 @@ export default {
           },
           {
             type: "lines",
-            polyline: true,
+            polyline: false,
             coordinateSystem: "bmap",
             zlevel: 2,
             animation: false,
@@ -92,25 +99,9 @@ export default {
             },
             lineStyle: {
               normal: {
-                color: new this.$echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [
-                    {
-                      offset: 0,
-                      color: "#4bccec"
-                    },
-                    {
-                      offset: 1,
-                      color: "#a680ff"
-                    }
-                  ],
-                  false
-                ),
+                color: "#4bccec",
                 width: 1,
-                opacity: 0.6,
+                opacity: 1,
                 curveness: 0.2
               }
             },
@@ -124,17 +115,18 @@ export default {
                       trailLength: 0,
                       color: "#4bccec",
                       symbolSize: line.symbol === "rail" ? 30 : 25,
+                      constantSpeed: speed[line.symbol]
                       // loop: false,
-                      period: 5,
-                      delay: line.delay * 1000
+                      // period: 5,
+                      // delay: line.delay * 1000
                     }
                   : {
                       trailLength: 1,
                       color: "#4bccec",
                       symbol: "arrow",
                       symbolSize: 10,
-                      period: 5,
-                      delay: line.delay * 1000
+                      period: 5
+                      // delay: line.delay * 1000
                     }
               };
             })

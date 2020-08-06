@@ -132,7 +132,8 @@ export default {
         {
           title: "未来一小时预测客运量",
           key: "psgvolNext1h",
-          align: "right"
+          align: "right",
+          width: 200
         },
         {
           title: "次日预测客运量",
@@ -175,7 +176,7 @@ export default {
         grid: {
           bottom: 50,
           top: 10,
-          right: 100
+          right: 50
         },
         legend: {
           left: "center",
@@ -544,16 +545,20 @@ export default {
   }
   .section2 {
     .rank-table {
-      flex: 1;
+      flex: 0.6;
       width: 60%;
       height: 80%;
-      margin: 20px 0 10px 0;
+      padding: 20px 55px 10px 0px;
+      overflow: hidden;
+      .ivu-tabs {
+        margin-left: 58px;
+      }
     }
     .jamnextdaytrendline-chart {
-      flex: 1;
+      flex: 0.4;
       margin: 20px 0 10px 20px;
       #jamnextdaytrendline-chart-dom {
-        height: 90%;
+        height: 85%;
       }
     }
   }

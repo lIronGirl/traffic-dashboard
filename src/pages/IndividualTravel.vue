@@ -14,9 +14,9 @@
         ></Table>
       </div>
       <div class="part rank-table">
-        <h3>个体出行排行</h3>
+        <h3>出行链路排行</h3>
         <div class="individual-selector">
-          <label style="text-align: left;" for>个体查询</label>
+          <label style="text-align: left;" for>链路查询</label>
           <Select v-model="individual" filterable label-in-value @on-change="getIndividualRank">
             <Option
               v-for="item in individualList"
@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      currnetActiveTable: 1, // 1:联程出行统计表，2:个体出行表
+      currentActiveTable: 1, // 1:联程出行统计表，2:个体出行表
       connectingTripColumns: [
         {
           type: "index",
@@ -80,15 +80,10 @@ export default {
       individual: "--ALL--",
       rankColumns: [
         {
-          type: "index",
+          key: "seq",
           width: 60,
           align: "right",
           title: "序号"
-        },
-        {
-          title: "出行个体",
-          width: 90,
-          key: "name"
         },
         {
           title: "出行链路",
@@ -212,6 +207,7 @@ export default {
             }
           }
           tableData.push({
+            seq: i + 1,
             name: data.name,
             route: route.join("-"),
             travelBy: travelBy.join("-"),
@@ -223,10 +219,13 @@ export default {
         }
 
         that.rankTableData = tableData;
+        if (that.individual !== "--ALL--" && tableData[0]) {
+          that.rankTableData[0].seq = that.individual;
+        }
 
         if (
           (that.individual !== "--ALL--" && tableData[0]) ||
-          that.currnetActiveTable === 2
+          that.currentActiveTable === 2
         ) {
           tableData[0]._highlight = true;
           that.selectIndividualRow(tableData[0]);
@@ -281,14 +280,14 @@ export default {
     selectRow(row) {
       let data = row;
       let that = this;
-      that.currnetActiveTable = 1;
+      that.currentActiveTable = 1;
       this.$refs.individualCurrentRowTable.clearCurrentRow();
       that.mapData = data.mapData;
     },
     selectIndividualRow(row) {
       let data = row;
       let that = this;
-      that.currnetActiveTable = 2;
+      that.currentActiveTable = 2;
       this.$refs.currentRowTable.clearCurrentRow();
       that.mapData = data.mapData;
     }

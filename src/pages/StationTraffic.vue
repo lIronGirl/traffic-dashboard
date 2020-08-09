@@ -44,19 +44,23 @@ export default {
         },
         {
           title: "枢纽名称",
-          key: "hubName"
+          key: "hubName",
+          width: 120
         },
         {
           title: "枢纽承载力",
-          key: "bearingCapacity"
+          key: "bearingCapacity",
+          align: "right"
         },
         {
           title: "客流量",
-          key: "passengerVolume"
+          key: "passengerVolume",
+          align: "right"
         },
         {
           title: "疏解效率",
-          key: "relievingEfficiency"
+          key: "relievingEfficiency",
+          align: "right"
         }
       ],
       tableData: [],

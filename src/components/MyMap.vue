@@ -7,8 +7,7 @@ import { mapStyle1 } from "../assets/mapStyle.js";
 import geoCoordMap from "../assets/geoCoordMap";
 import "echarts/extension/bmap/bmap";
 import {
-  getOccurrenceQuantity,
-  getAttractionQuantity,
+  getCityTrafficRank,
   getRailQuantity,
   getAirQuantity
 } from "@/api/index.js";
@@ -41,7 +40,9 @@ export default {
   data() {
     return {
       mapData: [],
-      myChart: null
+      myChart: null,
+      min: 0,
+      max: 1601856
     };
   },
   props: {
@@ -134,14 +135,15 @@ export default {
         seriesType === "scatter"
           ? {
               visualMap: {
-                min: 0,
-                max: 300,
+                min: that.min,
+                max: that.max,
                 calculable: true,
                 color: levelColors,
                 textStyle: {
                   color: "#fff"
                 },
-                right: "30%"
+                right: "30%",
+                show: false
               },
               series: [
                 {
@@ -150,7 +152,7 @@ export default {
                   coordinateSystem: "bmap",
                   data: convertData(that.mapData),
                   symbolSize: function(val) {
-                    return val[2] / 10;
+                    return val[2] / 50000;
                   },
                   label: {
                     formatter: "{b}",
@@ -179,7 +181,7 @@ export default {
                       .slice(0, 5)
                   ),
                   symbolSize: function(val) {
-                    return val[2] / 10;
+                    return val[2] / 50000;
                   },
                   showEffectOn: "render",
                   rippleEffect: {
@@ -295,15 +297,24 @@ export default {
     },
     getOccurrenceQuantity() {
       var that = this;
-      getOccurrenceQuantity().then(res => {
-        that.mapData = res;
+      getCityTrafficRank("occur").then(res => {
+        that.min = res[res.length - 1].occur;
+        that.max = res[0].occur;
+        that.mapData = res.map(function(data) {
+          return { name: data.name, value: data.occur };
+        });
+
         that.drawMap();
       });
     },
     getAttractionQuantity() {
       var that = this;
-      getAttractionQuantity().then(res => {
-        that.mapData = res;
+
+      getCityTrafficRank("attr").then(res => {
+        that.mapData = res.map(function(data) {
+          return { name: data.name, value: data.attr };
+        });
+
         that.drawMap();
       });
     },

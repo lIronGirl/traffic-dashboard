@@ -137,7 +137,6 @@ export default {
     let that = this;
     let table = document.getElementById("rank-table");
     tableDom = table.getElementsByClassName("ivu-table-body")[0];
-    //   TODO调试接口时，需要修改为在回调中调用之后的函数
     that.getCityTrafficRank();
     if (that.tableData.length > that.trViewCount) {
       that.startTimer();

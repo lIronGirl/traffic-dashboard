@@ -52,15 +52,16 @@ export default {
       let levelColors = ["#ec4b4b", "#eca54b", "#ece84b", "#4bec85"];
       let option = {
         visualMap: {
-          min: 10000,
-          max: 30000,
+          min: that.mapData[that.mapData.length - 1].value[2],
+          max: that.mapData[0].value[2],
           calculable: true,
           color: levelColors,
           textStyle: {
             color: "#fff"
           },
           right: "5%",
-          bottom: "5%"
+          bottom: "5%",
+          show: false
         },
         series: [
           {
@@ -68,7 +69,7 @@ export default {
             coordinateSystem: "bmap",
             data: that.mapData,
             symbolSize: function(val) {
-              return val[2] / 2000;
+              return val[2];
             },
             showEffectOn: "render",
             rippleEffect: {

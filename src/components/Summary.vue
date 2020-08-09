@@ -49,10 +49,10 @@ export default {
     getSummary() {
       //  接口获取高铁飞机出行量
       this.sumData = {
-        occurCount: 2345387,
-        attrCount: 4323434,
-        railCount: 231323,
-        airCount: 122330
+        occurCount: 50659055,
+        attrCount: 53886427,
+        railCount: 15057760,
+        airCount: 2988624
       };
     },
     clickIndicator(e) {
@@ -64,7 +64,7 @@ export default {
         node = node.parentNode;
       }
 
-      this.$emit("onIndicatorClick", node.getAttribute('indicator'));
+      this.$emit("onIndicatorClick", node.getAttribute("indicator"));
     }
   }
 };

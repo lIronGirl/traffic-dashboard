@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <bg-map class="bg-map" :mapData="mapData" :mapCenter="mapCenter" :seriesType="seriesType"></bg-map>
+    <bg-map class="bg-map" :mapData="mapData" :mapCenter="mapCenter"></bg-map>
   </div>
 </template>
 
@@ -76,7 +76,7 @@ export default {
     getData() {
       let me = this;
       let stationType = me.stationType;
-      me.seriesType = "scatter";
+      // me.seriesType = "scatter";
       getStationTraffic(stationType).then(function(res) {
         me.tableData = res;
         me.mapData = res.map(function(station) {

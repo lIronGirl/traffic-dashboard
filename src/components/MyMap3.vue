@@ -20,9 +20,6 @@ export default {
     },
     mapCenter: {
       default: 0
-    },
-    seriesType: {
-      default: "scatter"
     }
   },
   watch: {

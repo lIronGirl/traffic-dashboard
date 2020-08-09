@@ -203,3 +203,26 @@ export function getStationTraffic(hubType) {
         }
     })
 }
+
+export function getCityClustersData(params) {
+    return request({
+        url: 'api/cityclustersdata',
+        method: 'get',
+        data: params
+    })
+}
+
+export function getCityData(params) {
+    return request({
+        url: 'api/citydata',
+        method: 'get',
+        data: params
+    })
+}
+
+export function getCityClustersMapdata() {
+    return request({
+        url: 'api/cityclustersmapdata',
+        method: 'get'
+    })
+}

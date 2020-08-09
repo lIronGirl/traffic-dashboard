@@ -13,9 +13,12 @@
     body {
       color: white !important;
       background-color: #070d18 !important;
+      height: 916px;
+      width: 1680px;
     }
   </style>
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=FC26SVL6R3IXbGTAXixUcaDex1jBdueS"></script>
+
 </head>
 
 <body>
@@ -23,6 +26,20 @@
     <strong>We're sorry but traffic-dashboard doesn't work properly without JavaScript enabled. Please enable it to
       continue.</strong>
   </noscript>
+  <script>
+    function resize() {
+      var ratioX = window.innerWidth / 1680;
+      var ratioY = window.innerHeight / 916;
+      document.body.style.transform = "scale(" + ratioX + "," + ratioY + ")";
+      document.body.style.transformOrigin = "left top";
+      document.body.style.backgroundSize = "100% 100%";
+    }
+
+    window.onresize = resize;
+    document.onresize = resize;
+
+    resize();
+  </script>
   <div id="app"></div>
   <!-- built files will be auto injected -->
 

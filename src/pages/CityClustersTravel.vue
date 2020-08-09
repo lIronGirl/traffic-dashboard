@@ -3,22 +3,24 @@
     <div class="content">
       <div class="part">
         <DatePicker
+          type="daterange"
           :open="open"
           :value="currDate"
-          type="date"
-          size="large"
+          :options="dateOptions"
+          placement="bottom-end"
           @on-change="handleChange"
         >
           <a href="javascript:void(0)" @click="handleClick">
             <Icon type="ios-calendar-outline" size="18" color="#fff"></Icon>
-            <span style="font-size: 18px; color: #fff;padding-left: 8px;">{{ currDate }}</span>
+            <span style="font-size: 18px; color: #fff;padding-left: 8px;">{{displayCurrDate}}</span>
           </a>
         </DatePicker>
-        <Select v-model="tripMode" style="width:100%; margin-top: 8px;">
-          <Option value="air">飞机</Option>
-          <Option value="rail">轨道</Option>
-          <Option value="road">公路</Option>
-        </Select>
+        <RadioGroup v-model="tripMode" type="button">
+          <Radio label="passenger">客运</Radio>
+          <Radio label="air">飞机</Radio>
+          <Radio label="rail">轨道</Radio>
+          <Radio label="road">公路</Radio>
+        </RadioGroup>
       </div>
       <div class="part rank-table">
         <Tabs v-model="rankType" size="small" type="card">
@@ -37,7 +39,7 @@
               :height="514"
               stripe
               highlight-row
-              :columns="outOrInColumns"
+              :columns="inColumns"
               :data="intableData"
               @on-row-click="selectInRow"
             ></Table>
@@ -47,7 +49,7 @@
               :height="514"
               stripe
               highlight-row
-              :columns="outOrInColumns"
+              :columns="outColumns"
               :data="outtableData"
               @on-row-click="selectOutRow"
             ></Table>
@@ -55,7 +57,18 @@
         </Tabs>
       </div>
     </div>
-
+    <transition name="slide-fade">
+      <div class="linkageTable" v-if="show">
+        <h3>{{ linkageTableTitle }}</h3>
+        <Table
+          :height="514"
+          stripe
+          highlight-row
+          :columns="rankType === 'inRank' ? inColumns : outColumns"
+          :data="rankType === 'inRank' ? inCitysTableData : outCityTableData"
+        ></Table>
+      </div>
+    </transition>
     <bg-map class="bg-map" :mapData="mapData" :mapCenter="mapCenter" :tripMode="tripMode"></bg-map>
   </div>
 </template>
@@ -64,7 +77,11 @@
 import BgMap from "../components/MyMap2";
 import moment from "moment";
 import "moment/locale/zh-cn";
-import { getTripViaAirRankList, getTripViaRailRankList } from "@/api/index.js";
+import {
+  getCityClustersData,
+  getCityData,
+  getCityClustersMapdata
+} from "@/api/index.js";
 
 export default {
   name: "cityClustersTravelPage",
@@ -73,50 +90,161 @@ export default {
   },
   data() {
     return {
+      show: false,
+      linkageTableTitle: "",
       open: false,
-      currDate: moment().format("YYYY-MM-DD"),
-      tripMode: "air",
+      currDate: [moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD")],
+      displayCurrDate: moment().format("YYYY-MM-DD"),
+      dateOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            value() {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              return [start, end];
+            }
+          },
+          {
+            text: "最近一个月",
+            value() {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              return [start, end];
+            }
+          },
+          {
+            text: "最近三个月",
+            value() {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              return [start, end];
+            }
+          }
+        ]
+      },
+      tripMode: "passenger",
       rankType: "tripRank",
       tripColumns: [
         {
-          title: "排行",
-          key: "name",
-          tooltip: true
+          type: "index",
+          width: 58,
+          align: "right",
+          title: "排行"
         },
         {
-          title: "指数",
-          key: "index"
+          title: "城市",
+          key: "city",
+          width: 70
         },
         {
-          title: "时长",
-          key: "time"
+          title: "迁入量",
+          key: "inVol",
+          align: "right",
+          width: 90
+        },
+        {
+          title: "与上一日增量",
+          key: "inVolIncre",
+          align: "right",
+          width: 90,
+          render: (h, params) => {
+            return this.renderArrow(h, params, "inVolIncre");
+          }
+        },
+        {
+          title: "迁出量",
+          key: "outVol",
+          align: "right",
+          width: 90
+        },
+        {
+          title: "与上一日增量",
+          key: "outVolIncre",
+          align: "right",
+          width: 90,
+          render: (h, params) => {
+            return this.renderArrow(h, params, "outVolIncre");
+          }
         }
       ],
-      outOrInColumns: [
+      inColumns: [
         {
-          title: "排行",
-          key: "name"
+          type: "index",
+          width: 58,
+          align: "right",
+          title: "排行"
         },
         {
-          title: "指数",
-          key: "index"
+          title: "城市",
+          key: "city"
+        },
+        {
+          title: "迁入量",
+          key: "inVol",
+          align: "right"
+        },
+        {
+          title: "与上一日增量",
+          key: "inVolIncre",
+          align: "right",
+          width: 114,
+          render: (h, params) => {
+            return this.renderArrow(h, params, "inVolIncre");
+          }
+        }
+      ],
+      outColumns: [
+        {
+          type: "index",
+          width: 58,
+          align: "right",
+          title: "排行"
+        },
+        {
+          title: "城市",
+          key: "city"
+        },
+        {
+          title: "迁出量",
+          key: "outVol",
+          align: "right"
+        },
+        {
+          title: "与上一日增量",
+          key: "outVolIncre",
+          align: "right",
+          width: 114,
+          render: (h, params) => {
+            return this.renderArrow(h, params, "outVolIncre");
+          }
         }
       ],
       triptableData: [],
       intableData: [],
       outtableData: [],
+      inCitysTableData: [],
+      outCityTableData: [],
       mapData: [],
       mapCenter: 0
     };
   },
   watch: {
-    currDate() {
+    currDate(currDate) {
+      this.displayCurrDate =
+        currDate[0] === currDate[1]
+          ? currDate[0]
+          : currDate[0] + " 至 " + currDate[1];
       this.getData();
     },
     tripMode() {
       this.getData();
     },
     rankType() {
+      this.show = this.rankType !== "tripRank";
       this.getData();
     }
   },
@@ -124,6 +252,26 @@ export default {
     this.getData();
   },
   methods: {
+    renderArrow(h, params, key) {
+      let val = params.row[key];
+      let isIncrem = +val.slice(0, -1) > 0;
+      return h("div", [
+        h(
+          "span",
+          {
+            style: { padding: "4px 0 0 0" }
+          },
+          val
+        ),
+        h("i", {
+          style: {
+            color: isIncrem ? "#ec4b4b" : "#4bec85",
+            padding: "2px 0 4px 0"
+          },
+          class: "iconfont icon-" + (isIncrem ? "up" : "down") + "_arrow"
+        })
+      ]);
+    },
     handleClick() {
       this.open = !this.open;
     },
@@ -131,206 +279,63 @@ export default {
       this.open = false;
       this.currDate = date;
     },
-    selectRow(row, index) {
-      this.mapCenter = index;
+    selectRow(row) {
+      this.mapCenter = row.city;
     },
     selectInRow(row) {
-      this.mapData = this.getInCityData(row.name);
+      this.getCityData(row.city, "in");
+      this.linkageTableTitle = row.city + "迁入量排行";
     },
     selectOutRow(row) {
-      this.mapData = this.getOutCityData(row.name);
+      this.getCityData(row.city, "out");
+      this.linkageTableTitle = row.city + "迁出量排行";
     },
     getData() {
-      // 飞机使用线图，轨道及公路使用路径图
       let that = this;
-      /* that.currDate;
-      that.tripMode;
-      that.rankType; */
-      // alert(that.currDate + "-" + that.tripMode + "-" + that.rankType);
-      let fakeData2 = [
-        {
-          name: "北京",
-          index: 80
-        },
-        {
-          name: "天津",
-          index: 76
-        },
-        {
-          name: "石家庄",
-          index: 60
-        },
-        {
-          name: "廊坊",
-          index: 54
-        },
-        {
-          name: "唐山",
-          index: 46
+      getCityClustersData({
+        dataRange: that.currDate,
+        tripMode: that.tripMode,
+        rankType: that.rankType
+      }).then(res => {
+        if (res[0]) {
+          res[0]._highlight = true;
         }
-      ];
-      let fakeData3 = [
-        {
-          name: "北京",
-          index: 79
-        },
-        {
-          name: "廊坊",
-          index: 76
-        },
-        {
-          name: "天津",
-          index: 60
-        },
-        {
-          name: "石家庄",
-          index: 54
-        },
-        {
-          name: "唐山",
-          index: 46
-        }
-      ];
-
-      if (that.rankType === "tripRank") {
-        if (that.tripMode === "air") {
-          getTripViaAirRankList(that.currDate).then(res => {
-            that.triptableData = res.map(function(val) {
-              return {
-                name: val[0].name + "-" + val[1].name,
-                index: val[1].index,
-                time: val[1].time
-              };
+        switch (that.rankType) {
+          case "tripRank":
+            that.triptableData = res;
+            res[0] && that.selectRow(res[0]);
+            getCityClustersMapdata().then(mapRes => {
+              that.mapData = mapRes;
+              that.mapCenter = res[0].city;
             });
-            that.triptableData[0] && (that.triptableData[0]._highlight = true);
-            that.mapData = res;
-          });
-        } else if (that.tripMode === "rail") {
-          getTripViaRailRankList(that.currDate).then(res => {
-            that.triptableData = res.map(function(val) {
-              return {
-                name: val[0].name + "-" + val[1].name,
-                index: val[1].index,
-                time: val[1].time
-              };
+            break;
+          case "inRank":
+            that.intableData = res;
+            res[0] && that.selectInRow(res[0]);
+            break;
+          case "outRank":
+            that.outtableData = res.sort(function(a, b) {
+              return +b.outVol - +a.outVol;
             });
-            that.triptableData[0] && (that.triptableData[0]._highlight = true);
-
-            that.mapData = that.getRailData(res[0][0].name, res[0][1].name);
-          });
-        } else {
-          /* that.mapData = that.getRoadData(
-            fakeData1[0][0].name,
-            fakeData1[0][1].name
-          ); */
+            res[0] && that.selectOutRow(that.outtableData[0]);
+            break;
+          default:
+            break;
         }
-      } else if (that.rankType === "inRank" && that.tripMode === "air") {
-        that.intableData = fakeData2;
-        that.intableData[0] && (that.intableData[0]._highlight = true);
-        that.mapData = that.getInCityData(fakeData2[0].name);
-      } else if (that.rankType === "outRank" && that.tripMode === "air") {
-        that.outtableData = fakeData3;
-        that.outtableData[0] && (that.outtableData[0]._highlight = true);
-        that.mapData = that.getOutCityData(fakeData3[0].name);
-      }
-
-      that.mapCenter = that.rankType === "tripRank" ? 0 : -1;
-    },
-    getRailData(fromCity, toCity) {
-      // let that = this;
-      if (fromCity === "北京" && toCity === "石家庄") {
-        return [
-          {
-            coords: [
-              [116.328103, 39.900835],
-              [114.490825, 38.016821]
-            ]
-          },
-          {
-            coords: [
-              [116.328103, 39.900835],
-              [115.607409, 38.869587],
-              [114.490825, 38.016821]
-            ]
-          },
-          {
-            coords: [
-              [116.328103, 39.900835],
-              [115.952311, 39.295036],
-              [114.490825, 38.016821]
-            ]
-          }
-        ];
-      }
-    },
-    /* getRoadData(fromCity, toCity) {
-      let that =
-      if (fromCity === "北京" && toCity === "石家庄") {
-        that.mapData = [
-          {
-            coords: [
-              [116.328103, 39.900835],
-              [114.490825, 38.016821]
-            ]
-          },
-          {
-            coords: [
-              [116.328103, 39.900835],
-              [115.607409, 38.869587],
-              [114.490825, 38.016821]
-            ]
-          },
-          {
-            coords: [
-              [116.328103, 39.900835],
-              [115.952311, 39.295036],
-              [114.490825, 38.016821]
-            ]
-          }
-        ];
-      }
-    }, */
-    getInCityData(city) {
-      let fakeData = [
-        { name: "廊坊" },
-        { name: "北京" },
-        { name: "天津" },
-        { name: "石家庄" },
-        { name: "邢台" },
-        { name: "唐山" },
-        { name: "邯郸" },
-        { name: "沧州" },
-        { name: "衡水" }
-      ].filter(function(val) {
-        return val.name !== city;
       });
-
-      if (this.tripMode === "air") {
-        return fakeData.map(function(val) {
-          return [val, { name: city }];
-        });
-      }
     },
-    getOutCityData(city) {
-      let fakeData = [
-        { name: "廊坊" },
-        { name: "北京" },
-        { name: "天津" },
-        { name: "石家庄" },
-        { name: "邢台" },
-        { name: "唐山" },
-        { name: "邯郸" },
-        { name: "沧州" },
-        { name: "衡水" }
-      ].filter(function(val) {
-        return val.name !== city;
+    getCityData(city, inOrOut) {
+      let that = this;
+      getCityData({ city: city, inOrOut: inOrOut }).then(res => {
+        that[inOrOut === "in" ? "inCitysTableData" : "outCityTableData"] = res;
+        if (res.length > 0) {
+          that.mapData = res.map(function(data) {
+            return inOrOut === "in"
+              ? [data.city, city, data.inVol]
+              : [city, data.city, data.outVol];
+          });
+        }
       });
-
-      if (this.tripMode === "air") {
-        return fakeData.map(function(val) {
-          return [{ name: city }, val];
-        });
-      }
     }
   }
 };
@@ -338,11 +343,22 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
 #cityClustersTravelPage {
   width: 100%;
   height: 100%;
   .content {
-    width: 22%;
+    width: 31%;
     height: 100%;
     position: absolute;
     right: 20px;
@@ -351,10 +367,30 @@ export default {
       padding: 16px;
       margin-bottom: 16px;
       background-color: rgba(255, 255, 255, 0.05);
+      & .ivu-date-picker {
+        width: 100%;
+      }
       &.rank-table {
         height: 80%;
       }
+      .ivu-radio-group-button .ivu-radio-wrapper {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        border-color: #dcdee2ba;
+        margin-top: 20px;
+      }
+      .ivu-radio-group-button .ivu-radio-wrapper-checked {
+        border-color: #4bccec;
+      }
     }
+  }
+  .linkageTable {
+    width: 20%;
+    height: 80%;
+    position: absolute;
+    left: 20px;
+    top: 240px;
+    z-index: 2;
   }
 }
 </style>

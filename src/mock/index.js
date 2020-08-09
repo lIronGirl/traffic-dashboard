@@ -232,7 +232,8 @@ Mock.mock('/api/individuallist', 'get', () => {
     for (let t = 0; t < 10; t++) {
         res.push({
             'id|+1': 1,
-            'name': ['任秀兰', '吴娟', '郑丽', '李丽', '谭军', '杜秀英', '郑明', '葛华', '关子龙', '莫有'][t]
+            // 'name': ['任秀兰', '吴娟', '郑丽', '李丽', '谭军', '杜秀英', '郑明', '葛华', '关子龙', '莫有'][t]
+            name: t + 1
         })
     }
     return Mock.mock(res);
@@ -358,11 +359,12 @@ Mock.mock('/api/individualrank', 'get', (option) => {
     }];
     let res = [];
     if (JSON.parse(option.body).name) {
-        res = tmp.filter(function (data) {
+        /* res = tmp.filter(function (data) {
             if (data.name === JSON.parse(option.body).name) {
                 return data;
             }
-        });
+        }); */
+        res = [tmp[+JSON.parse(option.body).name - 1]];
     } else {
         res = tmp;
     }
@@ -409,6 +411,30 @@ Mock.mock('/api/connectingtriprank', 'get', () => {
             coords: [114.490825, 38.016821]
         }],
         travelVol: 112
+    }, {
+        points: [{
+            name: '北京南站',
+            coords: [116.387452, 39.870426]
+        }, {
+            name: '天津站',
+            coords: [117.216853, 39.142488]
+        }, {
+            name: '滨海国际机场',
+            coords: [117.371645, 39.133514]
+        }],
+        travelVol: 105
+    }, {
+        points: [{
+            name: '天津站',
+            coords: [117.216853, 39.142488]
+        }, {
+            name: '滨海国际机场',
+            coords: [117.371645, 39.133514]
+        }, {
+            name: '首都国际机场',
+            coords: [116.609564, 40.083812]
+        }],
+        travelVol: 25
     }];
 
     return Mock.mock(res);
@@ -1240,6 +1266,182 @@ Mock.mock('/api/stationtraffic', 'get', (option) => {
             }
         })
     }
+
+    return Mock.mock(res);
+});
+
+
+// 城市群出行-表格数据
+Mock.mock('/api/cityclustersdata', 'get', (option) => {
+    let params = JSON.parse(option.body);
+    // dataRange: that.currDate,
+    //     tripMode: that.tripMode,
+    //         rankType: that.rankType
+    let tmp = {
+        passenger: [
+            { "city": "北京", "inVol": "937510", "inVolIncre": "0.34%", "outVol": "815765", "outVolIncre": "1.32%" },
+            { "city": "廊坊", "inVol": "811056", "inVolIncre": "-0.19%", "outVol": "726883", "outVolIncre": "-1.41%" },
+            { "city": "天津", "inVol": "756210", "inVolIncre": "1.78%", "outVol": "658352", "outVolIncre": "-1.47%" },
+            { "city": "保定", "inVol": "580315", "inVolIncre": "2.91%", "outVol": "585095", "outVolIncre": "-1.94%" },
+            { "city": "沧州", "inVol": "482257", "inVolIncre": "-2.23%", "outVol": "494015", "outVolIncre": "1.55%" },
+            { "city": "唐山", "inVol": "433228", "inVolIncre": "-2.26%", "outVol": "456502", "outVolIncre": "-0.86%" },
+            { "city": "石家庄", "inVol": "422702", "inVolIncre": "0.54%", "outVol": "407333", "outVolIncre": "0.38%" },
+            { "city": "秦皇岛", "inVol": "372288", "inVolIncre": "-2.13%", "outVol": "382478", "outVolIncre": "0.66%" },
+            { "city": "张家口", "inVol": "309132", "inVolIncre": "0.99%", "outVol": "352225", "outVolIncre": "-2.83%" },
+            { "city": "邢台", "inVol": "290850", "inVolIncre": "2.18%", "outVol": "340238", "outVolIncre": "-0.06%" },
+            { "city": "邯郸", "inVol": "281986", "inVolIncre": "2.33%", "outVol": "326703", "outVolIncre": "2.56%" },
+            { "city": "承德", "inVol": "261488", "inVolIncre": "1.17%", "outVol": "323295", "outVolIncre": "2.59%" },
+            { "city": "衡水", "inVol": "229633", "inVolIncre": "-0.11%", "outVol": "323294", "outVolIncre": "-0.49%" }
+        ],
+        air: [
+            { "city": "北京", "inVol": "81576", "inVolIncre": "1.69%", "outVol": "81576", "outVolIncre": "-1.64%" },
+            { "city": "天津", "inVol": "32186", "inVolIncre": "-0.17%", "outVol": "32329", "outVolIncre": "1.53%" },
+            { "city": "廊坊", "inVol": "27654", "inVolIncre": "-0.68%", "outVol": "32329", "outVolIncre": "2.35%" },
+            { "city": "保定", "inVol": "25432", "inVolIncre": "3.85%", "outVol": "25432", "outVolIncre": "-3.76%" },
+            { "city": "沧州", "inVol": "24827", "inVolIncre": "3.81%", "outVol": "24827", "outVolIncre": "2.77%" },
+            { "city": "唐山", "inVol": "23606", "inVolIncre": "-0.10%", "outVol": "23606", "outVolIncre": "1.54%" },
+            { "city": "石家庄", "inVol": "21857", "inVolIncre": "-3.34%", "outVol": "21857", "outVolIncre": "-2.61%" },
+            { "city": "秦皇岛", "inVol": "21131", "inVolIncre": "1.65%", "outVol": "21131", "outVolIncre": "-2.24%" },
+            { "city": "张家口", "inVol": "20493", "inVolIncre": "-2.12%", "outVol": "20493", "outVolIncre": "-3.26%" },
+            { "city": "邢台", "inVol": "20218", "inVolIncre": "-1.19%", "outVol": "20218", "outVolIncre": "-3.82%" },
+            { "city": "承德", "inVol": "20218", "inVolIncre": "-3.09%", "outVol": "16907", "outVolIncre": "1.11%" },
+            { "city": "邯郸", "inVol": "20196", "inVolIncre": "1.53%", "outVol": "20196", "outVolIncre": "1.26%" },
+            { "city": "衡水", "inVol": "20196", "inVolIncre": "1.49%", "outVol": "16511", "outVolIncre": "2.08%" }
+        ],
+        rail: [
+            { "city": "北京", "inVol": "427448", "inVolIncre": "2.54%", "outVol": "415296", "outVolIncre": "-1.20%" },
+            { "city": "廊坊", "inVol": "399784", "inVolIncre": "3.94%", "outVol": "335160", "outVolIncre": "1.76%" },
+            { "city": "天津", "inVol": "359072", "inVolIncre": "-0.07%", "outVol": "370048", "outVolIncre": "-2.23%" },
+            { "city": "保定", "inVol": "289856", "inVolIncre": "-3.25%", "outVol": "297864", "outVolIncre": "-3.01%" },
+            { "city": "沧州", "inVol": "280056", "inVolIncre": "1.01%", "outVol": "194712", "outVolIncre": "1.57%" },
+            { "city": "唐山", "inVol": "242984", "inVolIncre": "2.55%", "outVol": "232400", "outVolIncre": "-0.03%" },
+            { "city": "石家庄", "inVol": "231280", "inVolIncre": "-1.46%", "outVol": "164584", "outVolIncre": "-0.59%" },
+            { "city": "秦皇岛", "inVol": "207032", "inVolIncre": "2.67%", "outVol": "179312", "outVolIncre": "0.02%" },
+            { "city": "张家口", "inVol": "194880", "inVolIncre": "-2.23%", "outVol": "251496", "outVolIncre": "0.60%" },
+            { "city": "邢台", "inVol": "191072", "inVolIncre": "2.11%", "outVol": "166320", "outVolIncre": "-3.22%" },
+            { "city": "邯郸", "inVol": "187152", "inVolIncre": "0.65%", "outVol": "173208", "outVolIncre": "-3.08%" },
+            { "city": "承德", "inVol": "185024", "inVolIncre": "3.56%", "outVol": "207368", "outVolIncre": "-1.78%" },
+            { "city": "衡水", "inVol": "154784", "inVolIncre": "-0.20%", "outVol": "156576", "outVolIncre": "2.39%" }
+        ],
+        road: [
+            { "city": "北京", "inVol": "673901", "inVolIncre": "1.93%", "outVol": "437911", "outVolIncre": "3.27%" },
+            { "city": "廊坊", "inVol": "596965", "inVolIncre": "-3.75%", "outVol": "477098", "outVolIncre": "3.06%" },
+            { "city": "天津", "inVol": "550782", "inVolIncre": "0.91%", "outVol": "442530", "outVolIncre": "2.00%" },
+            { "city": "保定", "inVol": "545679", "inVolIncre": "-0.75%", "outVol": "669159", "outVolIncre": "-1.43%" },
+            { "city": "沧州", "inVol": "537459", "inVolIncre": "1.27%", "outVol": "460857", "outVolIncre": "2.45%" },
+            { "city": "唐山", "inVol": "524251", "inVolIncre": "2.53%", "outVol": "551747", "outVolIncre": "-3.14%" },
+            { "city": "石家庄", "inVol": "441888", "inVolIncre": "0.64%", "outVol": "416604", "outVolIncre": "-1.90%" },
+            { "city": "秦皇岛", "inVol": "429834", "inVolIncre": "-0.65%", "outVol": "385314", "outVolIncre": "0.39%" },
+            { "city": "张家口", "inVol": "429371", "inVolIncre": "1.12%", "outVol": "437911", "outVolIncre": "-2.80%" },
+            { "city": "邢台", "inVol": "406002", "inVolIncre": "-2.31%", "outVol": "374586", "outVolIncre": "1.98%" },
+            { "city": "邯郸", "inVol": "392769", "inVolIncre": "3.89%", "outVol": "400959", "outVolIncre": "1.04%" },
+            { "city": "承德", "inVol": "384400", "inVolIncre": "3.90%", "outVol": "319754", "outVolIncre": "-3.83%" },
+            { "city": "衡水", "inVol": "380437", "inVolIncre": "-1.77%", "outVol": "435974", "outVolIncre": "2.00%" }
+        ]
+    }
+    let res = [];
+    res = tmp[params.tripMode];
+
+    return Mock.mock(res);
+});
+
+// 城市群出行-联动表格citydata
+Mock.mock('/api/citydata', 'get', (option) => {
+    let params = JSON.parse(option.body);
+    let tmp = {
+        'in': {
+            '北京': [
+                { "city": "廊坊", "inVol": "235444", "inVolIncre": "2.89%" },
+                { "city": "保定", "inVol": "88813", "inVolIncre": "2.26%" },
+                { "city": "天津", "inVol": "81744", "inVolIncre": "-2.13%" },
+                { "city": "张家口", "inVol": "47850", "inVolIncre": "0.96%" },
+                { "city": "沧州", "inVol": "26520", "inVolIncre": "-0.85%" },
+                { "city": "唐山", "inVol": "21840", "inVolIncre": "-2.25%" },
+                { "city": "石家庄", "inVol": "11856", "inVolIncre": "0.95%" },
+                { "city": "秦皇岛", "inVol": "10608", "inVolIncre": "-1.41%" },
+                { "city": "邢台", "inVol": "4992", "inVolIncre": "-2.57%" },
+                { "city": "承德", "inVol": "3432", "inVolIncre": "-0.43%" },
+                { "city": "衡水", "inVol": "1716", "inVolIncre": "3.71%" },
+                { "city": "邯郸", "inVol": "624", "inVolIncre": "3.66%" }
+            ],
+            '天津': [
+                { "city": "廊坊", "inVol": "108025", "inVolIncre": "0.79%" },
+                { "city": "北京", "inVol": "95632", "inVolIncre": "3.48%" },
+                { "city": "唐山", "inVol": "83013", "inVolIncre": "-2.30%" },
+                { "city": "沧州", "inVol": "71050", "inVolIncre": "-2.89%" },
+                { "city": "石家庄", "inVol": "34068", "inVolIncre": "1.30%" },
+                { "city": "秦皇岛", "inVol": "31008", "inVolIncre": "-2.69%" },
+                { "city": "张家口", "inVol": "20400", "inVolIncre": "0.34%" },
+                { "city": "保定", "inVol": "12648", "inVolIncre": "-0.58%" },
+                { "city": "邢台", "inVol": "12444", "inVolIncre": "2.15%" },
+                { "city": "邯郸", "inVol": "8568", "inVolIncre": "-2.44%" },
+                { "city": "承德", "inVol": "5304", "inVolIncre": "-2.04%" },
+                { "city": "衡水", "inVol": "5100", "inVolIncre": "-2.50%" }
+            ]
+        },
+        out: {
+            '北京': [
+                { "city": "廊坊", "outVol": "235444", "outVolIncre": "2.89%" },
+                { "city": "保定", "outVol": "88813", "outVolIncre": "2.26%" },
+                { "city": "天津", "outVol": "81744", "outVolIncre": "-2.13%" },
+                { "city": "张家口", "outVol": "47850", "outVolIncre": "0.96%" },
+                { "city": "沧州", "outVol": "26520", "outVolIncre": "-0.85%" },
+                { "city": "唐山", "outVol": "21840", "outVolIncre": "-2.25%" },
+                { "city": "石家庄", "outVol": "11856", "outVolIncre": "0.95%" },
+                { "city": "秦皇岛", "outVol": "10608", "outVolIncre": "-1.41%" },
+                { "city": "邢台", "outVol": "4992", "outVolIncre": "-2.57%" },
+                { "city": "承德", "outVol": "3432", "outVolIncre": "-0.43%" },
+                { "city": "衡水", "outVol": "1716", "outVolIncre": "3.71%" },
+                { "city": "邯郸", "outVol": "624", "outVolIncre": "3.66%" }
+            ],
+            '天津': [
+                { "city": "廊坊", "outVol": "108025", "outVolIncre": "0.79%" },
+                { "city": "北京", "outVol": "95632", "outVolIncre": "3.48%" },
+                { "city": "唐山", "outVol": "83013", "outVolIncre": "-2.30%" },
+                { "city": "沧州", "outVol": "71050", "outVolIncre": "-2.89%" },
+                { "city": "石家庄", "outVol": "34068", "outVolIncre": "1.30%" },
+                { "city": "秦皇岛", "outVol": "31008", "outVolIncre": "-2.69%" },
+                { "city": "张家口", "outVol": "20400", "outVolIncre": "0.34%" },
+                { "city": "保定", "outVol": "12648", "outVolIncre": "-0.58%" },
+                { "city": "邢台", "outVol": "12444", "outVolIncre": "2.15%" },
+                { "city": "邯郸", "outVol": "8568", "outVolIncre": "-2.44%" },
+                { "city": "承德", "outVol": "5304", "outVolIncre": "-2.04%" },
+                { "city": "衡水", "outVol": "5100", "outVolIncre": "-2.50%" }
+            ]
+        }
+    }
+    let res = [];
+    res = tmp[params.inOrOut][params.city];
+    return Mock.mock(res);
+});
+
+// 城市群出行-出行-地图数据
+Mock.mock('/api/cityclustersmapdata', 'get', () => {
+    let tmp = [
+        { "line": "廊坊-北京", "travelVol": "235444" },
+        { "line": "北京-廊坊", "travelVol": "270426" },
+        { "line": "廊坊-天津", "travelVol": "108025" },
+        { "line": "保定-北京", "travelVol": "88813" },
+        { "line": "北京-保定", "travelVol": "94975" },
+        { "line": "唐山-秦皇岛", "travelVol": "93525" },
+        { "line": "北京-张家口", "travelVol": "73588" },
+        { "line": "天津-北京", "travelVol": "81744" },
+        { "line": "北京-天津", "travelVol": "88994" },
+        { "line": "天津-廊坊", "travelVol": "112375" },
+        { "line": "天津-唐山", "travelVol": "101500" },
+        { "line": "唐山-天津", "travelVol": "83013" },
+        { "line": "北京-承德", "travelVol": "49119" },
+        { "line": "保定-石家庄", "travelVol": "64706" },
+        { "line": "沧州-天津", "travelVol": "71050" },
+        { "line": "廊坊-保定", "travelVol": "58544" },
+        { "line": "张家口-北京", "travelVol": "47850" },
+        { "line": "天津-沧州", "travelVol": "70144" },
+        { "line": "石家庄-保定", "travelVol": "58363" },
+        { "line": "邢台-石家庄", "travelVol": "59813" }
+    ]
+    let res = tmp.map(function (data) {
+        return [data.line.split('-')[0], data.line.split('-')[1], data.travelVol];
+    })
 
     return Mock.mock(res);
 });

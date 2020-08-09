@@ -7,6 +7,7 @@
 
 <script>
 import HomeHeader from "./components/Header";
+
 export default {
   name: "app",
   components: {
@@ -29,7 +30,12 @@ export default {
 .clearfix {
   zoom: 1;
 }
+html {
+  overflow: hidden;
+}
 #app {
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   font-size: 14px;
@@ -38,8 +44,6 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -117,6 +121,12 @@ export default {
   }
   /* datepicker 样式 */
   .ivu-date-picker .ivu-select-dropdown {
+    color: #515a6e;
+    & .ivu-picker-panel-sidebar {
+      width: 106px;
+    }
+  }
+  /* .ivu-date-picker .ivu-select-dropdown {
     background-color: @boxBackgroundColor;
     box-shadow: @boxInsetShadow;
     border: 1px solid rgba(75, 204, 236, 0.6);
@@ -156,7 +166,7 @@ export default {
     .ivu-date-picker-cells-month .ivu-date-picker-cells-cell-focused {
       border: 1px solid @fontPrimaryColor;
     }
-  }
+  } */
 
   /* dropdown样式 */
   .ivu-select {

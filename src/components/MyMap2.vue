@@ -20,7 +20,7 @@ export default {
       type: Array
     },
     mapCenter: {
-      default: 0
+      default: "北京"
     },
     tripMode: {
       default: "rail"
@@ -34,11 +34,16 @@ export default {
       let that = this,
         mapData = that.mapData,
         citys = [];
-      if (val !== -1) {
-        citys = [
-          geoCoordMap[mapData[val][0].name],
-          geoCoordMap[mapData[val][1].name]
-        ];
+
+      if (val !== "") {
+        for (let i = 0; i < mapData.length; i++) {
+          const data = mapData[i];
+          if (data.indexOf(val) !== -1) {
+            // citys.concat(data.slice(0, 2));
+            citys.indexOf(data[0]) === -1 && citys.push(geoCoordMap[data[0]]);
+            citys.indexOf(data[1]) === -1 && citys.push(geoCoordMap[data[1]]);
+          }
+        }
 
         that.setFitView(citys);
       } else {
@@ -84,18 +89,11 @@ export default {
       let citys = [],
         data = [];
 
-      if (that.tripMode === "air") {
-        citys = that.getCitysCoords(that.mapData);
-        data = that.convertLinesData(that.mapData);
-      } else {
-        data = that.mapData;
-      }
+      citys = that.getCitysCoords(that.mapData);
+      data = that.convertLinesData(that.mapData);
 
       let option = {
-        series:
-          that.tripMode === "air"
-            ? that.getAirSeries(data, citys)
-            : that.getRouteSeries(data)
+        series: that.getAirSeries(data, citys)
       };
 
       that.myChart.clear();
@@ -105,30 +103,23 @@ export default {
         .getComponent("bmap")
         .getBMap();
 
-      that.setFitView(
-        that.tripMode === "air"
-          ? that.mapCenter !== -1
-            ? [
-                geoCoordMap[that.mapData[0][0].name],
-                geoCoordMap[that.mapData[0][1].name]
-              ]
-            : citys
-          : data[0].coords
-      );
+      that.setFitView(citys);
     },
     getAirSeries(data, citys) {
-      let planePath =
-        "path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z";
+      // let planePath =
+      //   "path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z";
       return [
         {
           type: "lines",
           coordinateSystem: "bmap",
           zlevel: 1,
+          animation: false,
           effect: {
             show: true,
             constantSpeed: 80,
-            trailLength: 0.7,
+            trailLength: 0.5,
             color: "#fff",
+            opacity: 0.5,
             symbolSize: 3
           },
           lineStyle: {
@@ -137,7 +128,14 @@ export default {
               curveness: 0.2
             }
           },
-          data: data
+          data: data.map(function(line, i) {
+            return {
+              coords: [line[0].coord, line[1].coord],
+              effect: {
+                color: i < 3 ? "#ec4b4b" : "#4bccec"
+              }
+            };
+          })
         },
         {
           type: "lines",
@@ -148,8 +146,8 @@ export default {
             constantSpeed: 80,
             trailLength: 0,
             color: "#4bccec",
-            symbol: planePath,
-            symbolSize: 15
+            // symbol: planePath,
+            symbolSize: 3
           },
           lineStyle: {
             normal: {
@@ -159,7 +157,17 @@ export default {
               curveness: 0.2
             }
           },
-          data: data
+          data: data.map(function(line, i) {
+            return {
+              coords: [line[0].coord, line[1].coord],
+              lineStyle: {
+                color: i < 3 ? "#ec4b4b" : "#4bccec"
+              },
+              effect: {
+                color: i < 3 ? "#ec4b4b" : "#4bccec"
+              }
+            };
+          })
         },
         {
           type: "effectScatter",
@@ -237,15 +245,15 @@ export default {
         points.push(new BMap.Point(coords[0], coords[1]));
       }
       this.myMap.setViewport(points, {
-        margins: [100, 310, 20, 20]
+        margins: [100, 310, 0, 0]
       });
     },
     convertLinesData(data) {
       var res = [];
       for (var i = 0; i < data.length; i++) {
         var dataItem = data[i];
-        var fromCoord = geoCoordMap[dataItem[0].name];
-        var toCoord = geoCoordMap[dataItem[1].name];
+        var fromCoord = geoCoordMap[dataItem[0]];
+        var toCoord = geoCoordMap[dataItem[1]];
         if (fromCoord && toCoord) {
           res.push([
             {
@@ -253,10 +261,14 @@ export default {
             },
             {
               coord: toCoord
-            }
+            },
+            dataItem[2]
           ]);
         }
       }
+      res.sort(function(a, b) {
+        return b[2] - a[2];
+      });
       return res;
     },
     getCitysCoords(data) {
@@ -265,11 +277,11 @@ export default {
         len = data.length;
       for (i = 0; i < len; i++) {
         var dataItem = data[i],
-          fromCity = dataItem[0].name,
-          toCity = dataItem[1].name;
+          fromCity = dataItem[0],
+          toCity = dataItem[1];
         mRst[fromCity] =
-          mRst[fromCity] || geoCoordMap[fromCity].concat(fromCity);
-        mRst[toCity] = mRst[toCity] || geoCoordMap[toCity].concat(toCity);
+          mRst[fromCity] || geoCoordMap[fromCity].concat([fromCity]);
+        mRst[toCity] = mRst[toCity] || geoCoordMap[toCity].concat([toCity]);
       }
 
       return Object.values(mRst);

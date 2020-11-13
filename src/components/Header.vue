@@ -5,20 +5,20 @@
     <ul class="header-links" @click="linkChange($event)">
       <li>
         <router-link to="/">
-          <i class="iconfont icon-home"></i>
+          <i class="iconfont icon-home" title="中国主要城市出行排行榜"></i>
         </router-link>
       </li>
       <li>
-        <router-link to="/cityClustersTravel">城市群出行</router-link>
+        <router-link to="/cityClustersTravel">客运出行分析</router-link>
       </li>
       <li>
-        <router-link to="/stationTraffic">城市群场站交通状况</router-link>
+        <router-link to="/stationTraffic">枢纽客流分析</router-link>
       </li>
       <li>
-        <router-link to="/individualTravel">联程出行</router-link>
+        <router-link to="/individualTravel">联程客运分析</router-link>
       </li>
       <li>
-        <router-link to="/trafficPrediction">交通预测</router-link>
+        <router-link to="/trafficPrediction">联程客运需求预测</router-link>
       </li>
     </ul>
   </header>
@@ -31,10 +31,10 @@ moment.locale("zh-cn");
 
 let pageTitle = {
   "/": "中国主要城市出行排行榜",
-  "/cityClustersTravel": "京津冀出行排行",
-  "/stationTraffic": "京津冀场站交通状况",
-  "/individualTravel": "联程出行",
-  "/trafficPrediction": "京津冀交通需求预测"
+  "/cityClustersTravel": "京津冀客运出行分析",
+  "/stationTraffic": "京津冀枢纽客流分析",
+  "/individualTravel": "京津冀联程客运分析",
+  "/trafficPrediction": "京津冀联程客运需求预测"
 };
 
 export default {

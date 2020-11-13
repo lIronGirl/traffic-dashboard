@@ -15,16 +15,16 @@
             <span style="font-size: 18px; color: #fff;padding-left: 8px;">{{displayCurrDate}}</span>
           </a>
         </DatePicker>
-        <RadioGroup v-model="tripMode" type="button">
+        <!--         <RadioGroup v-model="tripMode" type="button">
           <Radio label="passenger">客运</Radio>
           <Radio label="air">飞机</Radio>
           <Radio label="rail">轨道</Radio>
           <Radio label="road">公路</Radio>
-        </RadioGroup>
+        </RadioGroup>-->
       </div>
       <div class="part rank-table">
         <Tabs v-model="rankType" size="small" type="card">
-          <TabPane label="出行" name="tripRank">
+          <TabPane label="客流量" name="tripRank">
             <Table
               :height="514"
               stripe
@@ -34,7 +34,7 @@
               @on-row-click="selectRow"
             ></Table>
           </TabPane>
-          <TabPane label="迁入" name="inRank">
+          <TabPane label="迁入量" name="inRank">
             <Table
               :height="514"
               stripe
@@ -44,7 +44,7 @@
               @on-row-click="selectInRow"
             ></Table>
           </TabPane>
-          <TabPane label="迁出" name="outRank">
+          <TabPane label="迁出量" name="outRank">
             <Table
               :height="514"
               stripe

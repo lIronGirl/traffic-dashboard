@@ -3,16 +3,13 @@
     <div class="content">
       <div class="part rank-table">
         <Tabs v-model="stationType" size="small" type="card">
-          <TabPane label="火车站" name="rail">
+          <TabPane label="客流量" name="rail">
             <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
           </TabPane>
-          <TabPane label="机场" name="air">
+          <TabPane label="产生量" name="air">
             <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
           </TabPane>
-          <TabPane label="高速" name="highway">
-            <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
-          </TabPane>
-          <TabPane label="景区" name="scenicspot">
+          <TabPane label="吸引量" name="highway">
             <Table :height="514" stripe highlight-row :columns="tableColumns" :data="tableData"></Table>
           </TabPane>
         </Tabs>

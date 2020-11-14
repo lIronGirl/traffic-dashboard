@@ -234,3 +234,11 @@ export function getHubData(params) {
         data: params
     })
 }
+
+
+export function getStationTrafficMapdata() {
+    return request({
+        url: 'api/stationtrafficmapdata',
+        method: 'get'
+    })
+}

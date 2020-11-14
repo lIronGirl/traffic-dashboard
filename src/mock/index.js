@@ -3771,27 +3771,1690 @@ Mock.mock('/api/hubdata', 'get', (option) => {
 // 城市群出行-出行-地图数据
 Mock.mock('/api/cityclustersmapdata', 'get', () => {
     let tmp = [
-        { "line": "廊坊-北京", "travelVol": "235444" },
-        { "line": "北京-廊坊", "travelVol": "270426" },
-        { "line": "廊坊-天津", "travelVol": "108025" },
-        { "line": "保定-北京", "travelVol": "88813" },
-        { "line": "北京-保定", "travelVol": "94975" },
-        { "line": "唐山-秦皇岛", "travelVol": "93525" },
-        { "line": "北京-张家口", "travelVol": "73588" },
-        { "line": "天津-北京", "travelVol": "81744" },
-        { "line": "北京-天津", "travelVol": "88994" },
-        { "line": "天津-廊坊", "travelVol": "112375" },
-        { "line": "天津-唐山", "travelVol": "101500" },
-        { "line": "唐山-天津", "travelVol": "83013" },
-        { "line": "北京-承德", "travelVol": "49119" },
-        { "line": "保定-石家庄", "travelVol": "64706" },
-        { "line": "沧州-天津", "travelVol": "71050" },
-        { "line": "廊坊-保定", "travelVol": "58544" },
-        { "line": "张家口-北京", "travelVol": "47850" },
-        { "line": "天津-沧州", "travelVol": "70144" },
-        { "line": "石家庄-保定", "travelVol": "58363" },
-        { "line": "邢台-石家庄", "travelVol": "59813" }
+        {
+            "line": "北京-廊坊",
+            "travelVol": "4703347033"
+        },
+        {
+            "line": "廊坊-北京",
+            "travelVol": "4427844278"
+        },
+        {
+            "line": "北京-天津",
+            "travelVol": "1548915489"
+        },
+        {
+            "line": "天津-北京",
+            "travelVol": "1474114741"
+        },
+        {
+            "line": "保定-北京",
+            "travelVol": "1344713447"
+        },
+        {
+            "line": "北京-保定",
+            "travelVol": "1318013180"
+        },
+        {
+            "line": "唐山-天津",
+            "travelVol": "1177811778"
+        },
+        {
+            "line": "廊坊-天津",
+            "travelVol": "1166211662"
+        },
+        {
+            "line": "天津-廊坊",
+            "travelVol": "1142811428"
+        },
+        {
+            "line": "天津-唐山",
+            "travelVol": "1060410604"
+        },
+        {
+            "line": "邯郸-邢台",
+            "travelVol": "87318731"
+        },
+        {
+            "line": "邢台-邯郸",
+            "travelVol": "75077507"
+        },
+        {
+            "line": "沧州-衡水",
+            "travelVol": "69806980"
+        },
+        {
+            "line": "衡水-沧州",
+            "travelVol": "67946794"
+        },
+        {
+            "line": "沧州-天津",
+            "travelVol": "50995099"
+        },
+        {
+            "line": "石家庄-保定",
+            "travelVol": "50135013"
+        },
+        {
+            "line": "石家庄-邢台",
+            "travelVol": "46824682"
+        },
+        {
+            "line": "唐山-秦皇岛",
+            "travelVol": "46654665"
+        },
+        {
+            "line": "邢台-石家庄",
+            "travelVol": "46394639"
+        },
+        {
+            "line": "天津-沧州",
+            "travelVol": "44784478"
+        },
+        {
+            "line": "秦皇岛-唐山",
+            "travelVol": "43404340"
+        },
+        {
+            "line": "衡水-邢台",
+            "travelVol": "39973997"
+        },
+        {
+            "line": "保定-石家庄",
+            "travelVol": "37953795"
+        },
+        {
+            "line": "保定-沧州",
+            "travelVol": "37193719"
+        },
+        {
+            "line": "北京-张家口",
+            "travelVol": "36323632"
+        },
+        {
+            "line": "邢台-衡水",
+            "travelVol": "35323532"
+        },
+        {
+            "line": "沧州-保定",
+            "travelVol": "34873487"
+        },
+        {
+            "line": "保定-廊坊",
+            "travelVol": "33543354"
+        },
+        {
+            "line": "张家口-北京",
+            "travelVol": "33363336"
+        },
+        {
+            "line": "廊坊-保定",
+            "travelVol": "31153115"
+        },
+        {
+            "line": "沧州-廊坊",
+            "travelVol": "29982998"
+        },
+        {
+            "line": "廊坊-沧州",
+            "travelVol": "29732973"
+        },
+        {
+            "line": "承德-北京",
+            "travelVol": "26662666"
+        },
+        {
+            "line": "北京-唐山",
+            "travelVol": "25242524"
+        },
+        {
+            "line": "唐山-北京",
+            "travelVol": "25182518"
+        },
+        {
+            "line": "北京-承德",
+            "travelVol": "23662366"
+        },
+        {
+            "line": "衡水-石家庄",
+            "travelVol": "23602360"
+        },
+        {
+            "line": "石家庄-北京",
+            "travelVol": "22442244"
+        },
+        {
+            "line": "石家庄-衡水",
+            "travelVol": "21972197"
+        },
+        {
+            "line": "北京-石家庄",
+            "travelVol": "21662166"
+        },
+        {
+            "line": "沧州-北京",
+            "travelVol": "20492049"
+        },
+        {
+            "line": "保定-衡水",
+            "travelVol": "20112011"
+        },
+        {
+            "line": "北京-沧州",
+            "travelVol": "18411841"
+        },
+        {
+            "line": "衡水-保定",
+            "travelVol": "18171817"
+        },
+        {
+            "line": "邯郸-石家庄",
+            "travelVol": "15411541"
+        },
+        {
+            "line": "唐山-承德",
+            "travelVol": "14401440"
+        },
+        {
+            "line": "石家庄-邯郸",
+            "travelVol": "14021402"
+        },
+        {
+            "line": "承德-唐山",
+            "travelVol": "13831383"
+        },
+        {
+            "line": "衡水-北京",
+            "travelVol": "11391139"
+        },
+        {
+            "line": "天津-保定",
+            "travelVol": "971971"
+        },
+        {
+            "line": "保定-天津",
+            "travelVol": "970970"
+        },
+        {
+            "line": "秦皇岛-北京",
+            "travelVol": "959959"
+        },
+        {
+            "line": "北京-衡水",
+            "travelVol": "958958"
+        },
+        {
+            "line": "沧州-石家庄",
+            "travelVol": "955955"
+        },
+        {
+            "line": "北京-秦皇岛",
+            "travelVol": "903903"
+        },
+        {
+            "line": "邯郸-北京",
+            "travelVol": "881881"
+        },
+        {
+            "line": "石家庄-沧州",
+            "travelVol": "876876"
+        },
+        {
+            "line": "北京-邯郸",
+            "travelVol": "738738"
+        },
+        {
+            "line": "唐山-廊坊",
+            "travelVol": "735735"
+        },
+        {
+            "line": "廊坊-唐山",
+            "travelVol": "654654"
+        },
+        {
+            "line": "邢台-北京",
+            "travelVol": "589589"
+        },
+        {
+            "line": "北京-邢台",
+            "travelVol": "526526"
+        },
+        {
+            "line": "秦皇岛-天津",
+            "travelVol": "516516"
+        },
+        {
+            "line": "石家庄-天津",
+            "travelVol": "467467"
+        },
+        {
+            "line": "承德-天津",
+            "travelVol": "442442"
+        },
+        {
+            "line": "衡水-天津",
+            "travelVol": "440440"
+        },
+        {
+            "line": "石家庄-廊坊",
+            "travelVol": "424424"
+        },
+        {
+            "line": "天津-秦皇岛",
+            "travelVol": "408408"
+        },
+        {
+            "line": "天津-石家庄",
+            "travelVol": "399399"
+        },
+        {
+            "line": "廊坊-石家庄",
+            "travelVol": "396396"
+        },
+        {
+            "line": "天津-承德",
+            "travelVol": "386386"
+        },
+        {
+            "line": "天津-衡水",
+            "travelVol": "360360"
+        },
+        {
+            "line": "石家庄-唐山",
+            "travelVol": "339339"
+        },
+        {
+            "line": "唐山-石家庄",
+            "travelVol": "319319"
+        }
     ]
+    let res = tmp.map(function (data) {
+        return [data.line.split('-')[0], data.line.split('-')[1], data.travelVol];
+    })
+
+    return Mock.mock(res);
+});
+
+
+Mock.mock('/api/stationtrafficmapdata', 'get', () => {
+    let tmp = [
+        {
+            "line": "保定东站-北京西站",
+            "travelVol": "9075"
+        },
+        {
+            "line": "保定东站-石家庄站",
+            "travelVol": "4230"
+        },
+        {
+            "line": "保定东站-正定机场站",
+            "travelVol": "1575"
+        },
+        {
+            "line": "保定东站-天津西站",
+            "travelVol": "1425"
+        },
+        {
+            "line": "保定东站-天津站",
+            "travelVol": "750"
+        },
+        {
+            "line": "保定东站-石家庄正定机场",
+            "travelVol": "735"
+        },
+        {
+            "line": "保定东站-北京南站",
+            "travelVol": "630"
+        },
+        {
+            "line": "保定东站-邯郸东站",
+            "travelVol": "495"
+        },
+        {
+            "line": "保定东站-北京北站",
+            "travelVol": "375"
+        },
+        {
+            "line": "保定东站-北京首都机场",
+            "travelVol": "330"
+        },
+        {
+            "line": "保定站-北京西站",
+            "travelVol": "26790"
+        },
+        {
+            "line": "保定站-石家庄站",
+            "travelVol": "9000"
+        },
+        {
+            "line": "保定站-石家庄北站",
+            "travelVol": "3120"
+        },
+        {
+            "line": "保定站-天津站",
+            "travelVol": "1605"
+        },
+        {
+            "line": "保定站-邯郸马头机场",
+            "travelVol": "1155"
+        },
+        {
+            "line": "保定站-天津北站",
+            "travelVol": "1140"
+        },
+        {
+            "line": "保定站-邯郸站",
+            "travelVol": "1110"
+        },
+        {
+            "line": "保定站-丰台站",
+            "travelVol": "1095"
+        },
+        {
+            "line": "保定站-北京站",
+            "travelVol": "1005"
+        },
+        {
+            "line": "保定站-邢台站",
+            "travelVol": "945"
+        },
+        {
+            "line": "保定站-北京北站",
+            "travelVol": "870"
+        },
+        {
+            "line": "北戴河站-北京站",
+            "travelVol": "8190"
+        },
+        {
+            "line": "北戴河站-天津站",
+            "travelVol": "1155"
+        },
+        {
+            "line": "北戴河站-唐山站",
+            "travelVol": "1110"
+        },
+        {
+            "line": "北戴河站-唐山北站",
+            "travelVol": "480"
+        },
+        {
+            "line": "北戴河站-滨海西站",
+            "travelVol": "345"
+        },
+        {
+            "line": "北戴河站-北京南站",
+            "travelVol": "255"
+        },
+        {
+            "line": "北京北站-石家庄站",
+            "travelVol": "630"
+        },
+        {
+            "line": "北京北站-天津站",
+            "travelVol": "450"
+        },
+        {
+            "line": "北京北站-保定站",
+            "travelVol": "270"
+        },
+        {
+            "line": "北京北站-沧州西站",
+            "travelVol": "135"
+        },
+        {
+            "line": "北京北站-唐山北站",
+            "travelVol": "135"
+        },
+        {
+            "line": "北京北站-山海关站",
+            "travelVol": "120"
+        },
+        {
+            "line": "北京大兴机场-廊坊站",
+            "travelVol": "690"
+        },
+        {
+            "line": "北京大兴机场-衡水站",
+            "travelVol": "375"
+        },
+        {
+            "line": "北京大兴机场-廊坊北站",
+            "travelVol": "135"
+        },
+        {
+            "line": "北京南站-天津站",
+            "travelVol": "69480"
+        },
+        {
+            "line": "北京南站-北京首都机场",
+            "travelVol": "18765"
+        },
+        {
+            "line": "北京南站-沧州西站",
+            "travelVol": "13020"
+        },
+        {
+            "line": "北京南站-天津滨海机场",
+            "travelVol": "7320"
+        },
+        {
+            "line": "北京南站-廊坊站",
+            "travelVol": "7065"
+        },
+        {
+            "line": "北京南站-天津北站",
+            "travelVol": "7035"
+        },
+        {
+            "line": "北京南站-武清站",
+            "travelVol": "3960"
+        },
+        {
+            "line": "北京南站-天津西站",
+            "travelVol": "3120"
+        },
+        {
+            "line": "北京南站-沧州站",
+            "travelVol": "1515"
+        },
+        {
+            "line": "北京南站-唐山站",
+            "travelVol": "1095"
+        },
+        {
+            "line": "北京南站-石家庄站",
+            "travelVol": "885"
+        },
+        {
+            "line": "北京南站-塘沽站",
+            "travelVol": "870"
+        },
+        {
+            "line": "北京南站-保定站",
+            "travelVol": "795"
+        },
+        {
+            "line": "北京南站-滨海站",
+            "travelVol": "675"
+        },
+        {
+            "line": "北京南站-保定东站",
+            "travelVol": "540"
+        },
+        {
+            "line": "北京南站-山海关站",
+            "travelVol": "450"
+        },
+        {
+            "line": "北京南站-石家庄北站",
+            "travelVol": "450"
+        },
+        {
+            "line": "北京南站-滨海西站",
+            "travelVol": "405"
+        },
+        {
+            "line": "北京南站-衡水站",
+            "travelVol": "360"
+        },
+        {
+            "line": "北京首都机场-北京南站",
+            "travelVol": "23745"
+        },
+        {
+            "line": "北京首都机场-北京站",
+            "travelVol": "19545"
+        },
+        {
+            "line": "北京首都机场-北京西站",
+            "travelVol": "12405"
+        },
+        {
+            "line": "北京首都机场-天津滨海机场",
+            "travelVol": "1215"
+        },
+        {
+            "line": "北京首都机场-沧州站",
+            "travelVol": "495"
+        },
+        {
+            "line": "北京首都机场-天津站",
+            "travelVol": "405"
+        },
+        {
+            "line": "北京首都机场-唐山站",
+            "travelVol": "375"
+        },
+        {
+            "line": "北京首都机场-廊坊站",
+            "travelVol": "345"
+        },
+        {
+            "line": "北京首都机场-天津北站",
+            "travelVol": "270"
+        },
+        {
+            "line": "北京首都机场-张家口站",
+            "travelVol": "255"
+        },
+        {
+            "line": "北京首都机场-承德站",
+            "travelVol": "240"
+        },
+        {
+            "line": "北京首都机场-石家庄站",
+            "travelVol": "210"
+        },
+        {
+            "line": "北京西站-石家庄站",
+            "travelVol": "39975"
+        },
+        {
+            "line": "北京西站-保定站",
+            "travelVol": "15660"
+        },
+        {
+            "line": "北京西站-北京首都机场",
+            "travelVol": "11640"
+        },
+        {
+            "line": "北京西站-保定东站",
+            "travelVol": "8175"
+        },
+        {
+            "line": "北京西站-正定机场站",
+            "travelVol": "7305"
+        },
+        {
+            "line": "北京西站-衡水站",
+            "travelVol": "6330"
+        },
+        {
+            "line": "北京西站-石家庄北站",
+            "travelVol": "4275"
+        },
+        {
+            "line": "北京西站-邯郸站",
+            "travelVol": "3105"
+        },
+        {
+            "line": "北京西站-邯郸东站",
+            "travelVol": "2880"
+        },
+        {
+            "line": "北京西站-邢台站",
+            "travelVol": "2670"
+        },
+        {
+            "line": "北京西站-邯郸马头机场",
+            "travelVol": "1275"
+        },
+        {
+            "line": "北京西站-邢台东站",
+            "travelVol": "960"
+        },
+        {
+            "line": "北京西站-天津站",
+            "travelVol": "885"
+        },
+        {
+            "line": "北京西站-张家口站",
+            "travelVol": "780"
+        },
+        {
+            "line": "北京西站-石家庄正定机场",
+            "travelVol": "750"
+        },
+        {
+            "line": "北京西站-廊坊站",
+            "travelVol": "525"
+        },
+        {
+            "line": "北京站-北京首都机场",
+            "travelVol": "22815"
+        },
+        {
+            "line": "北京站-唐山北站",
+            "travelVol": "6030"
+        },
+        {
+            "line": "北京站-秦皇岛站",
+            "travelVol": "4860"
+        },
+        {
+            "line": "北京站-山海关站",
+            "travelVol": "3825"
+        },
+        {
+            "line": "北京站-北戴河站",
+            "travelVol": "2550"
+        },
+        {
+            "line": "北京站-唐山站",
+            "travelVol": "1695"
+        },
+        {
+            "line": "北京站-衡水站",
+            "travelVol": "870"
+        },
+        {
+            "line": "北京站-保定站",
+            "travelVol": "810"
+        },
+        {
+            "line": "北京站-廊坊站",
+            "travelVol": "780"
+        },
+        {
+            "line": "北京站-天津站",
+            "travelVol": "780"
+        },
+        {
+            "line": "北京站-承德站",
+            "travelVol": "735"
+        },
+        {
+            "line": "北京站-天津北站",
+            "travelVol": "525"
+        },
+        {
+            "line": "滨海北站-唐山站",
+            "travelVol": "345"
+        },
+        {
+            "line": "滨海北站-北京南站",
+            "travelVol": "105"
+        },
+        {
+            "line": "滨海北站-秦皇岛站",
+            "travelVol": "75"
+        },
+        {
+            "line": "滨海西站-唐山站",
+            "travelVol": "1455"
+        },
+        {
+            "line": "滨海西站-北京南站",
+            "travelVol": "915"
+        },
+        {
+            "line": "滨海西站-山海关站",
+            "travelVol": "315"
+        },
+        {
+            "line": "滨海西站-秦皇岛站",
+            "travelVol": "255"
+        },
+        {
+            "line": "滨海西站-石家庄站",
+            "travelVol": "255"
+        },
+        {
+            "line": "滨海西站-保定东站",
+            "travelVol": "225"
+        },
+        {
+            "line": "滨海站-北京南站",
+            "travelVol": "540"
+        },
+        {
+            "line": "滨海站-北京首都机场",
+            "travelVol": "60"
+        },
+        {
+            "line": "滨海站-北京北站",
+            "travelVol": "45"
+        },
+        {
+            "line": "滨海站-唐山站",
+            "travelVol": "45"
+        },
+        {
+            "line": "沧州西站-北京南站",
+            "travelVol": "9540"
+        },
+        {
+            "line": "沧州西站-天津站",
+            "travelVol": "3090"
+        },
+        {
+            "line": "沧州西站-天津西站",
+            "travelVol": "1455"
+        },
+        {
+            "line": "沧州西站-北京西站",
+            "travelVol": "810"
+        },
+        {
+            "line": "沧州西站-北京北站",
+            "travelVol": "615"
+        },
+        {
+            "line": "沧州西站-廊坊站",
+            "travelVol": "615"
+        },
+        {
+            "line": "沧州西站-北京站",
+            "travelVol": "480"
+        },
+        {
+            "line": "沧州西站-天津滨海机场",
+            "travelVol": "390"
+        },
+        {
+            "line": "沧州站-天津站",
+            "travelVol": "1425"
+        },
+        {
+            "line": "沧州站-石家庄北站",
+            "travelVol": "1335"
+        },
+        {
+            "line": "沧州站-北京南站",
+            "travelVol": "1140"
+        },
+        {
+            "line": "沧州站-天津北站",
+            "travelVol": "720"
+        },
+        {
+            "line": "沧州站-天津西站",
+            "travelVol": "615"
+        },
+        {
+            "line": "沧州站-衡水站",
+            "travelVol": "585"
+        },
+        {
+            "line": "沧州站-唐山站",
+            "travelVol": "390"
+        },
+        {
+            "line": "沧州站-北京站",
+            "travelVol": "360"
+        },
+        {
+            "line": "沧州站-廊坊站",
+            "travelVol": "270"
+        },
+        {
+            "line": "沧州站-山海关站",
+            "travelVol": "225"
+        },
+        {
+            "line": "承德普宁机场-北京首都机场",
+            "travelVol": "75"
+        },
+        {
+            "line": "承德站-北京站",
+            "travelVol": "270"
+        },
+        {
+            "line": "承德站-北京首都机场",
+            "travelVol": "195"
+        },
+        {
+            "line": "承德站-北京南站",
+            "travelVol": "165"
+        },
+        {
+            "line": "承德站-唐山站",
+            "travelVol": "165"
+        },
+        {
+            "line": "承德站-北京西站",
+            "travelVol": "120"
+        },
+        {
+            "line": "丰台站-张家口站",
+            "travelVol": "1050"
+        },
+        {
+            "line": "丰台站-保定站",
+            "travelVol": "615"
+        },
+        {
+            "line": "丰台站-天津站",
+            "travelVol": "330"
+        },
+        {
+            "line": "丰台站-石家庄站",
+            "travelVol": "300"
+        },
+        {
+            "line": "丰台站-廊坊站",
+            "travelVol": "195"
+        },
+        {
+            "line": "丰台站-天津北站",
+            "travelVol": "195"
+        },
+        {
+            "line": "邯郸东站-北京西站",
+            "travelVol": "10245"
+        },
+        {
+            "line": "邯郸东站-石家庄站",
+            "travelVol": "4590"
+        },
+        {
+            "line": "邯郸东站-正定机场站",
+            "travelVol": "1515"
+        },
+        {
+            "line": "邯郸东站-保定东站",
+            "travelVol": "930"
+        },
+        {
+            "line": "邯郸东站-邢台东站",
+            "travelVol": "660"
+        },
+        {
+            "line": "邯郸东站-天津站",
+            "travelVol": "390"
+        },
+        {
+            "line": "邯郸东站-石家庄北站",
+            "travelVol": "345"
+        },
+        {
+            "line": "邯郸东站-石家庄正定机场",
+            "travelVol": "330"
+        },
+        {
+            "line": "邯郸东站-天津西站",
+            "travelVol": "300"
+        },
+        {
+            "line": "邯郸东站-北京南站",
+            "travelVol": "285"
+        },
+        {
+            "line": "邯郸马头机场-保定站",
+            "travelVol": "1005"
+        },
+        {
+            "line": "邯郸马头机场-北京西站",
+            "travelVol": "645"
+        },
+        {
+            "line": "邯郸马头机场-石家庄站",
+            "travelVol": "615"
+        },
+        {
+            "line": "邯郸马头机场-邢台站",
+            "travelVol": "450"
+        },
+        {
+            "line": "邯郸站-石家庄站",
+            "travelVol": "4545"
+        },
+        {
+            "line": "邯郸站-北京西站",
+            "travelVol": "3960"
+        },
+        {
+            "line": "邯郸站-邢台站",
+            "travelVol": "3120"
+        },
+        {
+            "line": "邯郸站-保定站",
+            "travelVol": "2685"
+        },
+        {
+            "line": "邯郸站-石家庄北站",
+            "travelVol": "1170"
+        },
+        {
+            "line": "邯郸站-天津站",
+            "travelVol": "330"
+        },
+        {
+            "line": "邯郸站-北京站",
+            "travelVol": "210"
+        },
+        {
+            "line": "邯郸站-天津北站",
+            "travelVol": "210"
+        },
+        {
+            "line": "邯郸站-邢台东站",
+            "travelVol": "195"
+        },
+        {
+            "line": "衡水北站-北京南站",
+            "travelVol": "45"
+        },
+        {
+            "line": "衡水北站-石家庄北站",
+            "travelVol": "45"
+        },
+        {
+            "line": "衡水站-石家庄北站",
+            "travelVol": "9720"
+        },
+        {
+            "line": "衡水站-北京西站",
+            "travelVol": "5745"
+        },
+        {
+            "line": "衡水站-天津站",
+            "travelVol": "2145"
+        },
+        {
+            "line": "衡水站-北京站",
+            "travelVol": "1545"
+        },
+        {
+            "line": "衡水站-北京南站",
+            "travelVol": "825"
+        },
+        {
+            "line": "衡水站-沧州站",
+            "travelVol": "495"
+        },
+        {
+            "line": "衡水站-唐山站",
+            "travelVol": "390"
+        },
+        {
+            "line": "衡水站-丰台站",
+            "travelVol": "345"
+        },
+        {
+            "line": "衡水站-北京大兴机场",
+            "travelVol": "330"
+        },
+        {
+            "line": "衡水站-天津北站",
+            "travelVol": "315"
+        },
+        {
+            "line": "衡水站-石家庄正定机场",
+            "travelVol": "270"
+        },
+        {
+            "line": "衡水站-北京北站",
+            "travelVol": "240"
+        },
+        {
+            "line": "军粮城北站-山海关站",
+            "travelVol": "165"
+        },
+        {
+            "line": "军粮城北站-唐山站",
+            "travelVol": "135"
+        },
+        {
+            "line": "军粮城北站-北京南站",
+            "travelVol": "90"
+        },
+        {
+            "line": "廊坊北站-北京南站",
+            "travelVol": "300"
+        },
+        {
+            "line": "廊坊北站-北京大兴机场",
+            "travelVol": "195"
+        },
+        {
+            "line": "廊坊北站-北京西站",
+            "travelVol": "120"
+        },
+        {
+            "line": "廊坊北站-天津站",
+            "travelVol": "105"
+        },
+        {
+            "line": "廊坊站-天津西站",
+            "travelVol": "12780"
+        },
+        {
+            "line": "廊坊站-北京南站",
+            "travelVol": "7965"
+        },
+        {
+            "line": "廊坊站-天津站",
+            "travelVol": "1860"
+        },
+        {
+            "line": "廊坊站-北京站",
+            "travelVol": "900"
+        },
+        {
+            "line": "廊坊站-北京大兴机场",
+            "travelVol": "885"
+        },
+        {
+            "line": "廊坊站-北京首都机场",
+            "travelVol": "585"
+        },
+        {
+            "line": "廊坊站-北京西站",
+            "travelVol": "570"
+        },
+        {
+            "line": "廊坊站-天津北站",
+            "travelVol": "510"
+        },
+        {
+            "line": "廊坊站-沧州西站",
+            "travelVol": "465"
+        },
+        {
+            "line": "秦皇岛北戴河机场-石家庄正定机场",
+            "travelVol": "180"
+        },
+        {
+            "line": "秦皇岛北戴河机场-北京站",
+            "travelVol": "45"
+        },
+        {
+            "line": "秦皇岛站-北京站",
+            "travelVol": "6105"
+        },
+        {
+            "line": "秦皇岛站-唐山站",
+            "travelVol": "1935"
+        },
+        {
+            "line": "秦皇岛站-天津站",
+            "travelVol": "1380"
+        },
+        {
+            "line": "秦皇岛站-北京南站",
+            "travelVol": "720"
+        },
+        {
+            "line": "秦皇岛站-唐山北站",
+            "travelVol": "645"
+        },
+        {
+            "line": "秦皇岛站-天津西站",
+            "travelVol": "615"
+        },
+        {
+            "line": "秦皇岛站-滨海西站",
+            "travelVol": "540"
+        },
+        {
+            "line": "秦皇岛站-石家庄站",
+            "travelVol": "240"
+        },
+        {
+            "line": "秦皇岛站-北京西站",
+            "travelVol": "210"
+        },
+        {
+            "line": "秦皇岛站-天津滨海机场",
+            "travelVol": "195"
+        },
+        {
+            "line": "清河站-张家口站",
+            "travelVol": "135"
+        },
+        {
+            "line": "清河站-天津滨海机场",
+            "travelVol": "120"
+        },
+        {
+            "line": "清河站-石家庄站",
+            "travelVol": "90"
+        },
+        {
+            "line": "清河站-张家口宁远机场",
+            "travelVol": "60"
+        },
+        {
+            "line": "清河站-保定东站",
+            "travelVol": "45"
+        },
+        {
+            "line": "山海关站-北京站",
+            "travelVol": "5415"
+        },
+        {
+            "line": "山海关站-天津站",
+            "travelVol": "1125"
+        },
+        {
+            "line": "山海关站-唐山站",
+            "travelVol": "945"
+        },
+        {
+            "line": "山海关站-唐山北站",
+            "travelVol": "750"
+        },
+        {
+            "line": "山海关站-北京南站",
+            "travelVol": "525"
+        },
+        {
+            "line": "山海关站-滨海西站",
+            "travelVol": "465"
+        },
+        {
+            "line": "山海关站-塘沽站",
+            "travelVol": "300"
+        },
+        {
+            "line": "山海关站-北京西站",
+            "travelVol": "180"
+        },
+        {
+            "line": "石家庄北站-衡水站",
+            "travelVol": "6435"
+        },
+        {
+            "line": "石家庄北站-北京西站",
+            "travelVol": "3435"
+        },
+        {
+            "line": "石家庄北站-保定站",
+            "travelVol": "2025"
+        },
+        {
+            "line": "石家庄北站-邢台站",
+            "travelVol": "705"
+        },
+        {
+            "line": "石家庄北站-天津北站",
+            "travelVol": "600"
+        },
+        {
+            "line": "石家庄北站-沧州站",
+            "travelVol": "450"
+        },
+        {
+            "line": "石家庄北站-邯郸站",
+            "travelVol": "390"
+        },
+        {
+            "line": "石家庄北站-天津站",
+            "travelVol": "255"
+        },
+        {
+            "line": "石家庄北站-邯郸马头机场",
+            "travelVol": "240"
+        },
+        {
+            "line": "石家庄北站-邯郸东站",
+            "travelVol": "210"
+        },
+        {
+            "line": "石家庄东站-衡水站",
+            "travelVol": "105"
+        },
+        {
+            "line": "石家庄站-北京西站",
+            "travelVol": "16635"
+        },
+        {
+            "line": "石家庄站-保定站",
+            "travelVol": "6255"
+        },
+        {
+            "line": "石家庄站-邢台站",
+            "travelVol": "4230"
+        },
+        {
+            "line": "石家庄站-邯郸站",
+            "travelVol": "3855"
+        },
+        {
+            "line": "石家庄站-邯郸东站",
+            "travelVol": "2745"
+        },
+        {
+            "line": "石家庄站-保定东站",
+            "travelVol": "2085"
+        },
+        {
+            "line": "石家庄站-正定机场站",
+            "travelVol": "2055"
+        },
+        {
+            "line": "石家庄站-天津站",
+            "travelVol": "1425"
+        },
+        {
+            "line": "石家庄站-邯郸马头机场",
+            "travelVol": "1245"
+        },
+        {
+            "line": "石家庄站-天津西站",
+            "travelVol": "795"
+        },
+        {
+            "line": "石家庄站-邢台东站",
+            "travelVol": "795"
+        },
+        {
+            "line": "石家庄站-北京南站",
+            "travelVol": "660"
+        },
+        {
+            "line": "石家庄站-北京北站",
+            "travelVol": "510"
+        },
+        {
+            "line": "石家庄正定机场-正定机场站",
+            "travelVol": "10875"
+        },
+        {
+            "line": "石家庄正定机场-保定东站",
+            "travelVol": "870"
+        },
+        {
+            "line": "石家庄正定机场-北京西站",
+            "travelVol": "870"
+        },
+        {
+            "line": "石家庄正定机场-保定站",
+            "travelVol": "195"
+        },
+        {
+            "line": "石家庄正定机场-张家口宁远机场",
+            "travelVol": "135"
+        },
+        {
+            "line": "石家庄正定机场-北京首都机场",
+            "travelVol": "120"
+        },
+        {
+            "line": "石家庄正定机场-邯郸东站",
+            "travelVol": "105"
+        },
+        {
+            "line": "唐山北站-北京站",
+            "travelVol": "10395"
+        },
+        {
+            "line": "唐山北站-山海关站",
+            "travelVol": "705"
+        },
+        {
+            "line": "唐山北站-秦皇岛站",
+            "travelVol": "555"
+        },
+        {
+            "line": "唐山北站-北戴河站",
+            "travelVol": "270"
+        },
+        {
+            "line": "唐山北站-北京北站",
+            "travelVol": "165"
+        },
+        {
+            "line": "唐山北站-北京西站",
+            "travelVol": "165"
+        },
+        {
+            "line": "唐山北站-承德站",
+            "travelVol": "165"
+        },
+        {
+            "line": "唐山北站-北京南站",
+            "travelVol": "150"
+        },
+        {
+            "line": "唐山北站-保定站",
+            "travelVol": "45"
+        },
+        {
+            "line": "唐山北站-北京首都机场",
+            "travelVol": "45"
+        },
+        {
+            "line": "唐山站-天津站",
+            "travelVol": "9885"
+        },
+        {
+            "line": "唐山站-滨海西站",
+            "travelVol": "2505"
+        },
+        {
+            "line": "唐山站-北京站",
+            "travelVol": "2385"
+        },
+        {
+            "line": "唐山站-天津北站",
+            "travelVol": "1710"
+        },
+        {
+            "line": "唐山站-秦皇岛站",
+            "travelVol": "1395"
+        },
+        {
+            "line": "唐山站-北京南站",
+            "travelVol": "1245"
+        },
+        {
+            "line": "唐山站-天津西站",
+            "travelVol": "1245"
+        },
+        {
+            "line": "唐山站-塘沽站",
+            "travelVol": "1170"
+        },
+        {
+            "line": "唐山站-石家庄站",
+            "travelVol": "1080"
+        },
+        {
+            "line": "唐山站-山海关站",
+            "travelVol": "1050"
+        },
+        {
+            "line": "塘沽站-唐山站",
+            "travelVol": "1050"
+        },
+        {
+            "line": "塘沽站-北京南站",
+            "travelVol": "990"
+        },
+        {
+            "line": "塘沽站-沧州站",
+            "travelVol": "390"
+        },
+        {
+            "line": "塘沽站-北京站",
+            "travelVol": "285"
+        },
+        {
+            "line": "塘沽站-衡水站",
+            "travelVol": "255"
+        },
+        {
+            "line": "塘沽站-石家庄站",
+            "travelVol": "165"
+        },
+        {
+            "line": "塘沽站-邯郸站",
+            "travelVol": "150"
+        },
+        {
+            "line": "塘沽站-山海关站",
+            "travelVol": "150"
+        },
+        {
+            "line": "天津北站-北京南站",
+            "travelVol": "4035"
+        },
+        {
+            "line": "天津北站-沧州站",
+            "travelVol": "1155"
+        },
+        {
+            "line": "天津北站-唐山站",
+            "travelVol": "870"
+        },
+        {
+            "line": "天津北站-山海关站",
+            "travelVol": "465"
+        },
+        {
+            "line": "天津北站-秦皇岛站",
+            "travelVol": "450"
+        },
+        {
+            "line": "天津北站-衡水站",
+            "travelVol": "375"
+        },
+        {
+            "line": "天津北站-保定站",
+            "travelVol": "330"
+        },
+        {
+            "line": "天津滨海机场-天津站",
+            "travelVol": "35805"
+        },
+        {
+            "line": "天津滨海机场-北京南站",
+            "travelVol": "6405"
+        },
+        {
+            "line": "天津滨海机场-天津西站",
+            "travelVol": "4020"
+        },
+        {
+            "line": "天津滨海机场-北京首都机场",
+            "travelVol": "1500"
+        },
+        {
+            "line": "天津滨海机场-唐山站",
+            "travelVol": "1080"
+        },
+        {
+            "line": "天津滨海机场-廊坊站",
+            "travelVol": "375"
+        },
+        {
+            "line": "天津滨海机场-北京西站",
+            "travelVol": "225"
+        },
+        {
+            "line": "天津滨海机场-北京大兴机场",
+            "travelVol": "195"
+        },
+        {
+            "line": "天津滨海机场-北京站",
+            "travelVol": "180"
+        },
+        {
+            "line": "天津滨海机场-丰台站",
+            "travelVol": "150"
+        },
+        {
+            "line": "天津滨海机场-秦皇岛站",
+            "travelVol": "150"
+        },
+        {
+            "line": "天津西站-廊坊站",
+            "travelVol": "8040"
+        },
+        {
+            "line": "天津西站-天津滨海机场",
+            "travelVol": "3810"
+        },
+        {
+            "line": "天津西站-北京南站",
+            "travelVol": "3375"
+        },
+        {
+            "line": "天津西站-石家庄站",
+            "travelVol": "2115"
+        },
+        {
+            "line": "天津西站-保定东站",
+            "travelVol": "1065"
+        },
+        {
+            "line": "天津西站-沧州站",
+            "travelVol": "930"
+        },
+        {
+            "line": "天津西站-沧州西站",
+            "travelVol": "585"
+        },
+        {
+            "line": "天津西站-正定机场站",
+            "travelVol": "555"
+        },
+        {
+            "line": "天津站-天津滨海机场",
+            "travelVol": "44685"
+        },
+        {
+            "line": "天津站-北京南站",
+            "travelVol": "33255"
+        },
+        {
+            "line": "天津站-唐山站",
+            "travelVol": "5205"
+        },
+        {
+            "line": "天津站-石家庄站",
+            "travelVol": "2340"
+        },
+        {
+            "line": "天津站-秦皇岛站",
+            "travelVol": "1695"
+        },
+        {
+            "line": "天津站-北京西站",
+            "travelVol": "1665"
+        },
+        {
+            "line": "天津站-沧州站",
+            "travelVol": "1545"
+        },
+        {
+            "line": "天津站-保定站",
+            "travelVol": "1380"
+        },
+        {
+            "line": "天津站-廊坊站",
+            "travelVol": "1320"
+        },
+        {
+            "line": "天津站-山海关站",
+            "travelVol": "1275"
+        },
+        {
+            "line": "天津站-石家庄北站",
+            "travelVol": "1260"
+        },
+        {
+            "line": "天津站-北京站",
+            "travelVol": "1065"
+        },
+        {
+            "line": "武清站-北京南站",
+            "travelVol": "5790"
+        },
+        {
+            "line": "武清站-北京站",
+            "travelVol": "390"
+        },
+        {
+            "line": "武清站-廊坊站",
+            "travelVol": "330"
+        },
+        {
+            "line": "武清站-北京西站",
+            "travelVol": "300"
+        },
+        {
+            "line": "武清站-沧州站",
+            "travelVol": "180"
+        },
+        {
+            "line": "武清站-唐山站",
+            "travelVol": "180"
+        },
+        {
+            "line": "武清站-北京北站",
+            "travelVol": "105"
+        },
+        {
+            "line": "邢台东站-北京西站",
+            "travelVol": "1050"
+        },
+        {
+            "line": "邢台东站-石家庄站",
+            "travelVol": "915"
+        },
+        {
+            "line": "邢台东站-邯郸东站",
+            "travelVol": "510"
+        },
+        {
+            "line": "邢台东站-保定东站",
+            "travelVol": "315"
+        },
+        {
+            "line": "邢台站-石家庄站",
+            "travelVol": "3270"
+        },
+        {
+            "line": "邢台站-邯郸站",
+            "travelVol": "1905"
+        },
+        {
+            "line": "邢台站-保定站",
+            "travelVol": "1275"
+        },
+        {
+            "line": "邢台站-北京西站",
+            "travelVol": "885"
+        },
+        {
+            "line": "张家口宁远机场-石家庄正定机场",
+            "travelVol": "210"
+        },
+        {
+            "line": "张家口宁远机场-北京首都机场",
+            "travelVol": "75"
+        },
+        {
+            "line": "张家口站-北京站",
+            "travelVol": "1155"
+        },
+        {
+            "line": "张家口站-丰台站",
+            "travelVol": "645"
+        },
+        {
+            "line": "张家口站-北京西站",
+            "travelVol": "615"
+        },
+        {
+            "line": "张家口站-北京南站",
+            "travelVol": "450"
+        },
+        {
+            "line": "张家口站-衡水站",
+            "travelVol": "405"
+        },
+        {
+            "line": "张家口站-北京首都机场",
+            "travelVol": "345"
+        },
+        {
+            "line": "张家口站-保定站",
+            "travelVol": "315"
+        },
+        {
+            "line": "正定机场站-石家庄正定机场",
+            "travelVol": "13965"
+        },
+        {
+            "line": "正定机场站-北京西站",
+            "travelVol": "12015"
+        },
+        {
+            "line": "正定机场站-保定东站",
+            "travelVol": "2805"
+        },
+        {
+            "line": "正定机场站-石家庄站",
+            "travelVol": "2595"
+        },
+        {
+            "line": "正定机场站-天津站",
+            "travelVol": "990"
+        },
+        {
+            "line": "正定机场站-天津西站",
+            "travelVol": "960"
+        },
+        {
+            "line": "正定机场站-邯郸东站",
+            "travelVol": "405"
+        }
+    ];
     let res = tmp.map(function (data) {
         return [data.line.split('-')[0], data.line.split('-')[1], data.travelVol];
     })

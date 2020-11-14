@@ -4,7 +4,14 @@
       <div class="part rank-table">
         <Tabs v-model="direction" size="small" type="card">
           <TabPane label="客流量" name="all">
-            <Table :height="614" stripe highlight-row :columns="tableColumns1" :data="tableData1"></Table>
+            <Table
+              :height="614"
+              stripe
+              highlight-row
+              :columns="tableColumns1"
+              :data="tableData1"
+              @on-row-click="selectRow"
+            ></Table>
           </TabPane>
           <TabPane label="产生量" name="out">
             <Table

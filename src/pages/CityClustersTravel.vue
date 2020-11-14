@@ -131,26 +131,32 @@ export default {
       tripColumns: [
         {
           type: "index",
-          width: 58,
+          width: 44,
           align: "right",
           title: "排行"
         },
         {
           title: "城市",
           key: "city",
+          width: 60
+        },
+        {
+          title: "客流量",
+          key: "allVol",
+          align: "right",
           width: 70
         },
         {
           title: "迁入量",
           key: "inVol",
           align: "right",
-          width: 90
+          width: 70
         },
         {
           title: "与上一日增量",
           key: "inVolIncre",
           align: "right",
-          width: 90,
+          // width: 100,
           render: (h, params) => {
             return this.renderArrow(h, params, "inVolIncre");
           }
@@ -159,13 +165,13 @@ export default {
           title: "迁出量",
           key: "outVol",
           align: "right",
-          width: 90
+          width: 70
         },
         {
           title: "与上一日增量",
           key: "outVolIncre",
           align: "right",
-          width: 90,
+          // width: 100,
           render: (h, params) => {
             return this.renderArrow(h, params, "outVolIncre");
           }
@@ -327,9 +333,15 @@ export default {
     getCityData(city, inOrOut) {
       let that = this;
       getCityData({ city: city, inOrOut: inOrOut }).then(res => {
-        that[inOrOut === "in" ? "inCitysTableData" : "outCityTableData"] = res;
-        if (res.length > 0) {
-          that.mapData = res.map(function(data) {
+        let key = inOrOut === "in" ? "inVol" : "outVol";
+        let datas = res.sort(function(a, b) {
+          return +b[key] - +a[key];
+        });
+        that[
+          inOrOut === "in" ? "inCitysTableData" : "outCityTableData"
+        ] = datas;
+        if (datas.length > 0) {
+          that.mapData = datas.map(function(data) {
             return inOrOut === "in"
               ? [data.city, city, data.inVol]
               : [city, data.city, data.outVol];

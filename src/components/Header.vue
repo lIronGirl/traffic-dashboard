@@ -134,7 +134,8 @@ header {
       padding: 4px 6px;
       background: rgba(255, 255, 255, 0.05);
       cursor: pointer;
-      a:hover {
+      a:hover,
+      a.router-link-exact-active {
         color: #4bccec;
       }
       &:first-child {

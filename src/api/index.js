@@ -226,3 +226,11 @@ export function getCityClustersMapdata() {
         method: 'get'
     })
 }
+
+export function getHubData(params) {
+    return request({
+        url: 'api/hubdata',
+        method: 'get',
+        data: params
+    })
+}

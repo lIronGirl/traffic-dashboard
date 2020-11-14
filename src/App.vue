@@ -94,8 +94,8 @@ html {
       height: 0;
     }
     .ivu-table-cell {
-      padding-left: 14px;
-      padding-right: 14px;
+      padding-left: 8px;
+      padding-right: 8px;
     }
   }
 

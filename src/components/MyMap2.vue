@@ -245,7 +245,7 @@ export default {
         points.push(new BMap.Point(coords[0], coords[1]));
       }
       this.myMap.setViewport(points, {
-        margins: [100, 310, 0, 0]
+        margins: [100, 200, 0, 0]
       });
     },
     convertLinesData(data) {

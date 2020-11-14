@@ -1,53 +1,31 @@
 <template>
   <div id="individualTravel">
     <div class="content">
-      <div class="part statistical-chart">
-        <h3>联程出行统计</h3>
+      <div class="part line-table">
+        <h3>联程客运出行分析</h3>
         <Table
-          height="202"
+          height="340"
           stripe
-          highlight-row
           ref="currentRowTable"
           :columns="connectingTripColumns"
           :data="connectingTripData"
-          @on-row-click="selectRow"
+          :show-header="showHeader"
+          @on-selection-change="selectionChange"
         ></Table>
       </div>
-      <div class="part rank-table">
-        <h3>出行链路排行</h3>
-        <div class="individual-selector">
-          <label style="text-align: left;" for>链路查询</label>
-          <Select v-model="individual" filterable label-in-value @on-change="getIndividualRank">
-            <Option
-              v-for="item in individualList"
-              :value="item.name"
-              :key="item.name"
-            >{{ item.name }}</Option>
-          </Select>
-        </div>
-        <Table
-          height="370"
-          stripe
-          highlight-row
-          ref="individualCurrentRowTable"
-          :columns="rankColumns"
-          :data="rankTableData"
-          @on-row-click="selectIndividualRow"
-        ></Table>
+      <div class="part statistical-chart">
+        <h3>出行特征分析</h3>
+        <div id="static-chart-dom"></div>
       </div>
     </div>
 
-    <bg-map class="bg-map" :mapData="mapData"></bg-map>
+    <bg-map class="bg-map" :mapData="mapData" :mapPoints="mapPoints"></bg-map>
   </div>
 </template>
 
 <script>
 import BgMap from "../components/MyMap4";
-import {
-  getConnectingTripRank,
-  getIndividualList,
-  getIndividualRank
-} from "@/api/index.js";
+import { getConnectingTripRank, getLines } from "@/api/index.js";
 
 export default {
   name: "individualTravel",
@@ -56,23 +34,40 @@ export default {
   },
   data() {
     return {
+      showHeader: false,
       currentActiveTable: 1, // 1:联程出行统计表，2:个体出行表
       connectingTripColumns: [
         {
-          type: "index",
+          type: "selection",
           width: 60,
-          align: "right",
-          title: "排行"
+          align: "center"
         },
         {
           title: "热门路线",
-          key: "popularRoutes"
+          key: "popularRoutes",
+          align: "right",
+          width: 250
         },
         {
           title: "出行量",
           key: "travelVol",
-          align: "right",
-          width: 120
+          align: "left",
+          render: (h, params) => {
+            let width = params.row.volPer;
+            return h("div", [
+              h("span", {
+                style: {
+                  display: "inline-block",
+                  width: width,
+                  height: "14px",
+                  background: "#4cccec",
+                  verticalAlign: "middle",
+                  marginRight: "8px"
+                }
+              }),
+              h("span", {}, width)
+            ]);
+          }
         }
       ],
       connectingTripData: [],
@@ -95,29 +90,38 @@ export default {
           key: "travelBy"
         }
       ],
+      lines: {},
       rankTableData: [],
-      mapData: []
+      mapData: [],
+      mapPoints: []
     };
   },
   mounted() {
     this.getConnectingTripRank();
-    this.getIndividualList();
-    this.getIndividualRank();
+    this.drawChart();
+    this.getLines();
   },
   methods: {
-    drawChart() {
-      let that = this;
-      let seriesType = that.staticContent === "duration" ? "bar" : "line";
+    drawChart(series) {
+      // let that = this;
       // 基于准备好的dom，初始化echarts实例
       let staticChart = this.$echarts.init(
         document.getElementById("static-chart-dom")
       );
+      staticChart.clear();
       // 绘制图表
       staticChart.setOption({
-        color: ["#4bccec", "#a680ff"],
+        color: [
+          "#4bccec",
+          "#a680ff",
+          "#ec4b4b",
+          "#eca54b",
+          "#ece84b",
+          "#4bec85"
+        ],
         tooltip: {
           trigger: "item",
-          formatter: "{a} <br/>{b}: {c} ({d}%)"
+          formatter: "{a} <br/>{b}时: {c}%"
         },
         grid: {
           bottom: 50,
@@ -125,6 +129,7 @@ export default {
           right: 10
         },
         legend: {
+          type: "scroll",
           left: "center",
           top: "bottom",
           textStyle: {
@@ -136,107 +141,73 @@ export default {
           {
             type: "category",
             axisTick: { show: false },
+            axisLabel: { formatter: "{value}时" },
             axisLine: {
               lineStyle: {
                 color: "#fff"
               }
             },
-            data: that.staticsData.time
+            data: [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23
+            ]
           }
         ],
         yAxis: [
           {
             type: "value",
             axisTick: { show: false },
-            axisLabel: { color: "#fff" },
+            axisLabel: { color: "#fff", formatter: "{value}%" },
             axisLine: { show: false },
             splitLine: { lineStyle: { color: "#333" } }
           }
         ],
-        series: [
-          {
-            name: "出行",
-            type: seriesType,
-            barGap: 0,
-            data: that.staticsData.outTravel
-          },
-          {
-            name: "到达",
-            type: seriesType,
-            data: that.staticsData.inTravel
-          }
-        ]
+        series: series
       });
     },
-    getIndividualList() {
+    getLines() {
       var that = this;
-      getIndividualList().then(res => {
-        that.individualList = [{ id: 0, name: "--ALL--" }].concat(res);
-      });
-    },
-    getIndividualRank() {
-      let that = this;
-      getIndividualRank(
-        that.individual === "--ALL--" ? null : that.individual
-      ).then(res => {
-        let tableData = [];
-        for (let i = 0; i < res.length; i++) {
-          const data = res[i],
-            period = 5;
-          let lines = [],
-            points = [],
-            route = [],
-            travelBy = [];
-          for (let k = 0; k < data.points.length; k++) {
-            const point = data.points[k],
-              symbols = ["plane", "rail", "car"],
-              symbolsRc = ["飞机", "轨道", "汽车"];
-            points.push({
-              name: point.name,
-              value: point.coords
-            });
-            route.push(point.name);
-            if (k < data.points.length - 1) {
-              let nextPoint = data.points[k + 1];
-              lines.push({
-                coords: [point.coords, nextPoint.coords],
-                delay: period * k,
-                symbol: symbols[point.by - 1] // 1:飞机，2:轨道，3:汽车
-              });
-              travelBy.push(symbolsRc[point.by - 1]);
-            }
-          }
-          tableData.push({
-            seq: i + 1,
-            name: data.name,
-            route: route.join("-"),
-            travelBy: travelBy.join("-"),
-            mapData: {
-              points: points,
-              moveLines: lines
-            }
-          });
-        }
-
-        that.rankTableData = tableData;
-        if (that.individual !== "--ALL--" && tableData[0]) {
-          that.rankTableData[0].seq = that.individual;
-        }
-
-        if (
-          (that.individual !== "--ALL--" && tableData[0]) ||
-          that.currentActiveTable === 2
-        ) {
-          tableData[0]._highlight = true;
-          that.selectIndividualRow(tableData[0]);
-        }
+      getLines().then(res => {
+        that.lines = res;
       });
     },
     getConnectingTripRank() {
       let that = this;
       getConnectingTripRank().then(res => {
         let tableData = [];
-        for (let i = 0; i < res.length; i++) {
+        let allVol = 0;
+        res.forEach(data => {
+          allVol += +data.travelVol;
+        });
+        res.forEach(data => {
+          data.volPer = ((+data.travelVol * 100) / allVol).toFixed(2) + "%";
+        });
+        tableData = res;
+        that.connectingTripData = tableData;
+        that.mapData = [];
+        /* for (let i = 0; i < res.length; i++) {
           const data = res[i],
             period = 5;
           let stations = [],
@@ -274,22 +245,23 @@ export default {
           let data = that.connectingTripData[0];
           data._highlight = true;
           that.mapData = data.mapData;
-        }
+        } */
       });
     },
-    selectRow(row) {
-      let data = row;
+    selectionChange(selection) {
       let that = this;
-      that.currentActiveTable = 1;
-      this.$refs.individualCurrentRowTable.clearCurrentRow();
-      that.mapData = data.mapData;
-    },
-    selectIndividualRow(row) {
-      let data = row;
-      let that = this;
-      that.currentActiveTable = 2;
-      this.$refs.currentRowTable.clearCurrentRow();
-      that.mapData = data.mapData;
+      let series = [];
+      let mapData = [];
+      selection.forEach(s => {
+        series.push({
+          name: s.popularRoutes,
+          type: "line",
+          data: that.lines[s.popularRoutes]
+        });
+        mapData.push(s.popularRoutes.split("-"));
+      });
+      that.drawChart(series);
+      that.mapData = mapData;
     }
   }
 };
@@ -309,33 +281,18 @@ export default {
       padding: 16px;
       margin-bottom: 16px;
       background-color: rgba(255, 255, 255, 0.05);
+      &.line-table {
+        height: 45%;
+      }
       &.statistical-chart {
-        height: 30%;
+        height: 35%;
         display: flex;
         display: -webkit-flex;
         flex-direction: column;
-        .static-filter {
-          flex: 0.2;
-        }
         #static-chart-dom {
           width: 100%;
           flex: 1;
         }
-      }
-      &.rank-table {
-        .individual-selector {
-          display: flex;
-          display: -webkit-flex;
-          flex-direction: row;
-          margin-bottom: 8px;
-          label {
-            flex: 0.2;
-          }
-          .ivu-select {
-            flex: 0.8;
-          }
-        }
-        // height: 80%;
       }
     }
   }

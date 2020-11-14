@@ -242,3 +242,10 @@ export function getStationTrafficMapdata() {
         method: 'get'
     })
 }
+
+export function getLines() {
+    return request({
+        url: 'api/lines',
+        method: 'get'
+    })
+}

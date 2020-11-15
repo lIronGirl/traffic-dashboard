@@ -65,7 +65,7 @@ export default {
                   marginRight: "8px"
                 }
               }),
-              h("span", {}, width)
+              h("span", {}, params.row.travelVol)
             ]);
           }
         }

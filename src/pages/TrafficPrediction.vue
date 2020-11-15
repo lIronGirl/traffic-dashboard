@@ -2,59 +2,18 @@
   <main id="trafficPredictionPage">
     <section class="section1">
       <div class="line-chart">
-        <h3>城市交通预测</h3>
+        <h3>交通枢纽客流预测</h3>
+        <Table height="500" stripe highlight-row :columns="rankColumns" :data="rankTableData"></Table>
+      </div>
+      <div class="line-chart">
+        <h3>联程客流预测</h3>
         <div class="individual-selector">
-          <label style="text-align: left;" for>城市</label>
+          <label style="text-align: 100px;" for>联程路线</label>
           <Select v-model="staticCity" filterable @on-change="getWeekPrediction">
             <Option v-for="item in cityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </div>
         <div id="static-chart-dom"></div>
-      </div>
-      <div class="jamtrendcolumn-chart">
-        <h3>拥堵趋势预测</h3>
-        <div id="jamtrendcolumn-chart-dom"></div>
-      </div>
-    </section>
-    <section class="section2">
-      <div class="rank-table">
-        <h3>交通枢纽出行预测排行</h3>
-        <Tabs v-model="stationType" size="small" type="card" @on-click="getHubTrafficPrediction">
-          <TabPane label="火车站" name="rail">
-            <Table
-              height="340"
-              stripe
-              highlight-row
-              :columns="rankColumns"
-              :data="rankTableData"
-              @on-row-click="selectRow"
-            ></Table>
-          </TabPane>
-          <TabPane label="机场" name="air">
-            <Table
-              height="340"
-              stripe
-              highlight-row
-              :columns="rankColumns"
-              :data="rankTableData"
-              @on-row-click="selectRow"
-            ></Table>
-          </TabPane>
-          <TabPane label="高速收费站" name="highway">
-            <Table
-              height="340"
-              stripe
-              highlight-row
-              :columns="rankColumns"
-              :data="rankTableData"
-              @on-row-click="selectRow"
-            ></Table>
-          </TabPane>
-        </Tabs>
-      </div>
-      <div class="jamnextdaytrendline-chart">
-        <h3>明日24小时拥堵趋势预测</h3>
-        <div id="jamnextdaytrendline-chart-dom"></div>
       </div>
     </section>
   </main>
@@ -91,21 +50,21 @@ export default {
     return {
       staticCity: 1,
       cityList: [
-        /* {
-          id: 0,
-          name: "整体"
-        }, */
         {
           id: 1,
-          name: "北京"
+          name: "北京南站-天津站-滨海机场"
         },
         {
           id: 2,
-          name: "天津"
+          name: "北京西站-正定高铁站-正定机场"
         },
         {
           id: 3,
-          name: "保定"
+          name: "滨海国际机场-天津站-北京南站"
+        },
+        {
+          id: 4,
+          name: "正定机场-正定高铁站-北京西站"
         }
       ],
       staticContent: "duration",
@@ -122,31 +81,26 @@ export default {
         },
         {
           title: "枢纽名称",
+          // width: 150,
+          align: "center",
           key: "hubName"
         },
         {
-          title: "承载力",
+          title: "当前小时客流量",
+          // width: 150,
           key: "bearingCapacity",
-          align: "right"
+          align: "center"
         },
         {
-          title: "未来一小时预测客运量",
+          title: "未来小时客运量",
           key: "psgvolNext1h",
-          align: "right",
-          width: 200
+          align: "center"
+          // width: 200
         },
         {
-          title: "次日预测客运量",
+          title: "未来日客运量",
           key: "psgvolNext1d",
-          align: "right"
-        },
-        {
-          title: "预测精度",
-          key: "predAcc",
-          align: "right",
-          render: (h, params) => {
-            return h("div", [h("span", params.row.predAcc + "%")]);
-          }
+          align: "center"
         }
       ],
       rankTableData: [],
@@ -206,7 +160,7 @@ export default {
           {
             type: "value",
             axisTick: { show: false },
-            axisLabel: { color: "#fff" },
+            axisLabel: { color: "#fff", formatter: "{value}人" },
             axisLine: { show: false },
             splitLine: { lineStyle: { color: "#333" } }
           },
@@ -376,12 +330,22 @@ export default {
           let histroyVal = [];
           let predictVal = [];
           res.forEach((data, i) => {
-            let isHistroy = data.type === 1;
-            time.push(moment(data.time).format("MM/DD"));
-            if (isHistroy) {
-              histroyVal[i] = data.index;
+            if (data.h) {
+              histroyVal[i] = data.h;
+              time.push(
+                moment()
+                  .add(+data.date - 24, "day")
+                  .hour(+data.time)
+                  .format("MM/DD")
+              );
             } else {
-              predictVal[i] = data.index;
+              predictVal[i] = data.p;
+              time.push(
+                moment()
+                  .add(1, "day")
+                  .hour(+data.time)
+                  .format("MM/DD")
+              );
             }
           });
           histroyVal[histroyVal.length] = predictVal[histroyVal.length];
@@ -459,13 +423,6 @@ export default {
       let that = this;
       getHubTrafficPrediction(that.stationType).then(res => {
         that.rankTableData = res;
-        let data = that.rankTableData[0];
-        if (data) {
-          data._highlight = true;
-          that.updatePredictionChart(data.hubName);
-        } else {
-          that.updatePredictionChart();
-        }
       });
     },
     updatePredictionChart(hubName) {
@@ -511,9 +468,11 @@ export default {
     flex-direction: row;
   }
   .section1 {
+    margin-top: 80px;
     .line-chart {
       flex: 0.6;
-      width: 60%;
+      width: 45%;
+      height: 70%;
       display: -webkit-flex;
       display: flex;
       flex-direction: column;
@@ -522,17 +481,17 @@ export default {
         display: flex;
         display: -webkit-flex;
         flex-direction: row;
-        margin-bottom: 8px;
+        margin-bottom: -1px;
         label {
-          flex: 0.05;
+          flex: 0.2;
           text-align: center;
         }
         .ivu-select {
-          flex: 0.1;
+          flex: 0.5;
         }
       }
       #static-chart-dom {
-        flex: 0.9;
+        flex: 0.8;
       }
     }
     .jamtrendcolumn-chart {

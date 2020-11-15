@@ -2,7 +2,7 @@ export let mapStyle1 = [{
     'featureType': 'water',
     'elementType': 'all',
     'stylers': {
-        'color': '#1a2028'
+        'color': '#03091a'
     }
 }, {
     "featureType": "water",
@@ -14,7 +14,7 @@ export let mapStyle1 = [{
     'featureType': 'land',
     'elementType': 'all',
     'stylers': {
-        'color': '#111316'
+        'color': '#040f25'
     }
 }, {
     'featureType': 'railway',
@@ -38,13 +38,13 @@ export let mapStyle1 = [{
     'featureType': 'arterial',
     'elementType': 'geometry',
     'stylers': {
-        'color': '#fefefe'
+        'color': '#040f25'
     }
 }, {
     'featureType': 'arterial',
     'elementType': 'geometry.fill',
     'stylers': {
-        'color': '#fefefe'
+        'color': '#040f25'
     }
 }, {
     'featureType': 'poi',

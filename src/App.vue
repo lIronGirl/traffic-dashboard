@@ -107,7 +107,7 @@ html {
   @btnBackgroundColor: rgba(255, 255, 255, 0.05);
   @boxInsetShadow: rgba(15, 29, 51, 0.5) 0px 4px 5px 0px,
     rgba(75, 204, 236, 0.5) 0px 0px 6px 0px inset;
-  @boxBackgroundColor: #181c21;
+  @boxBackgroundColor: #040f27;
   @fontNormalColor: #fff;
   @fontPrimaryColor: #4bccec;
   @dateCellSize: 50px;
